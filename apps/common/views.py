@@ -73,6 +73,8 @@ class LoginView(View):
             res = {'success': 0, 'msg': '用户名或密码错误'}
         elif not re.fullmatch(request.session.get('check_code'), code, flags=re.IGNORECASE):
             res = {'success': 2, 'msg': '验证码错误'}
+        elif not u.activation:
+            res = {'success': 3, 'msg': '该账户未激活，先激活'}
         else:
             try:
                 autoLogin = int(autoLogin)

@@ -43,6 +43,7 @@
             <a href="reset.html" class="fr" target="_blank">忘记密码？</a>
             <input type="hidden" id="loginToUrl" name="loginToUrl" value="{{ loginToUrl }}"/>
             <input type="submit" id="submitLogin" value="登 &nbsp; &nbsp; 录"/>
+            <span class="error" style="display:none;" id="lockError"></span>
 
         </form>
         <div class="login_right">
@@ -110,9 +111,11 @@
                         }
                     } else if (result.success === 0) {
                         $('#beError').text(result.msg).show();
-                    } else {
+                    } else if (result.success === 2) {
                         $('#CodeError').text(result.msg).show();
                         $('#img_code').attr('src', $('#img_code').attr('src') + '?');
+                    }else if(result.success === 3){
+                        $('#lockError').text(result.msg).show();
                     }
                     $(form).find(":submit").attr("disabled", false);
                 });
