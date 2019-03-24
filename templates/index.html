@@ -11,9 +11,7 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
     <meta name="baidu-site-verification" content="QIQ6KC1oZ6"/>
-
-
-    <link rel="Shortcut Icon" href="{{ MEDIA_URL }}favicon.ico">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/external.min.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/popup.css"/>
@@ -29,13 +27,13 @@
 <div id="body">
     <div id="header">
         <div class="wrapper">
-            <a href="index.html" class="logo">
+            <a href="{% url 'index' %}" class="logo">
                 <img src="/static/images/logo.png" width="229" height="43" alt="拉勾招聘-专注互联网招聘"/>
             </a>
             <ul class="reset" id="navheader">
                 <li class="current"><a href="index.html">首页</a></li>
                 <li><a href="companylist.html">公司</a></li>
-                <li><a href="jianli.html" rel="nofollow">我的简历</a></li>
+                <li><a href="{% url 'user:my_resume' %}" rel="nofollow">我的简历</a></li>
                 <li><a href="create.html" rel="nofollow">发布职位</a></li>
             </ul>
             <ul class="loginTop">

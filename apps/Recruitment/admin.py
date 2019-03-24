@@ -3,13 +3,6 @@ from .models import *
 
 
 # Register your models here.
-class ProvinceAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-
-
-class CityAdmin(admin.ModelAdmin):
-    list_display = ('name', 'province')
-
 
 class IndustrySectorAdmin(admin.ModelAdmin):
     list_display = ('sector',)
@@ -28,7 +21,7 @@ class CompanyFoundingTeamAdmin(admin.ModelAdmin):
 
 
 class CompanyProductAdmin(admin.ModelAdmin):
-    list_display = ('product_poster', 'product_name', 'product_url', 'product_desc', )
+    list_display = ('product_poster', 'product_name', 'product_url', 'product_desc',)
 
 
 class CompanyAdmin(admin.ModelAdmin):
@@ -36,8 +29,6 @@ class CompanyAdmin(admin.ModelAdmin):
                     'development_stage', 'investment_agency', 'desc')
 
 
-admin.site.register(Province, ProvinceAdmin)
-admin.site.register(City, CityAdmin)
 admin.site.register(IndustrySector, IndustrySectorAdmin)
 admin.site.register(TagSort, TagSortAdmin)
 admin.site.register(CompanyTag, CompanyTagAdmin)

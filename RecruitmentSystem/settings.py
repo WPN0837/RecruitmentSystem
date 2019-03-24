@@ -120,14 +120,44 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'media'),
 ]
+
 MEDIA_ROOT = 'media/'
 MEDIA_URL = 'media/'
+
+ACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {"max_connections": 1000}
+            # "PASSWORD": "123",
+        }
+    }
+}
+
+NEVER_REDIS_TIMEOUT = 365 * 24 * 60 * 60  # 一年
+REDIS_TIMEOUT = 7 * 24 * 60 * 60  # 一周
+CUBES_REDIS_TIMEOUT = 30  # 一小时
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'
+
+EMAIL_HOST = 'smtp.qq.com'  # 如果是 163 改成 smtp.163.com   以什么邮箱发送
+EMAIL_PORT = 465  # 端口号
+EMAIL_HOST_USER = '757201759@qq.com'  # 帐号 发送者邮箱账号
+EMAIL_HOST_PASSWORD = 'ckuixsxdqklbbbbb'  # 密码 不是密码, 授权码
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# 这样收到的邮件，收件人处就会这样显示
+# DEFAULT_FROM_EMAIL = 'lqz<'306334678@qq.com>'
+EMAIL_USE_SSL = True  # 使用ssl,qq只支持这种
+
