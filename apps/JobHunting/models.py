@@ -138,7 +138,7 @@ class EducationalExperience(models.Model):
     resume = models.OneToOneField('Resume', verbose_name='简历', on_delete=models.CASCADE,
                                   related_name='educational_experience')
     school_name = models.CharField(max_length=20, verbose_name='学校名称', blank=True)
-    education = models.SmallIntegerField(verbose_name='学历', choices=education_choices, blank=True)
+    education = models.CharField(verbose_name='学历', max_length=20, blank=True)
     professional = models.CharField(max_length=20, verbose_name='专业名称', blank=True)
     start_year = models.CharField(verbose_name='开始年份', max_length=10, blank=True)
     end_year = models.CharField(verbose_name='结束年份', max_length=10, blank=True)

@@ -23,4 +23,9 @@ urlpatterns = [
     path('resumeinfoimage.html', ResumeInfoImageView, name='resumeinfoimage'),
     path('hopework.html', HopeWorkView.as_view(), name='hopework'),
     path('workexperience.html', WorkExperienceView.as_view(), name='workexperience'),
+    path('projectexperience.html', ProjectExperienceView.as_view(), name='projectexperience'),
+    path('educationalexperience.html', EducationalExperienceView.as_view(), name='educationalexperience'),
+    path('selfdetail.html', SelfDetailView.as_view(), name='selfdetail'),
+    path('gallery.html', GalleryView.as_view(), name='gallery'),
+    path('resume/preview.html', ResumePreviewView.as_view(), name='preview'),
 ]
