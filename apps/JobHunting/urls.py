@@ -27,5 +27,9 @@ urlpatterns = [
     path('educationalexperience.html', EducationalExperienceView.as_view(), name='educationalexperience'),
     path('selfdetail.html', SelfDetailView.as_view(), name='selfdetail'),
     path('gallery.html', GalleryView.as_view(), name='gallery'),
+    path('gallerydel.html', GalleryDelView.as_view(), name='gallerydel'),
     path('resume/preview.html', ResumePreviewView.as_view(), name='preview'),
+    path('educationalexperiencedel.html', EducationalExperienceDelView.as_view(), name='educationalexperiencedel'),
+    path('projectexperiencedeldel.html', ProjectExperienceViewDelView.as_view(), name='projectexperiencedeldel'),
+    path('workExperiencedel.html', WorkExperienceDelView.as_view(), name='workExperiencedel'),
 ]

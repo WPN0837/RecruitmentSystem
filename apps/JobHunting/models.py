@@ -26,16 +26,16 @@ class Resume(models.Model):
             res += self.resume_info.score
         if hasattr(self, 'hope_work') and hasattr(self.hope_work, 'score'):
             res += self.hope_work.score
-        if hasattr(self, 'work_experience') and hasattr(self.work_experience, 'score'):
-            res += self.work_experience.score
-        if hasattr(self, 'project_experience') and hasattr(self.project_experience, 'score'):
-            res += self.project_experience.score
-        if hasattr(self, 'educational_experience') and hasattr(self.educational_experience, 'score'):
-            res += self.educational_experience.score
+        if hasattr(self, 'work_experience') and self.work_experience.all():
+            res += self.work_experience.all()[0].score
+        if hasattr(self, 'project_experience') and self.project_experience.all():
+            res += self.project_experience.all()[0].score
+        if hasattr(self, 'educational_experience') and self.educational_experience.all():
+            res += self.educational_experience.all()[0].score
         if hasattr(self, 'self_detail') and hasattr(self.self_detail, 'score'):
             res += self.self_detail.score
-        if hasattr(self, 'gallery') and hasattr(self.gallery, 'score'):
-            res += self.gallery.score
+        if hasattr(self, 'gallery') and self.gallery.all():
+            res += self.gallery.all()[0].score
         return res
 
 
@@ -84,7 +84,7 @@ class WorkExperience(models.Model):
     '''
     工作经历
     '''
-    resume = models.OneToOneField('Resume', verbose_name='简历', on_delete=models.CASCADE, related_name='work_experience')
+    resume = models.ForeignKey('Resume', verbose_name='简历', on_delete=models.CASCADE, related_name='work_experience')
     company_name = models.CharField(max_length=50, verbose_name='公司名称', blank=True)
     position = models.CharField(max_length=20, verbose_name='职位名称', blank=True)
     start_year = models.CharField(verbose_name='开始年份', max_length=10, blank=True)
@@ -105,8 +105,8 @@ class ProjectExperience(models.Model):
     '''
     项目经验
     '''
-    resume = models.OneToOneField('Resume', verbose_name='简历', on_delete=models.CASCADE,
-                                  related_name='project_experience')
+    resume = models.ForeignKey('Resume', verbose_name='简历', on_delete=models.CASCADE,
+                               related_name='project_experience')
     project_name = models.CharField(max_length=20, verbose_name='项目名称', blank=True)
     position = models.CharField(max_length=20, verbose_name='担任职务', blank=True)
     start_year = models.CharField(verbose_name='开始年份', max_length=10, blank=True)
@@ -135,8 +135,8 @@ class EducationalExperience(models.Model):
         (3, '博士'),
         (4, '其他'),
     )
-    resume = models.OneToOneField('Resume', verbose_name='简历', on_delete=models.CASCADE,
-                                  related_name='educational_experience')
+    resume = models.ForeignKey('Resume', verbose_name='简历', on_delete=models.CASCADE,
+                               related_name='educational_experience')
     school_name = models.CharField(max_length=20, verbose_name='学校名称', blank=True)
     education = models.CharField(verbose_name='学历', max_length=20, blank=True)
     professional = models.CharField(max_length=20, verbose_name='专业名称', blank=True)
@@ -173,8 +173,8 @@ class Gallery(models.Model):
     '''
     作品展示
     '''
-    resume = models.OneToOneField('Resume', verbose_name='简历', on_delete=models.CASCADE,
-                                  related_name='gallery')
+    resume = models.ForeignKey('Resume', verbose_name='简历', on_delete=models.CASCADE,
+                               related_name='gallery')
     url = models.URLField(verbose_name='作品链接', blank=True)
     detail = models.CharField(max_length=500, verbose_name='作品描述', blank=True)
     score = models.IntegerField(default=15, verbose_name='分数')
