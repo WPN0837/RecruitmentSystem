@@ -123,10 +123,10 @@
                     url: '/register.html',
                     dataType: 'json'
                 }).done(function (result) {
-                    if (result.success === 1) {
+                    if (result.add_company_info06 === 1) {
                         alert('注册成功，已发送激活邮件到注册邮箱，请激活');
                         window.location.href = result.content;
-                    } else if (result.success === 0) {
+                    } else if (result.add_company_info06 === 0) {
                         $('#beError').text(result.msg).show();
                     } else {
                         $('#CodeError').text(result.msg).show();

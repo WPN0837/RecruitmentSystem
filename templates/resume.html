@@ -67,8 +67,7 @@
     <!-- end #header -->
     <div id="container">
         <div class="clearfix">
-            {% if resume %}
-                <div class="content_l">
+            <div class="content_l">
                 <div class="fl" id="resume_name">
                     <div class="nameShow fl">
                         <h1>{{ resume.title }}</h1>
@@ -114,8 +113,10 @@
                     <div class="basicShow">
                         {% if resume_info %}
                             <span>{{ resume_info.name }} | {{ resume_info.gender }} | {{ resume_info.education }} |
-                            {{ resume_info.work_ex }}<br/> {{ resume_info.phone }} | {{ user.email }}<br/> {% else %}
-                            <span>空</span> {% endif %} </span>
+                            {{ resume_info.work_ex }}<br/> {{ resume_info.phone }} | {{ user.email }}<br/> </span>
+                        {% else %}
+                            <span>空</span>
+                        {% endif %}
                         <div class="m_portrait">
                             <div></div> {% if resume_info.photo %}
                             <img width="120" height="120" alt="" src="/{{ resume_info.photo }}"/> {% else %}
@@ -253,7 +254,10 @@
                 <span class="c_edit"></span>
                 <div class="expectShow">
                     {% if hope_work %}
-                        <span>{{ hope_work.city }} | {{ hope_work.work_sort }} | {{ hope_work.hope_wage }} | {{ hope_work.hope_position }}</span> {% endif %}
+                        <span>{{ hope_work.city }} | {{ hope_work.work_sort }} | {{ hope_work.hope_wage }} | {{ hope_work.hope_position }}</span>
+                    {% else %}
+                        <span></span>
+                    {% endif %}
                 </div>
                 <!--end .expectShow-->
                 <div class="expectEdit dn">
@@ -429,7 +433,7 @@
                 <input type="hidden" id="expectCityVal" value="{{ hope_work.city }}"/>
                 <input type="hidden" id="typeVal" value="{{ hope_work.work_sort }}"/>
                 <input type="hidden" id="expectPositionVal" value="{{ hope_work.hope_position }}"/>
-                <input type="hidden" id="expectSalaryVal" value="{{ hope_work.hope_wage }}"/> {% endif %}
+                <input type="hidden" id="expectSalaryVal" value="{{ hope_work.hope_wage }}"/>
             </div>
             <!--end #expectJob-->
             <div class="profile_box" id="workExperience">
@@ -1573,7 +1577,7 @@
                     type: "GET",
                     async: false
                 }).done(function (data) {
-                    if (data.success) {
+                    if (data.add_company_info06) {
                         $('#qr_cloud_resume img').attr("src", data.content);
                     }
                 });

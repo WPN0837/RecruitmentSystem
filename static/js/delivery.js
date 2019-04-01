@@ -34,7 +34,7 @@ $(function(){
 		type:'get',
 		dataType:'json'
 	}).done(function(result){
-		if(result.success){
+		if(result.add_company_info06){
 			for(var i = 0;i < 6;i++){
 				$('#box_record ul li').eq(i).html(result.content[i].optionValue)
 			}
@@ -47,7 +47,7 @@ $(function(){
 		type:'get',
 		dataType:'json'
 	}).done(function(result){
-		if(result.success){
+		if(result.add_company_info06){
 			for(var i = 0;i < 6;i++){
 				$('#box_record ul li').eq(i).html(result.content[i].optionValue)
 			}
@@ -223,7 +223,7 @@ $(function(){
             	dataType:'json'
     		}).done(function(result){
 //				$('#resubmitToken').val(result.resubmitToken);
-    			if(result.success){
+    			if(result.add_company_info06){
     				top.location.href=top.location.href;
     			}else{
     				alert(result.msg);

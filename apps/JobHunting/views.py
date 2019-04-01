@@ -61,7 +61,8 @@ class ResumeView(View):
             u = User.objects.filter(email=email).first()
             r = Resume.objects.create(title=title, user=u)
             res = {'success': True,
-                   "content": {'resumeName': title, 'refreshTime': r.last_time.strftime("%Y-%m-%d %H:%M:%S")}}
+                   "content": {'resumeName': title, 'refreshTime': r.last_time.strftime("%Y-%m-%d %H:%M:%S"),
+                               'rid': r.id}}
         return HttpResponse(json.dumps(res))
 
 
@@ -239,6 +240,10 @@ class WorkExperienceView(View):
 
 
 class WorkExperienceDelView(View):
+    '''
+    删除工作经验
+    '''
+
     def post(self, request):
         wid = request.POST.get('id', None)
         if WorkExperience.objects.filter(id=int(wid)).exists():
@@ -248,6 +253,10 @@ class WorkExperienceDelView(View):
 
 
 class ProjectExperienceView(View):
+    '''
+    项目经验
+    '''
+
     def post(self, request):
         project_name = request.POST.get('projectName', None)
         position = request.POST.get('positionName', None)
@@ -312,6 +321,10 @@ class ProjectExperienceView(View):
 
 
 class ProjectExperienceViewDelView(View):
+    '''
+    删除项目经验
+    '''
+
     def post(self, request):
         pid = request.POST.get('id')
         if ProjectExperience.objects.filter(id=int(pid)).exists():
@@ -321,6 +334,10 @@ class ProjectExperienceViewDelView(View):
 
 
 class EducationalExperienceView(View):
+    '''
+    教育经历
+    '''
+
     def post(self, request):
         school_name = request.POST.get('schoolName', None)
         education = request.POST.get('education', None)
@@ -374,6 +391,10 @@ class EducationalExperienceView(View):
 
 
 class EducationalExperienceDelView(View):
+    '''
+    删除教育经历
+    '''
+
     def post(self, request):
         eid = request.POST.get('id', None)
         if eid:
@@ -384,6 +405,10 @@ class EducationalExperienceDelView(View):
 
 
 class SelfDetailView(View):
+    '''
+    自我描述
+    '''
+
     def post(self, request):
         detail = request.POST.get('myRemark', None)
         rid = request.POST.get('id', None)
@@ -412,6 +437,10 @@ class SelfDetailView(View):
 
 
 class GalleryView(View):
+    '''
+    作品展示
+    '''
+
     def post(self, request):
         print(request.POST)
         url = request.POST.get('url', None)
@@ -452,6 +481,10 @@ class GalleryView(View):
 
 
 class GalleryDelView(View):
+    '''
+    删除作品
+    '''
+
     def post(self, request):
         gid = request.POST.get('id', None)
         # rid = request.POST.get('rid', None)
@@ -469,8 +502,11 @@ class GalleryDelView(View):
 
 
 class ResumePreviewView(View):
+    '''
+    预览简历
+    '''
+
     def get(self, request):
-        email = request.session.get('email', None)
         email = request.session.get('email', None)
         if email:
             user = User.objects.get(email=email)

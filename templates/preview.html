@@ -25,12 +25,11 @@
             });
         });
     </script>
-    <script src="/static/js/ajaxCross.json" charset="UTF-8"></script>
 </head>
 <body>
 <div id="previewWrapper">
     <div class="preview_header">
-        <h1 title="jason的简历">{{ resume.title }}</h1>
+        <h1 title="{{ resume.title }}">{{ resume.title }}</h1>
     </div>
     <!--end .preview_header-->
     <div class="preview_content">
@@ -40,7 +39,7 @@
                 <span> {{ resume_info.gender }} | {{ resume_info.education }} | {{ resume_info.work_ex }} | {{ hope_work.city }}<br/> {{ resume_info.phone }} | {{ user.email }}<br/> </span>
                 <div class="m_portrait">
                     <div></div>
-                    <img width="120" height="120" alt="jason" src="/{{ resume_info.photo }}"/>
+                    <img width="120" height="120" alt="" src="/{{ resume_info.photo }}"/>
                 </div>
             </div>
             <!--end .basicShow-->

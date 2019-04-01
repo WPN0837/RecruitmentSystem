@@ -195,7 +195,7 @@ jQuery.extend({
 
                 try {
 
-                    status = isTimeout != "timeout" ? "success" : "error";
+                    status = isTimeout != "timeout" ? "success.html" : "error";
 
                     // Make sure that the request was successful or notmodified
 

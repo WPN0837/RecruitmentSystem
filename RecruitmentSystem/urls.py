@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from common.views import IndexView, RegisterView, LoginView, LogoutView, CheckCodeView, ActivationView
+from Recruitment.views import PostJobView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,5 +26,7 @@ urlpatterns = [
     path('logout.html', LogoutView.as_view(), name='logout'),
     path('code.html', CheckCodeView.as_view(), name='check_code'),
     path('activation.html', ActivationView.as_view(), name='activation'),
+    path('recruitment.html', PostJobView.as_view(), name='PostJob'),
     path('user/', include('JobHunting.urls', namespace='user')),
+    path('recruitment/', include('Recruitment.urls', namespace='recruitment')),
 ]

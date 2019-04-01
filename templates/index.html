@@ -34,7 +34,7 @@
                 <li class="current"><a href="index.html">首页</a></li>
                 <li><a href="companylist.html">公司</a></li>
                 <li><a href="{% url 'user:my_resume' %}" rel="nofollow">我的简历</a></li>
-                <li><a href="create.html" rel="nofollow">发布职位</a></li>
+                <li><a href="{% url 'PostJob' %}" rel="nofollow">发布职位</a></li>
             </ul>
             <ul class="loginTop">
                 {% if not email %}

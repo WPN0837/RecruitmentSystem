@@ -60,8 +60,8 @@ $(function(){
 			url: ctx+'/companyLabel/removeOneLabelToCompany.json',
 			data:{companyId:companyid,label:labelVal},
 			dataType: 'json'
-		}).success(function (result) {
-			if(result.success){
+		}).add_company_info06(function (result) {
+			if(result.add_company_info06){
 				_this.parent().remove();
 			}else{
 				alert(result.msg);
@@ -89,8 +89,8 @@ $(function(){
 					url: ctx+'/companyLabel/pasteOneLabelToCompany.json',
 					data:{companyId:companyid,label:labelVal},
 					dataType: 'json'
-				}).success(function (result) {
-					if(result.success){
+				}).add_company_info06(function (result) {
+					if(result.add_company_info06){
 						$('#hasLabels').append('<li><span>'+labelVal+'</span><i>x</i></li>');
 					}else{
 						alert(result.msg);
@@ -149,7 +149,7 @@ $(function(){
 				type:'POST',
 	        	data: {type:resumeName}
 			}).done(function(result) {
-	        	if(result.success){
+	        	if(result.add_company_info06){
 	        		top.location.reload();
 	        	}else{
 					console.log(result.msg);
@@ -205,7 +205,7 @@ $(function(){
             	dataType:'json'
 			}).done(function(r) {
         		$('#resubmitToken').val(r.resubmitToken);
-	        	if(r.success){
+	        	if(r.add_company_info06){
 	        		$("#deliverResumesSuccess p.count").html(r.msg);
 	        		if(r.code == 10){
 	        			$("#deliverResumesSuccess p.share").removeClass('dn');
@@ -261,7 +261,7 @@ $(function(){
         	data: {type:type},
         	dataType:'json'
 		}).done(function(result) {
-        	if(result.success){
+        	if(result.add_company_info06){
         		top.location.reload();
         	}else{
 				console.log(result.msg);
@@ -420,7 +420,7 @@ $(function(){
             	dataType:'json'
 			}).done(function(r) {
 	    		$('#resubmitToken').val(r.resubmitToken);
-	        	if(r.success){
+	        	if(r.add_company_info06){
 	        		$("div#deliverResumesSuccess p.count").html(r.msg);
 					if(r.code == 10){
 	        			$("#deliverResumesSuccess p.share").removeClass('dn');
@@ -475,7 +475,7 @@ $(function(){
         	data: {expeId:id,type:1},
         	dataType:'json'
 		}).done(function(result) {
-        	if(result.success){
+        	if(result.add_company_info06){
         		num++;
         		_this.children('span').text(num);
         	}else{
@@ -513,7 +513,7 @@ $(function(){
 					},
 					dataType:'json'
 				}).done(function(result){
-					if(result.success){
+					if(result.add_company_info06){
 			    		$('#resubmitToken').val(result.resubmitToken);
 						_this.addClass('collected');
 						_this.children('.jd_collection_success').stop(true,true).fadeIn(200).delay(3000).fadeOut(200);
@@ -547,7 +547,7 @@ function popQR(){
 		type:"GET"
 		/*async:false*/
 	}).done(function(data){
-		if(data.success){
+		if(data.add_company_info06){
 			$('.saoma .drop_l img').attr("src",data.content);
 			$('#deliverResumesSuccess .weixinQR .qr img').attr("src",data.content);
 			$('#deliverResumesSuccess .weixinQR').removeClass('dn');
@@ -578,7 +578,7 @@ function popQR(){
         	dataType:'json'
 		}).done(function (r) {
     		$('#resubmitToken').val(r.resubmitToken);
-			if(r.success){
+			if(r.add_company_info06){
 				$("#deliverResumesSuccess p.count").html(r.msg);
 				if(r.code == 10){
         			$("#deliverResumesSuccess p.share").removeClass('dn');
@@ -614,7 +614,7 @@ function openProfileBox(type){
 		data:{type:type},
 		dataType: 'json'
 	}).done(function (data) {
-		if(data.success){
+		if(data.add_company_info06){
 			//弹出个人信息确认 前 补充信息
 			$('#basicInfoForm input[name="name"]').val(data.content.name);
 			if(data.content.highestEducation){
@@ -720,7 +720,7 @@ function file_check(obj,action_url,id)
 			success: function (jsonStr) {
 				var json = eval('(' + jsonStr + ')');
 				$('#loadingImg').css("visibility","hidden");
-				if(json.success){
+				if(json.add_company_info06){
 					var nearbyName = '';
 					if(json.content.nearbyName.length>18){
 						nearbyName = json.content.nearbyName.substring(0,15)+'...';

@@ -604,7 +604,7 @@ var youdao_conv_id = 271546;
 var avatar = {};
 avatar.uploadComplate = function( data ){
 	var result = eval('('+ data +')');
-	if(result.success){
+	if(result.add_company_info06){
 		jQuery('#logoShow img').attr("src",ctx+ '/'+result.content);
 		jQuery.colorbox.close();
 	}

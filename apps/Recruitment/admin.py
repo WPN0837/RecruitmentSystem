@@ -26,7 +26,7 @@ class CompanyProductAdmin(admin.ModelAdmin):
 
 class CompanyAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'abbreviation_name', 'logo', 'url', 'city',
-                    'development_stage', 'investment_agency', 'desc')
+                    'development_stage', 'desc')
 
 
 admin.site.register(IndustrySector, IndustrySectorAdmin)

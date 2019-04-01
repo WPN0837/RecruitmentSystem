@@ -160,7 +160,7 @@ function popQR(){
          url:ctx+"/mycenter/showQRCode",
          type:"GET"
     }).done(function(data){
-         if(data.success){
+         if(data.add_company_info06){
               $('.weixinSuc .qr img').attr("src",data.content);
               $('.weixinSuc').removeClass('dn');
          }
