@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from common.models import User, City
 from .models import IndustrySector, Company, TagSort, CompanyTag, CompanyFoundingTeam, CompanyProduct, \
-    CompanyIntroduction
+    CompanyIntroduction, Position, PositionInfo
 import json
 import uuid
 
@@ -27,9 +27,11 @@ class PostJobView(View):
             if u and u.type:
                 if hasattr(u, 'company'):
                     c = u.company
+                    p = Position.objects.filter(level=1).all()
                     return render(request, 'PostJob.html', {
                         'user': u,
                         'c': c,
+                        'p': p,
                     })
                 else:
                     return redirect('recruitment:company01')
@@ -37,6 +39,40 @@ class PostJobView(View):
                 return render(request, 'error.html', {'msg': ''})
         else:
             return redirect('login')
+
+    def post(self, request):
+        positionType = request.POST.get('positionType', None)
+        position = request.POST.get('positionName', None)
+        department = request.POST.get('department', None)
+        jobNature = request.POST.get('jobNature', None)
+        salaryMin = request.POST.get('salaryMin', None)
+        salaryMax = request.POST.get('salaryMax', None)
+        workAddress = request.POST.get('workAddress', None)
+        workYear = request.POST.get('workYear', None)
+        education = request.POST.get('education', None)
+        positionAdvantage = request.POST.get('positionAdvantage', None)
+        positionDetail = request.POST.get('positionDetail', None)
+        positionAddress = request.POST.get('positionAddress', None)
+        positionLng = request.POST.get('positionLng', None)
+        positionLat = request.POST.get('positionLat', None)
+        email = request.POST.get('email', None)
+        cid = request.POST.get('companyId', None)
+        if cid:
+            try:
+                c = Company.objects.filter(id=int(cid)).first()
+            except Exception as e:
+                return HttpResponse('error')
+            p = PositionInfo(
+                positionType=positionType, position=position, department=department, jobNature=jobNature,
+                salaryMin=salaryMin, salaryMax=salaryMax, workAddress=workAddress, workYear=workYear,
+                education=education, positionAdvantage=positionAdvantage, positionDetail=positionDetail,
+                positionAddress=positionAddress, positionLng=positionLng, positionLat=positionLat, email=email,
+                company=c
+            )
+            p.save()
+            res = {'success': True, 'content': '/recruitment/positions.html'}
+            return HttpResponse(json.dumps(res))
+        return HttpResponse('error')
 
 
 class AddCompany01View(View):
@@ -244,6 +280,25 @@ class AddCompany06View(View):
         })
 
 
+class EffectivePositionsView(View):
+    def get(self, request):
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        c = u.company
+        positions = PositionInfo.objects.filter(status=0).all()
+        return render(request, 'effective_positions.html', {
+            'user': u,
+            'c': c,
+            'positions': positions,
+        })
+
+    def post(self, request):
+        pass
+
+
 @csrf_exempt
 def CompanyLogo(request):
     '''
@@ -295,3 +350,60 @@ def ProductPoster(request):
             url = ''
         finally:
             return HttpResponse(url)
+
+
+@csrf_exempt
+def PositionInfoImg(request):
+    if request.method == 'POST':
+        img = request.FILES['imgFile']
+        url = 'static/Company/PositionInfoImg/' + str(uuid.uuid1()) + img._name
+        try:
+            with open(url, 'wb')as IMG:
+                for i in img.file:
+                    IMG.write(i)
+        except Exception as e:
+            url = ''
+        finally:
+            ret = {'error': 0,
+                   'url': '/' + url,
+                   'message': '',
+                   }
+            return HttpResponse(json.dumps(ret, ensure_ascii=False))
+
+
+class PositionOfflineView(View):
+    '''
+    下线职位
+    '''
+
+    def post(self, request):
+        pid = request.POST.get('id', None)
+        if pid:
+            try:
+                PositionInfo.objects.filter(id=int(pid)).update(status=1)
+            except Exception as e:
+                res = {'success': False}
+                return HttpResponse(json.dumps(res))
+            res = {'success': True}
+            return HttpResponse(json.dumps(res))
+        res = {'success': False}
+        return HttpResponse(json.dumps(res))
+
+
+class PositionDeleteView(View):
+    '''
+    删除职位
+    '''
+
+    def post(self, request):
+        pid = request.POST.get('id', None)
+        if pid:
+            try:
+                PositionInfo.objects.filter(id=int(pid)).update(status=2)
+            except Exception as e:
+                res = {'success': False}
+                return HttpResponse(json.dumps(res))
+            res = {'success': True}
+            return HttpResponse(json.dumps(res))
+        res = {'success': False}
+        return HttpResponse(json.dumps(res))

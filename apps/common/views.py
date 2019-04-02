@@ -9,7 +9,7 @@ from utils.check_code import create_validate_code
 from .tasks import send_register_email
 import time
 import base64
-
+from Recruitment.models import Position
 
 # Create your views here.
 
@@ -20,7 +20,11 @@ class IndexView(View):
 
     def get(self, request):
         email = request.session.get('email', '')
-        return render(request, 'index.html', {'email': email})
+        p = Position.objects.filter(level=1).all()
+        return render(request, 'index.html', {
+            'email': email,
+            'p':p,
+        })
 
 
 class CheckCodeView(View):

@@ -24,8 +24,12 @@ urlpatterns = [
     path('company-product.html', AddCompany04View.as_view(), name='company04'),
     path('company-introduction.html', AddCompany05View.as_view(), name='company05'),
     path('company-success.html', AddCompany06View.as_view(), name='company06'),
+    path('positions.html', EffectivePositionsView.as_view(), name='positions'),
     path('validate_city', ValidateCityView.as_view(), name='validate_city'),
     path('company_logo.html', CompanyLogo, name='company_logo'),
     path('founder_photo.html', FounderPhoto, name='founder_photo'),
     path('product_poster.html', ProductPoster, name='product_poster'),
+    path('position_info_img.html', PositionInfoImg, name='position_info_img'),
+    path('position_offline.html', PositionOfflineView.as_view(), name='position_offline'),
+    path('position_delete.html', PositionDeleteView.as_view(), name='position_delete'),
 ]

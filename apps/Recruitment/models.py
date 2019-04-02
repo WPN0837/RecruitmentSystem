@@ -140,3 +140,56 @@ class CompanyIntroduction(models.Model):
 
     def __str__(self):
         return self.company.abbreviation_name
+
+
+class Position(models.Model):
+    '''
+    职位
+    '''
+    name = models.CharField(max_length=20, blank=True, verbose_name='职位名称', )
+    level = models.IntegerField(verbose_name='等级', blank=True, default=1)
+    pid = models.ForeignKey('Position', on_delete=models.CASCADE, null=True, verbose_name='父级职位', blank=True,
+                            related_name='son')
+
+    class Meta:
+        verbose_name = '职位'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+
+class PositionInfo(models.Model):
+    '''
+    发布的招聘信息
+    '''
+    status_choices = (
+        (0, '有效职位'),
+        (1, '过期职位'),
+        (2, '删除')
+    )
+    positionType = models.CharField(max_length=20, blank=True, verbose_name='职位类别')
+    position = models.CharField(max_length=20, blank=True, verbose_name='职位名称')
+    department = models.CharField(max_length=20, blank=True, verbose_name='所属部门', null=True)
+    jobNature = models.CharField(max_length=20, blank=True, verbose_name='工作性质')
+    salaryMin = models.IntegerField(blank=True, verbose_name='月薪l')
+    salaryMax = models.IntegerField(blank=True, verbose_name='月薪r')
+    workAddress = models.CharField(max_length=20, blank=True, verbose_name='工作城市')
+    workYear = models.CharField(max_length=20, blank=True, verbose_name='工作经验')
+    education = models.CharField(max_length=20, blank=True, verbose_name='学历要求')
+    positionAdvantage = models.CharField(max_length=21, blank=True, verbose_name='职位诱惑')
+    positionDetail = models.TextField(verbose_name='职位描述', blank=True)
+    positionAddress = models.TextField(max_length=150, verbose_name='工作地址', blank=True)
+    email = models.EmailField(verbose_name='接收简历邮箱', blank=True)
+    positionLng = models.CharField(max_length=20, verbose_name='经度', blank=True, null=True)
+    positionLat = models.EmailField(max_length=20, verbose_name='维度', blank=True, null=True)
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, verbose_name='所属公司', blank=True,
+                                related_name='position_info')
+    addTime = models.DateTimeField(verbose_name='发布时间', blank=True, auto_now_add=True)
+    status = models.SmallIntegerField(verbose_name='状态', choices=status_choices, blank=True, default=0)
+    class Meta:
+        verbose_name = '发布的招聘信息'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.position
