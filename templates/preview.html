@@ -45,111 +45,122 @@
             <!--end .basicShow-->
         </div>
         <!--end #basicInfo-->
-        <div class="profile_box" id="expectJob">
-            <h2>期望工作</h2>
-            <div class="expectShow">
-                {{ hope_work.city }} | {{ hope_work.work_sort }} | {{ hope_work.hope_wage }}
-                | {{ hope_work.hope_position }}
+        {% if hope_work %}
+            <div class="profile_box" id="expectJob">
+                <h2>期望工作</h2>
+                <div class="expectShow">
+                    {{ hope_work.city }} | {{ hope_work.work_sort }} | {{ hope_work.hope_wage }}
+                    | {{ hope_work.hope_position }}
+                </div>
+                <!--end .expectShow-->
             </div>
-            <!--end .expectShow-->
-        </div>
-        <!--end #expectJob-->
-        <div class="profile_box" id="workExperience">
-            <h2>工作经历</h2>
-            <div class="experienceShow">
-                <ul class="wlist clearfix">
-                    {% for work_experience in work_experiences %}
-                        <li class="clear">
+            <!--end #expectJob-->
+        {% endif %}
+        {% if work_experiences %}
+            <div class="profile_box" id="workExperience">
+                <h2>工作经历</h2>
+                <div class="experienceShow">
+                    <ul class="wlist clearfix">
+                        {% for work_experience in work_experiences %}
+                            <li class="clear">
                             <span class="c9">
            {{ work_experience.start_year }}.{{ work_experience.start_month }}-{{ work_experience.end_year }}
                                 {% if work_experience.end_year != '至今' %}
                                     .{{ work_experience.start_month }}
                                 {% endif %}
                             </span>
-                            <div>
-                                <h3>{{ work_experience.position }} </h3>
-                                <h4>{{ work_experience.company_name }}</h4>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+                                <div>
+                                    <h3>{{ work_experience.position }} </h3>
+                                    <h4>{{ work_experience.company_name }}</h4>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!--end .experienceShow-->
             </div>
-            <!--end .experienceShow-->
-        </div>
-        <!--end #workExperience-->
-        <div class="profile_box" id="projectExperience">
-            <h2>项目经验</h2>
-            <div class="projectShow">
-                <ul class="plist clearfix">
-                    {% for project_experience in project_experiences %}
-                        <li class="noborder">
-                            <div class="projectList">
-                                <div class="f16 mb10">
-                                    <p>{{ project_experience.project_name }}</p>
-                                    <p>{{ project_experience.project_detail }}</p>
-                                    <span class="c9"> （
+            <!--end #workExperience-->
+        {% endif %}
+        {% if project_experiences %}
+            <div class="profile_box" id="projectExperience">
+                <h2>项目经验</h2>
+                <div class="projectShow">
+                    <ul class="plist clearfix">
+                        {% for project_experience in project_experiences %}
+                            <li class="noborder">
+                                <div class="projectList">
+                                    <div class="f16 mb10">
+                                        <p>{{ project_experience.project_name }}</p>
+                                        <p>{{ project_experience.project_detail }}</p>
+                                        <span class="c9"> （
           {{ project_experience.start_year }}.{{ project_experience.start_month }}-{{ project_experience.end_year }}
-                                        {% if project_experience.end_year != '至今' %}
-                                            .{{ project_experience.start_month }}
-                                        {% endif %}
-                                        ） </span>
+                                            {% if project_experience.end_year != '至今' %}
+                                                .{{ project_experience.start_month }}
+                                            {% endif %}
+                                            ） </span>
+                                    </div>
+                                    <div class="dl1"></div>
                                 </div>
-                                <div class="dl1"></div>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!--end .projectShow-->
             </div>
-            <!--end .projectShow-->
-        </div>
-        <!--end #projectExperience-->
-        <div class="profile_box" id="educationalBackground">
-            <h2>教育背景</h2>
-            <div class="educationalShow">
-                <ul class="elist clearfix">
-                    {% for educational_experience in educational_experiences %}
-                        <li><span
-                                class="c9">{{ educational_experience.start_year }}-{{ educational_experience.end_year }}</span>
-                            <div>
-                                <h3>{{ educational_experience.school_name }}</h3>
-                                <h4>{{ educational_experience.professional }}</h4>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <!--end .educationalShow-->
-        </div>
-        <!--end #educationalBackground-->
-        <div class="profile_box" id="selfDescription">
-            <h2>自我描述</h2>
-            <div class="descriptionShow">
-                {{ self_detail.detail }}
-            </div>
-            <!--end .descriptionShow-->
-        </div>
-        <!--end #selfDescription-->
-        <div class="profile_box" id="worksShow">
-            <h2>作品展示</h2>
-            <div class="workShow">
-                <ul class="slist clearfix">
-                    {% for gallery in gallerys %}
-                        <li class="noborder">
-                            <div class="workList c7">
-                                <div class="f16">
-                                    网址：
-                                    <a target="_blank" href="{{ gallery.url }}">{{ gallery.url }}</a>
+            <!--end #projectExperience-->
+        {% endif %}
+        {% if educational_experiences %}
+            <div class="profile_box" id="educationalBackground">
+                <h2>教育背景</h2>
+                <div class="educationalShow">
+                    <ul class="elist clearfix">
+                        {% for educational_experience in educational_experiences %}
+                            <li><span
+                                    class="c9">{{ educational_experience.start_year }}-{{ educational_experience.end_year }}</span>
+                                <div>
+                                    <h3>{{ educational_experience.school_name }}</h3>
+                                    <h4>{{ educational_experience.professional }}</h4>
                                 </div>
-                                <p>{{ gallery.detail }} </p>
-                            </div>
-                        </li>
-                    {% endfor %}
-
-                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!--end .educationalShow-->
             </div>
-            <!--end .workShow-->
-        </div>
-        <!--end #worksShow-->
+            <!--end #educationalBackground-->
+        {% endif %}
+        {% if self_detail %}
+            <div class="profile_box" id="selfDescription">
+                <h2>自我描述</h2>
+                <div class="descriptionShow">
+                    {{ self_detail.detail }}
+                </div>
+                <!--end .descriptionShow-->
+            </div>
+            <!--end #selfDescription-->
+        {% endif %}
+        {% if gallerys %}
+            <div class="profile_box" id="worksShow">
+                <h2>作品展示</h2>
+                <div class="workShow">
+                    <ul class="slist clearfix">
+                        {% for gallery in gallerys %}
+                            <li class="noborder">
+                                <div class="workList c7">
+                                    <div class="f16">
+                                        网址：
+                                        <a target="_blank" href="{{ gallery.url }}">{{ gallery.url }}</a>
+                                    </div>
+                                    <p>{{ gallery.detail }} </p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!--end .workShow-->
+            </div>
+            <!--end #worksShow-->
+        {% endif %}
     </div>
     <!--end .preview_content-->
 </div>
