@@ -22,9 +22,10 @@ class IndexView(View):
 
     def get(self, request):
         email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
         p = Position.objects.filter(level=1).all()
         return render(request, 'index.html', {
-            'email': email,
+            'user': u,
             'p': p,
         })
 

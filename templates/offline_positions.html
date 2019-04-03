@@ -1,4 +1,4 @@
-﻿{% extends 'positions_base.html' %}
+{% extends 'positions_base.html' %}
 {% block container %}
     <div class="sidebar">
         <a class="btn_create" href="{% url 'PostJob' %}">发布新职位</a>
@@ -26,10 +26,10 @@
             <dt>
                 我发布的职位
             </dt>
-            <dd class="current">
+            <dd>
                 <a href="{% url 'recruitment:positions' %}">有效职位</a>
             </dd>
-            <dd>
+            <dd class="current">
                 <a href="{% url 'recruitment:position_offline' %}">已下线职位</a>
             </dd>
         </dl>
@@ -38,7 +38,7 @@
     <div class="content">
         <dl class="company_center_content">
             <dt>
-                <h1><em></em> 有效职位 <span>（共<i style="color:#fff;font-style:normal"
+                <h1><em></em> 下线职位 <span>（共<i style="color:#fff;font-style:normal"
                                               id="positionNumber">{{ pn }}</i>个）</span>
                 </h1>
             </dt>
@@ -47,11 +47,16 @@
                     <input type="hidden" value="Publish" name="type"/>
                     <ul class="reset my_jobs">
                         {% for position in positions %}
-                            <li data-id="{{ position.id }}"><h3><a target="_blank"
-                                                                   title="{{ position.positionType }}-{{ position.position }}"
-                                                                   href="{% url 'recruitment:position_detail' %}?id={{ position.id }}">{{ position.positionType }}-{{ position.position }}</a>
-                                <span>[{{ position.workAddress }}]</span></h3> <span class="receivedResumeNo"><a
-                                    href="#">应聘简历（1）</a></span>
+                            <li data-id="{{ position.id }}">
+                                <h3>
+                                    <a target="_blank"
+                                       title="{{ position.positionType }}-{{ position.position }}"
+                                       href="{% url 'recruitment:position_detail' %}?id={{ position.id }}">{{ position.positionType }}-{{ position.position }}</a>
+                                    <span>[{{ position.workAddress }}]</span>
+                                </h3>
+                                <span class="receivedResumeNo">
+                                    <a href="#">应聘简历（1）</a>
+                                </span>
                                 <div>
                                     {{ position.jobNature }} / {{ position.salaryMin }}k-{{ position.salaryMax }}k
                                     / {{ position.workYear }} / {{ position.education }}
@@ -60,8 +65,6 @@
                                     发布时间： {{ position.addTime }}
                                 </div>
                                 <div class="links">
-                                    <a target="_blank" class="job_edit" href="#">编辑</a>
-                                    <a class="job_offline" href="javascript:void(0)">下线</a>
                                     <a class="job_del" href="javascript:void(0)">删除</a>
                                 </div>
                             </li>

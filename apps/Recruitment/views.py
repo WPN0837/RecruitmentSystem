@@ -289,10 +289,12 @@ class EffectivePositionsView(View):
             return redirect('login')
         c = u.company
         positions = PositionInfo.objects.filter(status=0).all()
+        pn = len(positions)
         return render(request, 'effective_positions.html', {
             'user': u,
             'c': c,
             'positions': positions,
+            'pn': pn,
         })
 
     def post(self, request):
@@ -376,6 +378,22 @@ class PositionOfflineView(View):
     下线职位
     '''
 
+    def get(self, request):
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        c = u.company
+        positions = PositionInfo.objects.filter(status=1).all()
+        pn = len(positions)
+        return render(request, 'offline_positions.html', {
+            'user': u,
+            'c': c,
+            'positions': positions,
+            'pn': pn,
+        })
+
     def post(self, request):
         pid = request.POST.get('id', None)
         if pid:
@@ -407,3 +425,29 @@ class PositionDeleteView(View):
             return HttpResponse(json.dumps(res))
         res = {'success': False}
         return HttpResponse(json.dumps(res))
+
+
+class PositionDetailView(View):
+    '''
+    职位详细信息
+    '''
+
+    def get(self, request):
+        pid = request.GET.get('id', None)
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        if pid:
+            try:
+                p = PositionInfo.objects.filter(id=int(pid)).first()
+                c = p.company
+                sectors = c.industry_sector.all()
+            except Exception as e:
+                return HttpResponse('error')
+            return render(request, 'position_detail.html', {
+                'user':u,
+                'p': p,
+                'c': c,
+                'sectors': sectors,
+            })
+        return HttpResponse('error')

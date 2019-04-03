@@ -1,0 +1,111 @@
+{% extends 'positions_base.html' %}
+{% block script %}
+    <script type="text/javascript" src="/static/js/jquery-hbzx.js"></script>
+{% endblock %}
+{% block container %}
+    <div class="clearfix">
+        <div class="content_l">
+            <dl class="job_detail">
+                <dt>
+                    <h1 title="{{ p.positionType }}"><em></em>
+                        <div>
+                            {{ c.abbreviation_name }}互联网招聘
+                        </div>
+                        web前端开发
+                    </h1>
+                </dt>
+                <dd class="job_request">
+                    <span class="red">{{ p.salaryMin }}k-{{ p.salaryMax }}k</span>
+                    <span>{{ p.workAddress }}</span>
+                    <span>{{ p.workYear }}</span>
+                    <span>{{ p.education }}</span>
+                    <span>{{ p.jobNature }}</span>
+                    <br/> 职位诱惑 : {{ p.positionAdvantage }}
+                    <div>
+                        发布时间：{{ p.addTime }}发布
+                    </div>
+                </dd>
+                <dd class="job_bt">
+                    <h3 class="description">职位描述</h3>
+                    {{ p.positionDetail|safe }}
+                </dd>
+            </dl>
+        </div>
+        <div class="content_r">
+            <dl class="job_company">
+                <dt>
+                    <a target="_blank" href="#">
+                        <div>
+                            <h2 class="fl"> {{ c.abbreviation_name }} <img width="15" height="19" alt="拉勾认证企业"
+                                                                           src="/static/images/valid.png"/> <span
+                                    class="dn">拉勾认证企业</span>
+                            </h2>
+                        </div>
+                    </a>
+                </dt>
+                <dd>
+                    <ul class="c_feature reset">
+                        <li><span>领域</span>
+                            {% for sector in sectors %}
+                                {{ sector.sector }}&nbsp;&nbsp;
+                            {% endfor %}
+                        </li>
+                        <li><span>规模</span> {{ c.scope }}</li>
+                        <li><span>主页</span>
+                            <a rel="nofollow" title="{{ c.url }}" target="_blank" href="{{ c.url }}">{{ c.url }}</a>
+                        </li>
+                    </ul>
+                    <h4>发展阶段</h4>
+                    <ul class="c_feature reset">
+                        <li><span>目前阶段</span> {{ c.development_stage }}</li>
+                    </ul>
+                    <h4>工作地址</h4>
+                    <div>
+                        {{ p.positionAddress }}
+                    </div>
+                    <input type="hidden" value="{{ p.positionLng }}" id="positionLng">
+                    <input type="hidden" value="{{ p.positionLat }}" id="positionLat">
+                    <div id="smallmap"
+                         style="overflow: hidden; position: relative; z-index: 0; background-color: rgb(243, 241, 236); color: rgb(0, 0, 0); text-align: left;">
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <script src="/static/js/job_detail.js" type="text/javascript"></script>
+    <script src="/static/js/count.js" type="text/javascript"></script>
+
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=qnDozWhVGlheQZhknhvbgPSb4tAbhp3Z"></script>
+    <script type="text/javascript">
+        // 百度地图API功能
+        var map = new BMap.Map("smallmap");
+        var positionLng = $('#positionLng').val();
+        var positionLat = $('#positionLat').val();
+        if (positionLng && positionLat) {
+            var point = new BMap.Point(positionLng, positionLat);
+            map.centerAndZoom(point, 15);
+            var marker = new BMap.Marker(new BMap.Point(positionLng, positionLat)); // 创建点
+            map.addOverlay(marker);            //增加点
+        } else {
+            var point = new BMap.Point(116.331398, 39.897445);
+            map.centerAndZoom(point, 15);
+            // 创建地址解析器实例
+            var myGeo = new BMap.Geocoder();
+            // 将地址解析结果显示在地图上,并调整地图视野
+            myGeo.getPoint("{{ p.positionAddress }}", function (point) {
+                if (point) {
+                    map.centerAndZoom(point, 15);
+                    map.addOverlay(new BMap.Marker(point));
+                } else {
+                    alert("公司地址没有解析到结果!");
+                }
+            }, "北京市");
+        }
+        map.enableScrollWheelZoom();
+        map.enableContinuousZoom();
+
+    </script>
+    <div class="clear"></div>
+    <a rel="nofollow" title="回到顶部" id="backtop" style="display: inline;"></a>
+{% endblock %}

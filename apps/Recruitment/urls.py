@@ -30,6 +30,7 @@ urlpatterns = [
     path('founder_photo.html', FounderPhoto, name='founder_photo'),
     path('product_poster.html', ProductPoster, name='product_poster'),
     path('position_info_img.html', PositionInfoImg, name='position_info_img'),
-    path('position_offline.html', PositionOfflineView.as_view(), name='position_offline'),
-    path('position_delete.html', PositionDeleteView.as_view(), name='position_delete'),
+    path('position-offline.html', PositionOfflineView.as_view(), name='position_offline'),
+    path('position-delete.html', PositionDeleteView.as_view(), name='position_delete'),
+    path('position-detail.html', PositionDetailView.as_view(), name='position_detail'),
 ]
