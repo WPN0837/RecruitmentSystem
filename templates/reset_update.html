@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
  <head>
   <script id="allmobilize" charset="utf-8" src="/static/js/allmobilize.min.js"></script>
@@ -30,12 +30,13 @@
     </div>
    </div>
    <div class="find_psw">
-    <img src="/static/images/psw_step1.png" width="369" height="56" alt="找回密码第一步" />
-    <form id="pswForm" action="{% url 'reset' %}" method="post">
+    <img src="/static/images/psw_step3.png" width="369" height="56" alt="找回密码第三步" />
+    <form id="pswForm" action="{% url 'reset_update' %}" method="post">
      {% csrf_token %}
-     <input type="text" name="email" id="email" tabindex="1" value="{{ email }}" placeholder="请输入注册时使用的邮箱地址" />
-        <p style="color: red">{{ msg }}</p>
-     <input type="submit" id="submitLogin" value="找回密码" />
+     <input type="password" name="pwd" id="pwd" tabindex="1" value="" placeholder="请输入新密码" />
+     <input type="password" name="pwd1" id="pwd1" tabindex="1" value="" placeholder="请再输入一次" />
+     <p style="color: red">{{ msg }}</p>
+     <input type="submit" id="submitLogin" value="提交" />
     </form>
    </div>
   </div>
@@ -45,26 +46,31 @@
     		$(this).siblings('.error').hide();
     	});
     	//验证表单
-
-	    	 $("#pswForm").validate({
-	    	        rules: {
-			    	   	email: {
-			    	    	required: true,
-			    	    	email: true
-			    	   	}
-			    	},
-			    	messages: {
-			    	   	email: {
-			    	    	required: "请输入注册时使用的邮箱地址",
-			    	    	email: "请输入有效的邮箱地址，如：vivi@lagou.com"
-			    	   	}
-			    	},
-			    	submitHandler:function(form){
-			    		$(form).find(":submit").attr("disabled", true);
-			            form.submit();
-			        }
-	    	});
-    	});
+         $("#pswForm").validate({
+                rules: {
+                    pwd: {
+                        required: true,
+                        rangelength: [6, 16]
+                    },
+                    pwd1: {
+                        required: true,
+                    }
+                },
+                messages: {
+                    pwd: {
+                        required: "请输入新密码",
+                        rangelength:'请输入6-16位密码，字母区分大小写'
+                    },
+                    pwd1: {
+                        required: "请再输入一次",
+                    },
+                },
+                submitHandler:function(form){
+                    $(form).find(":submit").attr("disabled", true);
+                    form.submit();
+                }
+        });
+    });
     </script>
  </body>
 </html>

@@ -6,10 +6,12 @@ from .models import User
 import re
 import json
 from utils.check_code import create_validate_code
-from .tasks import send_register_email
+from .tasks import send_register_email, send_reset_email
 import time
 import base64
 from Recruitment.models import Position
+from utils.common import code
+
 
 # Create your views here.
 
@@ -23,7 +25,7 @@ class IndexView(View):
         p = Position.objects.filter(level=1).all()
         return render(request, 'index.html', {
             'email': email,
-            'p':p,
+            'p': p,
         })
 
 
@@ -76,7 +78,8 @@ class RegisterView(View):
             pwd = m.hexdigest()
             User(email=email, pwd=pwd, type=int(Type)).save()
             token = base64.b64encode(json.dumps({'email': email, 'time': time.time()}).encode('utf-8')).decode('utf-8')
-            send_register_email(email, token)
+            data = {'email': email, 'token': token}
+            send_register_email.delay(data)
             res = {'success': 1, 'content': "/login.html"}
         return HttpResponse(json.dumps(res))
 
@@ -93,7 +96,7 @@ class LoginView(View):
         :return:
         '''
         if request.session.get('email'):
-            return redirect('/')
+            return redirect('index')
         loginToUrl = request.META.get('HTTP_REFERER', '')
         return render(request, 'login.html', {'loginToUrl': loginToUrl})
 
@@ -129,7 +132,7 @@ class LoginView(View):
             else:
                 request.session.set_expiry(0)
             request.session['email'] = email
-            if re.search('/login\.html|/register\.html', loginToUrl):
+            if re.search('/login\.html|/register\.html|/update-password\.html', loginToUrl):
                 loginToUrl = ''
             res = {'success': 1, 'content': {'loginToUrl': loginToUrl}}
         return HttpResponse(json.dumps(res))
@@ -156,11 +159,88 @@ class ActivationView(View):
         if token:
             token = base64.b64decode(token.encode('utf-8')).decode('utf-8')
             dic = json.loads(token)
-            u = User.objects.get(email=dic.get('email', None))
-            if u:
-                u.activation = 1
-                u.save()
-                request.session.set_expiry(0)
-                request.session['email'] = dic['email']
-                return redirect('/')
+            t = dic.get('time', 0)
+            if t:
+                now = time.time()
+                if t > now or now - t > 24 * 60 * 60:
+                    return HttpResponse('激活过期')
+                u = User.objects.get(email=dic.get('email', None))
+                if u:
+                    if u.activation == 1:
+                        return HttpResponse('已激活')
+                    u.activation = 1
+                    u.save()
+                    request.session.set_expiry(0)
+                    request.session['email'] = dic['email']
+                    return redirect('/')
         return redirect('/')
+
+
+class Reset01View(View):
+    '''
+    邮件重置密码
+    第一步
+    '''
+
+    def get(self, request):
+        return render(request, 'reset.html')
+
+    def post(self, request):
+        email = request.POST.get('email', None)
+        if User.objects.filter(email=email).exists():
+            reset_code = code()
+            request.session['reset_code'] = reset_code
+            request.session['reset_email'] = email
+            request.session.set_expiry(120)
+            data = {'email': email, 'code': reset_code}
+            send_reset_email.delay(data)
+            return redirect('verification')
+        return render(request, 'reset.html', {'email': email, 'msg': '邮箱不存在！'})
+
+
+class Reset02View(View):
+    '''
+    验证重置密码验证码
+    第二步
+    '''
+
+    def get(self, request):
+        if request.session.get('reset_code', '') and request.session.get('reset_email', ''):
+            return render(request, 'reset_code.html')
+        return redirect('login')
+
+    def post(self, request):
+        reset_code = request.POST.get('reset_code', None)
+        s = request.session.get('reset_code', '')
+        if reset_code and reset_code == s:
+            del request.session['reset_code']
+            request.session['update_pwd'] = True
+            return redirect('reset_update')
+        return render(request, 'reset_code.html', {'msg': '验证码错误！'})
+
+
+class Reset03View(View):
+    '''
+    重置密码
+    第三步
+    '''
+
+    def get(self, request):
+        if not request.session.get('update_pwd', None):
+            return redirect('login')
+        return render(request, 'reset_update.html')
+
+    def post(self, request):
+        pwd = request.POST.get('pwd', '')
+        pwd1 = request.POST.get('pwd1', '')
+        email = request.session.get('reset_email', None)
+        if not email:
+            return HttpResponse('error')
+        if pwd == pwd1:
+            m = md5()
+            m.update('zhaopin'.encode('utf8'))
+            m.update(pwd.encode('utf8'))
+            pwd = m.hexdigest()
+            User.objects.filter(email=email).update(pwd=pwd)
+            return redirect('login')
+        return render(request, 'reset_update.html', {'msg': '两次密码不一致'})

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
  <head>
   <script id="allmobilize" charset="utf-8" src="/static/js/allmobilize.min.js"></script>
@@ -30,12 +30,12 @@
     </div>
    </div>
    <div class="find_psw">
-    <img src="/static/images/psw_step1.png" width="369" height="56" alt="找回密码第一步" />
-    <form id="pswForm" action="{% url 'reset' %}" method="post">
+    <img src="/static/images/psw_step2.png" width="369" height="56" alt="找回密码第二步" />
+    <form id="pswForm" action="{% url 'verification' %}" method="post">
      {% csrf_token %}
-     <input type="text" name="email" id="email" tabindex="1" value="{{ email }}" placeholder="请输入注册时使用的邮箱地址" />
-        <p style="color: red">{{ msg }}</p>
-     <input type="submit" id="submitLogin" value="找回密码" />
+     <input type="text" name="reset_code" id="reset_code" tabindex="1" value="" placeholder="请输入验证码" />
+     <p style="color: red">{{ msg }}</p>
+     <input type="submit" id="submitLogin" value="提交" />
     </form>
    </div>
   </div>
@@ -48,15 +48,13 @@
 
 	    	 $("#pswForm").validate({
 	    	        rules: {
-			    	   	email: {
+			    	   	reset_code: {
 			    	    	required: true,
-			    	    	email: true
 			    	   	}
 			    	},
 			    	messages: {
 			    	   	email: {
-			    	    	required: "请输入注册时使用的邮箱地址",
-			    	    	email: "请输入有效的邮箱地址，如：vivi@lagou.com"
+			    	    	required: "请输入邮箱中收到的验证码",
 			    	   	}
 			    	},
 			    	submitHandler:function(form){

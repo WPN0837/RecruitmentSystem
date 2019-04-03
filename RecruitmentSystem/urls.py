@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from common.views import IndexView, RegisterView, LoginView, LogoutView, CheckCodeView, ActivationView
+from common.views import IndexView, RegisterView, LoginView, LogoutView, CheckCodeView, ActivationView, Reset01View, \
+    Reset02View, Reset03View
 from Recruitment.views import PostJobView
 
 urlpatterns = [
@@ -24,6 +25,9 @@ urlpatterns = [
     path('register.html', RegisterView.as_view(), name='register'),
     path('login.html', LoginView.as_view(), name='login'),
     path('logout.html', LogoutView.as_view(), name='logout'),
+    path('reset.html', Reset01View.as_view(), name='reset'),
+    path('verification.html', Reset02View.as_view(), name='verification'),
+    path('update-password.html', Reset03View.as_view(), name='reset_update'),
     path('code.html', CheckCodeView.as_view(), name='check_code'),
     path('activation.html', ActivationView.as_view(), name='activation'),
     path('recruitment.html', PostJobView.as_view(), name='PostJob'),
