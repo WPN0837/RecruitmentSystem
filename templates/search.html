@@ -1,0 +1,257 @@
+{% extends 'index.html' %}
+{% block script %}
+{% endblock %}
+{#{% block header %}#}
+{#    <div class="wrapper">#}
+{#        <a href="{% url 'index' %}" class="logo">#}
+{#            <img src="/static/images/logo.png" width="229" height="43" alt="拉勾招聘-专注互联网招聘"/>#}
+{#        </a>#}
+{#        <ul class="reset" id="navheader">#}
+{#            <li class="current"><a href="{% url 'index' %}">首页</a></li>#}
+{#            <li><a href="companylist.html">公司</a></li>#}
+{#            {% if user %}#}
+{#                {% if user.type == 0 %}#}
+{#                    <li><a href="{% url 'user:my_resume' %}" rel="nofollow">我的简历</a></li>#}
+{#                {% endif %}#}
+{#                {% if user.type == 1 %}#}
+{#                    <li><a href="{% url 'PostJob' %}" rel="nofollow">发布职位</a></li>#}
+{#                {% endif %}#}
+{#            {% else %}#}
+{#                <li><a href="{% url 'user:my_resume' %}" rel="nofollow">我的简历</a></li>#}
+{#                <li><a href="{% url 'PostJob' %}" rel="nofollow">发布职位</a></li>#}
+{#            {% endif %}#}
+{#        </ul>#}
+{#        <ul class="loginTop">#}
+{#            {% if not user %}#}
+{#                <li><a href="{% url 'login' %}" rel="nofollow">登录</a></li>#}
+{#                <li>|</li>#}
+{#                <li><a href="{% url 'register' %}" rel="nofollow">注册</a></li>#}
+{#            {% else %}#}
+{#                <li><a href="#" rel="nofollow">{{ user.email }}</a></li>#}
+{#                <li>|</li>#}
+{#                <li><a href="{% url 'logout' %}" rel="nofollow">注销</a></li>#}
+{#            {% endif %}#}
+{#        </ul>#}
+{#    </div>#}
+{#{% endblock %}#}
+{% block container %}
+    <div class="sidebar">
+        <div id="options" class="greybg">
+            <dl>
+                <dt>
+                    月薪范围
+                    <em></em>
+                </dt>
+                <dd>
+                    {% for s in salary %}
+                        <div>
+                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ s }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                               style="text-decoration: none">{{ s }}</a>
+                        </div>
+                    {% endfor %}
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    工作经验
+                    <em></em>
+                </dt>
+                <dd>
+                    {% for s in workYear %}
+                        <div>
+                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ s }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                               style="text-decoration: none">{{ s }}</a>
+                        </div>
+                    {% endfor %}
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    最低学历
+                    <em></em>
+                </dt>
+                <dd>
+                    {% for s in education %}
+                        <div>
+                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ s }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                               style="text-decoration: none">{{ s }}</a>
+                        </div>
+                    {% endfor %}
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    工作性质
+                    <em></em>
+                </dt>
+                <dd>
+                    {% for s in jobNature %}
+                        <div>
+                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ s }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                               style="text-decoration: none">{{ s }}</a>
+                        </div>
+                    {% endfor %}
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    发布时间
+                    <em></em>
+                </dt>
+                <dd>
+                    {% for s in addTime %}
+                        <div>
+                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ s }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                               style="text-decoration: none">{{ s }}</a>
+                        </div>
+                    {% endfor %}
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="content">
+        <div id="search_box">
+            <form id="searchForm" name="searchForm" action="{% url 'search' %}" method="get">
+                <ul id="searchType">
+                    <li data-searchtype="1" class="type_selected">职位</li>
+                    <li data-searchtype="2">公司</li>
+                </ul>
+                <div class="searchtype_arrow"></div>
+                <input type="text" id="search_input" name="kd" tabindex="1" value="{{ kd }}"
+                       placeholder="请输入职位名称，如：产品经理"/>
+                <input type="hidden" name="spc" id="spcInput" value="1"/>
+                <input type="submit" id="search_button" value="搜索"/>
+            </form>
+        </div>
+        <style>
+            .ui-autocomplete {
+                width: 488px;
+                background: #fafafa !important;
+                position: relative;
+                z-index: 10;
+                border: 2px solid #91cebe;
+            }
+
+            .ui-autocomplete-category {
+                font-size: 16px;
+                color: #999;
+                width: 50px;
+                position: absolute;
+                z-index: 11;
+                right: 0px; /*top: 6px; */
+                text-align: center;
+                border-top: 1px dashed #e5e5e5;
+                padding: 5px 0;
+            }
+
+            .ui-menu-item {
+                *width: 439px;
+                vertical-align: middle;
+                position: relative;
+                margin: 0px;
+                margin-right: 50px !important;
+                background: #fff;
+                border-right: 1px dashed #ededed;
+            }
+
+            .ui-menu-item a {
+                display: block;
+                overflow: hidden;
+            }
+        </style>
+        <dl class="hotSearch">
+            <dt>
+                热门搜索：
+            </dt>
+            {% for search in hot_search %}
+                <dd>
+                    <a href="{% url 'search' %}?kd={{ search.name }}&spc=1">{{ search.name }}</a>
+                </dd>
+            {% endfor %}
+        </dl>
+        <script type="text/javascript" src="/static/js/search.min.js"></script>
+        <div class="breakline"></div>
+        <dl class="workplace" id="workplaceSelect">
+            <dt class="fl">
+                工作地点：
+            </dt>
+            {% for s in hotCity %}
+                <dd>
+                    {% if s == cws %}
+                        <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s }}&pn={{ cpn }}&cy={{ ccy }}"
+                           class="current">{{ s }}</a>
+                    {% else %}
+                        <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s }}&pn={{ cpn }}&cy={{ ccy }}"
+                        >{{ s }}</a>
+                    {% endif %}
+                    |
+                </dd>
+            {% endfor %}
+            <dd class="more">
+                <a href="javascript:;">其他</a>
+                <div class="triangle citymore_arrow"></div>
+            </dd>
+            <dd id="box_expectCity" class="searchlist_expectCity dn">
+                <span class="bot"></span>
+                <span class="top"></span>
+                {% for w in workAddress %}
+                    <dl>
+                        <dt>
+                            {{ w.0 }}
+                        </dt>
+                        <dd>
+                            {% for s in w.1 %}
+                                {% if cws == s.0 %}
+                                    <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s.0 }}&pn={{ cpn }}&cy={{ ccy }}"
+                                       class="current">{{ s.0 }}</a>
+                                {% else %}
+                                    <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s.0 }}&pn={{ cpn }}&cy={{ ccy }}">{{ s.0 }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </dd>
+                    </dl>
+                {% endfor %}
+            </dd>
+        </dl>
+        <ul class="hot_pos reset">
+            {% for position in hot_positions %}
+                <li class="clearfix">
+                    <div class="hot_pos_l">
+                        <div class="mb10">
+                            <a href="#" title="{{ position.position }}" target="_blank">{{ position.position }}</a>
+                            <span class="c9">[{{ position.workAddress }}]</span>
+                        </div>
+                        <span><em class="c7">月薪： </em>{{ position.salaryMin }}k-{{ position.salaryMax }}k</span>
+                        <span><em class="c7">经验：</em>{{ position.workYear }}</span>
+                        <span><em class="c7">最低学历： </em>{{ position.education }}</span>
+                        <br/>
+                        <span><em class="c7">职位诱惑：</em>{{ position.positionAdvantage }}</span>
+                        <br/>
+                        <span>{{ position.addTime }}</span>
+                        <!-- <a  class="wb">分享到微博</a> -->
+                    </div>
+                    <div class="hot_pos_r">
+                        <div class="apply">
+                            <a href="toudi.html" target="_blank">投个简历</a>
+                        </div>
+                        <div class="mb10 recompany">
+                            <a href="#" target="_blank">{{ position.abbreviation_name }}</a>
+                        </div>
+                        <span><em class="c7">领域：</em>{{ position.sector }}</span>
+                        <span><em class="c7">创始人：</em>{{ position.founder_name }}</span>
+                        <br/>
+                        <span><em class="c7">阶段：</em>{{ position.development_stage }}</span>
+                        <span><em class="c7">规模：</em>{{ position.scope }}</span>
+                        <ul class="companyTags reset">
+                            {% for i in position.tag %}
+                                <li>{{ i.0 }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="Pagination"></div>
+    </div>
+    <a id="backtop" title="回到顶部" rel="nofollow"></a>
+{% endblock %}

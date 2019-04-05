@@ -31,6 +31,21 @@ class City(models.Model):
         return self.name
 
 
+class HotCity(models.Model):
+    '''
+    热门城市
+    '''
+    name = models.CharField(max_length=20, blank=True, verbose_name='城市名称')
+    first = models.CharField(max_length=1, blank=True, verbose_name='拼音首字母')
+
+    class Meta:
+        verbose_name = '热门城市'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+
 class User(models.Model):
     '''
     用户登录账户信息

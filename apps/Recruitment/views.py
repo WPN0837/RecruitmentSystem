@@ -434,9 +434,8 @@ class PositionDetailView(View):
 
     def get(self, request):
         pid = request.GET.get('id', None)
-        email = request.session.get('email', None)
-        if email:
-            u = User.objects.filter(email=email).first()
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
         if pid:
             try:
                 p = PositionInfo.objects.filter(id=int(pid)).first()
@@ -445,9 +444,27 @@ class PositionDetailView(View):
             except Exception as e:
                 return HttpResponse('error')
             return render(request, 'position_detail.html', {
-                'user':u,
+                'user': u,
                 'p': p,
                 'c': c,
                 'sectors': sectors,
             })
         return HttpResponse('error')
+
+
+class MyCompanyDetailView(View):
+    '''
+    公司信息
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        c = u.company
+        return render(request, 'myhome.html', {
+            'user': u,
+            'c': c,
+        })

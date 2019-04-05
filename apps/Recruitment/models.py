@@ -104,8 +104,8 @@ class Company(models.Model):
         (5, 'D轮以上'),
         (6, '上市公司'),
     )
-    full_name = models.CharField(max_length=100, blank=True, verbose_name='公司全称')
-    abbreviation_name = models.CharField(max_length=50, blank=True, verbose_name='公司简称', null=True)
+    full_name = models.CharField(db_index=True, max_length=100, blank=True, verbose_name='公司全称')
+    abbreviation_name = models.CharField(db_index=True, max_length=50, blank=True, verbose_name='公司简称', null=True)
     logo = models.ImageField(upload_to='Company/logo', verbose_name='公司Logo', null=True, blank=True)
     url = models.URLField(max_length=200, verbose_name='公司网址', blank=True, null=True)
     city = models.CharField(max_length=10, verbose_name='所在城市', blank=True, )
@@ -118,6 +118,7 @@ class Company(models.Model):
                                    on_delete=models.CASCADE,
                                    related_name='company')
     user = models.OneToOneField(User, verbose_name='用户', on_delete=models.CASCADE, related_name='company', blank=True)
+    level = models.IntegerField(db_index=True, verbose_name='等级', blank=True, default=0)
 
     class Meta:
         verbose_name = '公司信息'
@@ -147,7 +148,8 @@ class Position(models.Model):
     职位
     '''
     name = models.CharField(max_length=20, blank=True, verbose_name='职位名称', )
-    level = models.IntegerField(verbose_name='等级', blank=True, default=1)
+    level = models.IntegerField(db_index=True, verbose_name='等级', blank=True, default=1)
+    hot = models.IntegerField(db_index=True, default=0, verbose_name='热度', blank=True)
     pid = models.ForeignKey('Position', on_delete=models.CASCADE, null=True, verbose_name='父级职位', blank=True,
                             related_name='son')
 
@@ -168,8 +170,8 @@ class PositionInfo(models.Model):
         (1, '过期职位'),
         (2, '删除')
     )
-    positionType = models.CharField(max_length=20, blank=True, verbose_name='职位类别')
-    position = models.CharField(max_length=20, blank=True, verbose_name='职位名称')
+    positionType = models.CharField(db_index=True, max_length=20, blank=True, verbose_name='职位类别')
+    position = models.CharField(db_index=True, max_length=20, blank=True, verbose_name='职位名称')
     department = models.CharField(max_length=20, blank=True, verbose_name='所属部门', null=True)
     jobNature = models.CharField(max_length=20, blank=True, verbose_name='工作性质')
     salaryMin = models.IntegerField(blank=True, verbose_name='月薪l')
@@ -187,6 +189,8 @@ class PositionInfo(models.Model):
                                 related_name='position_info')
     addTime = models.DateTimeField(verbose_name='发布时间', blank=True, auto_now_add=True)
     status = models.SmallIntegerField(verbose_name='状态', choices=status_choices, blank=True, default=0)
+    views_count = models.IntegerField(verbose_name='浏览次数', default=0, blank=True)
+
     class Meta:
         verbose_name = '发布的招聘信息'
         verbose_name_plural = verbose_name

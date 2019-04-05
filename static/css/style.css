@@ -106,7 +106,7 @@ span.error{display:block; margin:5px 0 10px 0; font-size:14px; color:#ff6a6a;tex
 #sidebar .current .menu_main{background:#fff; border:2px solid #c9cbce; border-right:none; z-index:102;}
 #sidebar .menu_sub{width:540px;padding:15px 30px 5px 30px; position:absolute;top:0;left:230px; z-index:101; border:2px solid #c9cbce;background:#fff;}
 #sidebar .menu_sub dl{margin:0 0 20px;*position:relative;}
-#sidebar .menu_sub dt{width:70px;font-size:14px;margin:0;text-align:right;position:absolute;*left:0;}
+#sidebar .menu_sub dt{width:70px;font-size:14px;margin:0;text-align:center;position:absolute;*left:0;}
 #sidebar .menu_sub dt a{padding:0; color:#333;line-height:28px;text-decoration:underline;}
 #sidebar .menu_sub dt a:hover{color:#019875; text-decoration:underline;}
 #sidebar .menu_sub dd{margin-left:100px;overflow:hidden;}
@@ -920,7 +920,7 @@ a.greylink{ color:#555;font-size:18px; margin-right:60px;text-decoration:underli
 /*友情链接*/
 #linkbox{padding:15px 0 0 0; margin-top:40px;border-top:1px solid #ececed;overflow:hidden;}
 #linkbox dt{float:left;width:70px;margin-top:2px; font-size:15px;}
-#linkbox dd{margin-left:70px;overflow:hidde;}
+#linkbox dd{margin-left:70px;overflow:hidden;}
 #linkbox a{white-space:nowrap;float:left;padding:3px 9px;color:#555555;font-size:12px; text-decoration:none;height:15px;line-height:15px;margin:5px 0 5px -1px;}
 #linkbox a:hover{color:#0061a6;text-decoration: underline;}
 #linkbox span{float:left;font-size:12px;padding:3px 0;color:#999;}

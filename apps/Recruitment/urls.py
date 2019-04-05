@@ -33,4 +33,5 @@ urlpatterns = [
     path('position-offline.html', PositionOfflineView.as_view(), name='position_offline'),
     path('position-delete.html', PositionDeleteView.as_view(), name='position_delete'),
     path('position-detail.html', PositionDetailView.as_view(), name='position_detail'),
+    path('my-home-detail', MyCompanyDetailView.as_view(), name='my_home_detail'),
 ]
