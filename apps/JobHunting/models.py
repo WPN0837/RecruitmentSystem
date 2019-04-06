@@ -1,16 +1,37 @@
 from django.db import models
-from datetime import datetime
-from common.models import User, City
+# from common.models import User
+
+
+class ResumeFile(models.Model):
+    '''
+    附件简历
+    '''
+    resume_file = models.FilePathField(verbose_name='简历文件', blank=True, null=True)
+    resume = models.OneToOneField('Resume', verbose_name='简历', on_delete=models.CASCADE, blank=True,
+                                  related_name='resume_file')
+    addTime = models.DateTimeField(auto_now=True, verbose_name='上传时间')
+
+    class Meta:
+        verbose_name = '附件简历'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.resume_file
 
 
 class Resume(models.Model):
     '''
     简历信息
     '''
+    default_choices = (
+        (1, '在线简历'),
+        (0, '附件简历')
+    )
     title = models.CharField(max_length=20, blank=True, verbose_name='简历标题')
     last_time = models.DateTimeField(auto_now=True, verbose_name='最后一次更新时间')
     user = models.OneToOneField('common.User', verbose_name='所属用户', on_delete=models.CASCADE, related_name='resume',
                                 blank=True)
+    default = models.SmallIntegerField(verbose_name='默认简历类型', default=1, blank=True, null=True, choices=default_choices)
 
     class Meta:
         verbose_name = '简历信息'
@@ -185,3 +206,20 @@ class Gallery(models.Model):
 
     def __str__(self):
         return self.resume.title
+
+
+# from Recruitment.models import PositionInfo
+
+
+class PositionCollection(models.Model):
+    '''
+    收藏职位
+    '''
+    user = models.ForeignKey('common.User', verbose_name='用户', blank=True, on_delete=models.CASCADE)
+    position = models.ForeignKey('Recruitment.PositionInfo', verbose_name='职位', blank=True, on_delete=models.CASCADE)
+    add_time = models.DateTimeField(auto_now_add=True, verbose_name='收藏时间', blank=True)
+
+    class Meta:
+        verbose_name = '收藏职位'
+        verbose_name_plural = verbose_name
+        unique_together = ['user', 'position']

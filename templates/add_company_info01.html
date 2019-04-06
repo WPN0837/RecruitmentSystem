@@ -16,14 +16,16 @@
                     </div>
                     <img width="668" height="56" class="c_steps" alt="第一步" src="/static/images/step1.png"/>
                     <h3>公司全称 </h3>
-                    <input type="text" placeholder="请输入公司全称，如:拉勾" value="" name="name_all" id="name_all" class="valid"/>
+                    <input type="text" placeholder="请输入公司全称，如:拉勾" value="{{ c.full_name }}" name="name_all"
+                           id="name_all" class="valid"/>
                     <h3>公司简称</h3>
                     <!--非必填-->
-                    <input type="text" placeholder="请输入公司简称，如:拉勾" value="" name="name" id="name" class="valid"/>
+                    <input type="text" placeholder="请输入公司简称，如:拉勾" value="{{ c.abbreviation_name }}" name="name"
+                           id="name" class="valid"/>
                     <h3>公司LOGO</h3>
                     <!--非必填改必填-->
                     <div class="c_logo c_logo_pos">
-                        {#         <a title="上传公司LOGO" class="inline cboxElement" href="#logoUploader">#}
+                        <img width="190" height="190" alt="公司logo" src="{{ c.logo }}"/>
                         <input type="file" value="" title="支持jpg、jpeg、gif、png格式，文件小于5M"
                                onchange="img_check(this,'/recruitment/company_logo.html','headPic','headPic');"
                                name="headPic"
@@ -34,19 +36,19 @@
                             <br/> 大小：小于5M
                         </div>
                         <div class="dn" id="logoShow">
-                            <img width="190" height="190" alt="公司logo" src=""/>
+                            <img width="190" height="190" alt="公司logo" src="{{ c.logo }}"/>
                             <span>更换公司LOGO<br/>190px*190px 小于5M</span>
                         </div>
-                        </a>
                     </div>
                     <h3>公司网址</h3>
-                    <input type="text" placeholder="请输入公司网址" value="" name="website" id="website"/>
+                    <input type="text" placeholder="请输入公司网址" value="{{ c.url }}" name="website" id="website"/>
                     <h3>所在城市</h3>
-                    <input type="text" placeholder="请输入工作城市，如：北京" name="city" id="city"/>
+                    <input type="text" placeholder="请输入工作城市，如：北京" value="{{ c.city }}" name="city" id="city"/>
                     <h3>行业领域</h3>
                     <div>
-                        <input type="hidden" value="" name="select_industry_hidden" id="select_industry_hidden"/>
-                        <input type="button" value="请选择行业领域" name="select_industry" id="select_industry"
+                        <input type="hidden" value="{{ c.sector }}" name="select_industry_hidden"
+                               id="select_industry_hidden"/>
+                        <input type="button" value="{{ c.sector }}" name="select_industry" id="select_industry"
                                class="select"/>
                         <div class="dn" id="box_industry" style="display: none;">
                             <ul class="reset">
@@ -58,37 +60,38 @@
                     </div>
                     <h3>公司规模</h3>
                     <div>
-                        <input type="hidden" value="" name="select_scale_hidden" id="select_scale_hidden"/>
-                        <input type="button" value="请选择公司规模" id="select_scale" class="select"/>
+                        <input type="hidden" value="{{ c.scope }}" name="select_scale_hidden" id="select_scale_hidden"/>
+                        <input type="button" value="{{ c.scope }}" id="select_scale" class="select"/>
                         <div class="dn" id="box_scale" style="display: none;">
                             <ul class="reset">
-                                <li>少于15人</li>
-                                <li>15-50人</li>
-                                <li>50-150人</li>
-                                <li>150-500人</li>
-                                <li>500-2000人</li>
-                                <li>2000人以上</li>
+                                {% for scope in scopes %}
+                                    <li>{{ scope }}</li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
                     <h3>发展阶段</h3>
                     <div>
-                        <input type="hidden" id="s_radio_hidden" name="s_radio_hidden" value=""/>
+                        <input type="hidden" id="s_radio_hidden" name="s_radio_hidden"
+                               value="{{ c.development_stage }}" class="valid"/>
                         <ul class="s_radio clearfix s_radio_ex">
-                            <li>未融资</li>
-                            <li>天使轮</li>
-                            <li>A轮</li>
-                            <li>B轮</li>
-                            <li>C轮</li>
-                            <li>D轮及以上</li>
-                            <li>上市公司</li>
+                            {% for stage in stages %}
+                                {% if stage == c.development_stage %}
+                                    <li style="background-color: rgb(246, 244, 236);"
+                                        class="current">{{ stage }}<em></em></li>
+                                {% else %}
+                                    <li style="background-color: rgb(246, 244, 236);">{{ stage }}</li>
+                                {% endif %}
+
+                            {% endfor %}
                         </ul>
                     </div>
                     <h3>一句话介绍</h3>
-                    <input type="text" placeholder="一句话概括公司亮点，如公司愿景、领导团队等，限50字" maxlength="50" name="temptation"
+                    <input type="text" value="{{ c.desc }}" placeholder="一句话概括公司亮点，如公司愿景、领导团队等，限50字" maxlength="50"
+                           name="temptation"
                            id="temptation"/>
                     <span style="display:none;" class="error" id="beError"></span>
-                    <input type="hidden" id="companyId" name="companyId" value=""/>
+                    <input type="hidden" id="companyId" name="companyId" value="{{ c.id }}"/>
                     <input type="submit" value="保存，下一步" id="stepBtn" class="btn_big fr"/>
                 </form>
             </dd>

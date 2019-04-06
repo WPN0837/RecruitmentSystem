@@ -13,6 +13,9 @@
                 <img width="668" height="56" class="c_steps" alt="第二步" src="/static/images/step2.png"/>
                 <h3>已添加标签</h3>
                 <ul class="reset" id="labels">
+                    {% for tag in c.tags.all %}
+                        <li><span>{{ tag.name }}</span><i class=""></i></li>
+                    {% endfor %}
                 </ul>
                 <div class="clear"></div>
                 <div id="box_labels">
@@ -24,7 +27,11 @@
                             <dd>
                                 <ul class="reset">
                                     {% for tag in tags %}
-                                        <li>{{ tag.name }}</li>
+                                        {% if tag in c.tags.all %}
+                                        <li style="background-color: rgb(246, 244, 236);" class="selected">{{ tag.name }}</li>
+                                        {% else %}
+                                        <li style="background-color: rgb(246, 244, 236);">{{ tag.name }}</li>
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             </dd>

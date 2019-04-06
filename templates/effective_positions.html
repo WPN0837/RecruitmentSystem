@@ -60,7 +60,7 @@
                                     发布时间： {{ position.addTime }}
                                 </div>
                                 <div class="links">
-                                    <a target="_blank" class="job_edit" href="#">编辑</a>
+                                    <a target="_blank" class="job_edit" href="{% url 'PostJob' %}?id={{ position.id }}">编辑</a>
                                     <a class="job_offline" href="javascript:void(0)">下线</a>
                                     <a class="job_del" href="javascript:void(0)">删除</a>
                                 </div>

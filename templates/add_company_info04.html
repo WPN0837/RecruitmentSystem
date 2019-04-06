@@ -24,10 +24,18 @@
                                         <br/> 尺寸：380*220px 大小：小于5M
                                     </div>
                                 </div>
-                                <div id="productShow0" class="product_upload dn productShow">
+                                {% if c.product %}
+                                    <div id="productShow0" class="product_upload productShow">
+                                    <img width="380" height="220" src="/{{ c.product.product_poster }}"/>
+                                    <span>更换产品图片<br/>380*220px 小于5M</span>
+                                </div>
+                                {% else %}
+                                    <div id="productShow0" class="product_upload dn productShow">
                                     <img width="380" height="220" src=""/>
                                     <span>更换产品图片<br/>380*220px 小于5M</span>
                                 </div>
+                                {% endif %}
+
                                 <input type="file" title="支持jpg、jpeg、gif、png格式，文件小于5M"
                                        onchange="img_check(this,'/recruitment/product_poster.html',380,220,5,'myfiles0','myfiles0_error','productNo0','productShow0','type0','productInfos0');"
                                        name="myfiles" id="myfiles0"/>
@@ -36,20 +44,20 @@
                             </div>
                             <span style="display:none;" id="myfiles0_error" class="error"></span>
                             <h3>产品名称</h3>
-                            <input type="text" placeholder="请输入产品名称" name="productInfos[0].product" id="name0"/>
+                            <input type="text" placeholder="请输入产品名称" value="{{ c.product.product_name }}" name="productInfos[0].product" id="name0"/>
                             <h3>产品地址</h3>
-                            <input type="text" placeholder="请输入产品主页URL或产品下载地址" name="productInfos[0].productUrl"
+                            <input type="text" placeholder="请输入产品主页URL或产品下载地址" value="{{ c.product.product_url }}" name="productInfos[0].productUrl"
                                    id="address0"/>
                             <h3>产品简介</h3>
                             <textarea placeholder="请简短描述该产品定位、产品特色、用户群体等" maxlength="1000"
-                                      name="productInfos[0].productProfile" id="description0"></textarea>
+                                      name="productInfos[0].productProfile" id="description0">{{ c.product.product_desc }}</textarea>
                             <div class="word_count">
                                 你还可以输入
-                                <span>500</span> 字
+                                <span>{{ l }}</span> 字
                             </div>
                         </div>
                     </div>
-                    <a id="addMember" class="add_member" href="javascript:void(0)"><i></i>继续添加公司产品</a>
+{#                    <a id="addMember" class="add_member" href="javascript:void(0)"><i></i>继续添加公司产品</a>#}
                     <div class="clear"></div>
                     <input type="submit" value="保存，下一步" id="step4Submit" class="btn_big fr"/>
                     <a class="btn_cancel fr" href="{% url 'recruitment:company05' %}">跳过</a>

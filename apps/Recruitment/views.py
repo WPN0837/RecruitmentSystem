@@ -21,26 +21,42 @@ class ValidateCityView(View):
 
 class PostJobView(View):
     def get(self, request):
-        email = request.session.get('email', None)
-        if email:
-            u = User.objects.filter(email=email).first()
-            if u and u.type:
-                if hasattr(u, 'company'):
-                    c = u.company
-                    p = Position.objects.filter(level=1).all()
-                    return render(request, 'PostJob.html', {
-                        'user': u,
-                        'c': c,
-                        'p': p,
-                    })
-                else:
-                    return redirect('recruitment:company01')
-            else:
-                return render(request, 'error.html', {'msg': ''})
-        else:
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
             return redirect('login')
+        if not u.type:
+            return HttpResponse('error')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
+        c = u.company
+        p = Position.objects.filter(level=1).all()
+        cpid = request.GET.get('id', None)
+        cp = None
+        natures = ['全职', '兼职', '实习']
+        if cpid:
+            try:
+                cp = PositionInfo.objects.filter(id=int(cpid)).first()
+            except Exception as e:
+                return HttpResponse('error')
+        return render(request, 'PostJob.html', {
+            'user': u,
+            'c': c,
+            'p': p,
+            'cp': cp,
+            'natures': natures,
+        })
 
     def post(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        if not u.type:
+            return HttpResponse('error')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
+        pid = request.POST.get('id', '')
         positionType = request.POST.get('positionType', None)
         position = request.POST.get('positionName', None)
         department = request.POST.get('department', None)
@@ -56,12 +72,22 @@ class PostJobView(View):
         positionLng = request.POST.get('positionLng', None)
         positionLat = request.POST.get('positionLat', None)
         email = request.POST.get('email', None)
-        cid = request.POST.get('companyId', None)
-        if cid:
+        c = u.company
+        if pid:
             try:
-                c = Company.objects.filter(id=int(cid)).first()
+                p = PositionInfo.objects.filter(id=int(pid)).update(positionType=positionType, position=position,
+                                                                    department=department, jobNature=jobNature,
+                                                                    salaryMin=salaryMin, salaryMax=salaryMax,
+                                                                    workAddress=workAddress, workYear=workYear,
+                                                                    education=education,
+                                                                    positionAdvantage=positionAdvantage,
+                                                                    positionDetail=positionDetail,
+                                                                    positionAddress=positionAddress,
+                                                                    positionLng=positionLng, positionLat=positionLat,
+                                                                    email=email, )
             except Exception as e:
                 return HttpResponse('error')
+        else:
             p = PositionInfo(
                 positionType=positionType, position=position, department=department, jobNature=jobNature,
                 salaryMin=salaryMin, salaryMax=salaryMax, workAddress=workAddress, workYear=workYear,
@@ -70,24 +96,27 @@ class PostJobView(View):
                 company=c
             )
             p.save()
-            res = {'success': True, 'content': '/recruitment/positions.html'}
-            return HttpResponse(json.dumps(res))
-        return HttpResponse('error')
+        res = {'success': True, 'content': '/recruitment/positions.html'}
+        return HttpResponse(json.dumps(res))
 
 
 class AddCompany01View(View):
     def get(self, request):
+        scopes = ['少于15人', '15-50人', '50-150人', '150-500人', '500-2000人', '2000人以上']
+        stages = ['未融资', '天使轮', 'A轮', 'B轮', 'C轮', 'D轮及以上', '上市公司']
         sectors = IndustrySector.objects.all()
         email = request.session.get('email', None)
         if email:
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
-        if hasattr(u, 'company'):
-            return redirect('recruitment:company02')
+        c = u.company
         return render(request, 'add_company_info01.html', {
             'sectors': sectors,
             'user': u,
+            'stages': stages,
+            'scopes': scopes,
+            'c': c,
         })
 
     def post(self, request):
@@ -107,7 +136,21 @@ class AddCompany01View(View):
         development_stage = request.POST.get('financeStage', None)
         desc = request.POST.get('companyFeatures', None)
         if cid:
-            pass
+            u.company.full_name = full_name
+            u.company.abbreviation_name = abbreviation_name
+            u.company.logo = logo
+            u.company.url = url
+            u.company.city = city
+            u.company.scope = scope
+            u.company.development_stage = development_stage
+            u.company.desc = desc
+            if industry_sector:
+                u.company.industry_sector.clear()
+                is_list = industry_sector.split(',')
+                is_obj_list = IndustrySector.objects.filter(sector__in=is_list).all()
+                for i in is_obj_list:
+                    u.company.industry_sector.add(i)
+            u.company.save()
         else:
             c = Company(full_name=full_name, abbreviation_name=abbreviation_name, logo=logo, url=url, city=city,
                         scope=scope, development_stage=development_stage, desc=desc, user=u)
@@ -137,10 +180,16 @@ class AddCompany02View(View):
         })
 
     def post(self, request):
-        cid = request.POST.get('companyId', None)
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        cid = u.company.id
         tags = request.POST.get('labels', None)
         if cid and tags:
             c = Company.objects.filter(id=int(cid)).first()
+            c.tags.clear()
             tag_list = CompanyTag.objects.filter(name__in=tags.split(','))
             for i in tag_list:
                 c.tags.add(i)
@@ -157,32 +206,46 @@ class AddCompany03View(View):
         else:
             return redirect('login')
         c = u.company
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
+        if not hasattr(u.company, 'founder'):
+            l = 500
+        else:
+            l = 500 - len(u.company.founder.desc)
         return render(request, 'add_company_info03.html', {
             'user': u,
             'c': c,
+            'l': l,
         })
 
     def post(self, request):
-        cid = request.POST.get('companyId', None)
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
         photo = request.POST.get('photo', None)
         founder_name = request.POST.get('name', None)
         current_position = request.POST.get('position', None)
         sina = request.POST.get('weibo', None)
         desc = request.POST.get('remark', None)
-        if cid:
-            try:
-                c = Company.objects.filter(id=int(cid)).first()
-            except ValueError as e:
-                return HttpResponse('error')
-            if c:
-                f = CompanyFoundingTeam(founder_name=founder_name, current_position=current_position, sina=sina,
-                                        desc=desc,
-                                        photo=photo)
-                f.save()
-                c.founder = f
-                c.save()
-                return redirect('recruitment:company04')
-        return HttpResponse('error')
+        c = u.company
+        if c.founder:
+            c.founder.founder_name = founder_name
+            c.founder.current_position = current_position
+            c.founder.sina = sina
+            c.founder.desc = desc
+            c.founder.photo = photo
+            c.founder.save()
+            return redirect('recruitment:company04')
+        else:
+            f = CompanyFoundingTeam(founder_name=founder_name, current_position=current_position, sina=sina,
+                                    desc=desc,
+                                    photo=photo)
+            f.save()
+            c.founder = f
+            c.save()
+            return redirect('recruitment:company04')
 
 
 class AddCompany04View(View):
@@ -192,50 +255,44 @@ class AddCompany04View(View):
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
         c = u.company
+        if c.product:
+            l = 500 - len(c.product.product_desc)
+        else:
+            l = 500
         return render(request, 'add_company_info04.html', {
             'user': u,
             'c': c,
+            'l': l,
         })
 
     def post(self, request):
-        cid = request.POST.get('companyId', None)
-        product_poster0 = request.POST.get('productInfos[0].productPicUrl', None)
-        product_name0 = request.POST.get('productInfos[0].product', None)
-        product_url0 = request.POST.get('productInfos[0].productUrl', None)
-        product_desc0 = request.POST.get('productInfos[0].productProfile', None)
-        product_poster1 = request.POST.get('productInfos[1].productPicUrl', None)
-        product_name1 = request.POST.get('productInfos[1].product', None)
-        product_url1 = request.POST.get('productInfos[1].productUrl', None)
-        product_desc1 = request.POST.get('productInfos[1].productProfile', None)
-        product_poster2 = request.POST.get('productInfos[2].productPicUrl', None)
-        product_name2 = request.POST.get('productInfos[2].product', None)
-        product_url2 = request.POST.get('productInfos[2].productUrl', None)
-        product_desc2 = request.POST.get('productInfos[2].productProfile', None)
-        if cid:
-            try:
-                c = Company.objects.filter(id=int(cid)).first()
-            except ValueError as e:
-                return HttpResponse('error')
-            if c:
-                if product_name0:
-                    p0 = CompanyProduct(product_poster=product_poster0, product_url=product_url0,
-                                        product_desc=product_desc0,
-                                        product_name=product_name0, company=c)
-                    p0.save()
-                if product_name1:
-                    p1 = CompanyProduct(product_poster=product_poster1, product_url=product_url1,
-                                        product_desc=product_desc1,
-                                        product_name=product_name1, company=c)
-                    p1.save()
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
+        c = u.company
+        product_poster = request.POST.get('productInfos[0].productPicUrl', None)
+        product_name = request.POST.get('productInfos[0].product', None)
+        product_url = request.POST.get('productInfos[0].productUrl', None)
+        product_desc = request.POST.get('productInfos[0].productProfile', None)
 
-                if product_name2:
-                    p2 = CompanyProduct(product_poster=product_poster2, product_url=product_url2,
-                                        product_desc=product_desc2,
-                                        product_name=product_name2, company=c)
-                    p2.save()
-                return redirect('recruitment:company05')
-        return HttpResponse('error')
+        if c.product:
+            CompanyProduct.objects.filter(company=c).update(product_poster=product_poster, product_url=product_url,
+                                                                product_desc=product_desc,
+                                                                product_name=product_name)
+        else:
+            if product_name:
+                p = CompanyProduct(product_poster=product_poster, product_url=product_url,
+                                   product_desc=product_desc,
+                                   product_name=product_name, company=c)
+                p.save()
+        return redirect('recruitment:company05')
 
 
 class AddCompany05View(View):
@@ -245,22 +302,34 @@ class AddCompany05View(View):
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
+        if not hasattr(u.company, 'introduction'):
+            l = 1000
+        else:
+            l = 1000 - len(u.company.introduction.introduction)
         c = u.company
         return render(request, 'add_company_info05.html', {
             'user': u,
             'c': c,
+            'l': l,
         })
 
     def post(self, request):
         print(request.POST)
-        cid = request.POST.get('companyId', None)
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
         introduction = request.POST.get('companyProfile', None)
-        if cid:
-            try:
-                c = Company.objects.filter(id=int(cid)).first()
-            except ValueError as e:
-                return HttpResponse('error')
-            if c:
+        if introduction:
+            c = u.company
+            if hasattr(c, 'introduction'):
+                c.introduction.introduction = introduction
+                c.introduction.save()
+                return redirect('recruitment:company06')
+            else:
                 CompanyIntroduction.objects.create(introduction=introduction, company=c)
                 return redirect('recruitment:company06')
         return HttpResponse('error')
@@ -458,11 +527,14 @@ class MyCompanyDetailView(View):
     '''
 
     def get(self, request):
+
         email = request.session.get('email', None)
         if email:
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
         c = u.company
         return render(request, 'myhome.html', {
             'user': u,

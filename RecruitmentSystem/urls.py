@@ -33,6 +33,10 @@ urlpatterns = [
     path('about.html', AboutView.as_view(), name='about'),
     path('list.html', ListView.as_view(), name='list'),
     path('search.html', SearchView.as_view(), name='search'),
+    path('company-detail.html', CompanyDetailView.as_view(), name='company_detail'),
+    path('position-detail.html', PositionDetailView.as_view(), name='position_detail'),
+    path('resume.html', ResumeView.as_view(), name='resume'),
+    path('submit-resume.html', SubmitResumeView.as_view(), name='submit_resume'),
     path('user/', include('JobHunting.urls', namespace='user')),
     path('recruitment/', include('Recruitment.urls', namespace='recruitment')),
 ]

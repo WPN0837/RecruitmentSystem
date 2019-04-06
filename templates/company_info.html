@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% block header %}
     <div class="wrapper">
         <a href="{% url 'index' %}" class="logo">
@@ -43,7 +43,6 @@
                     <h2 title="{{ c.full_name }}">{{ c.full_name }}</h2>
                     <em class="unvalid"></em>
                     <span class="va dn">拉勾未认证企业</span>
-                    <a target="_blank" class="applyC" href="http://www.lagou.com/c/auth.html">申请认证</a>
                     <div class="clear"></div>
                     <h1 title="{{ c.full_name }}" class="fullname">{{ c.full_name }}</h1>
                     <div class="clear oneword">
@@ -56,17 +55,14 @@
                         {% for tag in c.tags.all %}
                             <li><span>{{ tag.name }}</span></li>
                         {% endfor %}
-                        <a href="{% url 'recruitment:company02' %}?id={{ c.id }}">编辑</a>
                     </ul>
                 </div>
-                <a title="编辑基本信息" class="c_edit" id="editCompanyDetail"
-                   href="{% url 'recruitment:company01' %}?id={{ c.id }}"></a>
                 <div class="clear"></div>
             </div>
             <div class="c_breakline"></div>
-            <div id="Product">
-                <div class="product_wrap">
-                    {% if c.product %}
+            {% if c.product %}
+                <div id="Product">
+                    <div class="product_wrap">
                         <dl class="c_product">
                             <dt>
                                 <h2><em></em>公司产品</h2>
@@ -87,30 +83,16 @@
                                     </div>
                                 </div>
                             </dd>
-                            <a title="编辑产品信息" class="c_edit" id="editCompanyDetail"
-                               href="{% url 'recruitment:company04' %}?id={{ c.id }}"></a>
+                            {#                            <a title="编辑产品信息" class="c_edit" id="editCompanyDetail"#}
+                            {#                               href="{% url 'recruitment:company04' %}?id={{ c.id }}"></a>#}
                         </dl>
-                    {% else %}
-                        <dl class="c_section">
-                            <dt>
-                                <h2><em></em>公司产品</h2>
-                            </dt>
-                            <dd>
-                                <div class="addnew">
-                                    酒香不怕巷子深已经过时啦！
-                                    <br/> 把自己优秀的产品展示出来吸引人才围观吧！
-                                    <br/>
-                                    <a class="product_edit" href="{% url 'recruitment:company04' %}">+添加公司产品</a>
-                                </div>
-                            </dd>
-                        </dl>
-                    {% endif %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             <!-- end #Product -->
-            <div id="Profile">
-                <div class="profile_wrap">
-                    {% if c.introduction %}
+            {% if c.introduction %}
+                <div id="Profile">
+                    <div class="profile_wrap">
                         <dl class="c_section">
                             <dt>
                                 <h2><em></em>公司介绍</h2>
@@ -120,25 +102,13 @@
                                     {{ c.introduction.introduction }}
                                 </div>
                             </dd>
-                            <a title="编辑公司介绍" class="c_edit" id="editCompanyDetail"
-                               href="{% url 'recruitment:company05' %}?id={{ c.id }}"></a>
+                            {#                            <a title="编辑公司介绍" class="c_edit" id="editCompanyDetail"#}
+                            {#                               href="{% url 'recruitment:company05' %}?id={{ c.id }}"></a>#}
                         </dl>
-                    {% else %}
-                        <dl class="c_section">
-                            <dt>
-                                <h2><em></em>公司介绍</h2>
-                            </dt>
-                            <dd>
-                                <div class="addnew">
-                                    详细公司的发展历程、让求职者更加了解你!
-                                    <br/>
-                                    <a id="addIntro" href="{% url 'recruitment:company05' %}">+添加公司介绍</a>
-                                </div>
-                            </dd>
-                        </dl>
-                    {% endif %}
+
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             <div id="flag"></div>
         </div>
         <!-- end .content_l -->
@@ -171,7 +141,6 @@
                         </tr>
                         </tbody>
                     </table>
-                    {#                    <a id="editTags" class="c_edit" href="{% url 'recruitment:company02' %}?id={{ c.id }}"></a>#}
                 </div>
             </div>
             <dl class="c_section c_stages">
@@ -185,18 +154,19 @@
                 </dd>
             </dl>
             <!-- end .c_stages -->
-            <div id="Member">
-                <!--有创始团队-->
-                <dl class="c_section c_member">
-                    <dt>
-                        <h2><em></em>创始团队</h2>
-                    </dt>
-                    <dd>
-                        <div class="member_wrap">
-                            {% if c.founder %}
+            {% if c.founder %}
+                <div id="Member">
+                    <!--有创始团队-->
+                    <dl class="c_section c_member">
+                        <dt>
+                            <h2><em></em>创始团队</h2>
+                        </dt>
+                        <dd>
+                            <div class="member_wrap">
+
                                 <div class="member_info">
-                                    <a title="编辑创始人" class="c_edit member_edit"
-                                       href="{% url 'recruitment:company03' %}?id={{ c.founder.id }}"></a>
+                                    {#                                    <a title="编辑创始人" class="c_edit member_edit"#}
+                                    {#                                       href="{% url 'recruitment:company03' %}?id={{ c.founder.id }}"></a>#}
                                     <div class="m_portrait">
                                         <div></div>
                                         <img width="120" height="120" alt="{{ c.founder.founder_name }}"
@@ -213,19 +183,13 @@
                                         {{ c.founder.desc }}
                                     </div>
                                 </div>
-                            {% else %}
-                                <div class="member_info addnew_right">
-                                    展示公司的领导班子，
-                                    <br/>提升诱人指数！
-                                    <br/>
-                                    <a class="member_edit" href="{% url 'recruitment:company03' %}">+添加成员</a>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <!-- end .member_wrap -->
-                    </dd>
-                </dl>
-            </div>
+
+                            </div>
+                            <!-- end .member_wrap -->
+                        </dd>
+                    </dl>
+                </div>
+            {% endif %}
             <!-- end #Member -->
         </div>
     </div>

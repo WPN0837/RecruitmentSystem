@@ -69,3 +69,18 @@ class User(models.Model):
 
     def __str__(self):
         return self.email
+
+
+# from JobHunting.models import Resume
+# from Recruitment.models import PositionInfo
+
+
+class SubmitResume(models.Model):
+    resume = models.ForeignKey('JobHunting.Resume', verbose_name='简历', blank=True, on_delete=models.CASCADE)
+    position = models.ForeignKey('Recruitment.PositionInfo', verbose_name='职位', blank=True, on_delete=models.CASCADE)
+    add_time = models.DateTimeField(verbose_name='投递时间', blank=True, auto_now_add=True)
+
+    class Meta:
+        verbose_name = '收藏职位'
+        verbose_name_plural = verbose_name
+        unique_together = ['resume', 'position']

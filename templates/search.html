@@ -1,39 +1,6 @@
 {% extends 'index.html' %}
 {% block script %}
 {% endblock %}
-{#{% block header %}#}
-{#    <div class="wrapper">#}
-{#        <a href="{% url 'index' %}" class="logo">#}
-{#            <img src="/static/images/logo.png" width="229" height="43" alt="拉勾招聘-专注互联网招聘"/>#}
-{#        </a>#}
-{#        <ul class="reset" id="navheader">#}
-{#            <li class="current"><a href="{% url 'index' %}">首页</a></li>#}
-{#            <li><a href="companylist.html">公司</a></li>#}
-{#            {% if user %}#}
-{#                {% if user.type == 0 %}#}
-{#                    <li><a href="{% url 'user:my_resume' %}" rel="nofollow">我的简历</a></li>#}
-{#                {% endif %}#}
-{#                {% if user.type == 1 %}#}
-{#                    <li><a href="{% url 'PostJob' %}" rel="nofollow">发布职位</a></li>#}
-{#                {% endif %}#}
-{#            {% else %}#}
-{#                <li><a href="{% url 'user:my_resume' %}" rel="nofollow">我的简历</a></li>#}
-{#                <li><a href="{% url 'PostJob' %}" rel="nofollow">发布职位</a></li>#}
-{#            {% endif %}#}
-{#        </ul>#}
-{#        <ul class="loginTop">#}
-{#            {% if not user %}#}
-{#                <li><a href="{% url 'login' %}" rel="nofollow">登录</a></li>#}
-{#                <li>|</li>#}
-{#                <li><a href="{% url 'register' %}" rel="nofollow">注册</a></li>#}
-{#            {% else %}#}
-{#                <li><a href="#" rel="nofollow">{{ user.email }}</a></li>#}
-{#                <li>|</li>#}
-{#                <li><a href="{% url 'logout' %}" rel="nofollow">注销</a></li>#}
-{#            {% endif %}#}
-{#        </ul>#}
-{#    </div>#}
-{#{% endblock %}#}
 {% block container %}
     <div class="sidebar">
         <div id="options" class="greybg">
@@ -218,7 +185,7 @@
                 <li class="clearfix">
                     <div class="hot_pos_l">
                         <div class="mb10">
-                            <a href="#" title="{{ position.position }}" target="_blank">{{ position.position }}</a>
+                            <a href="{% url 'position_detail' %}?id={{ position.id }}" title="{{ position.position }}" target="_blank">{{ position.position }}</a>
                             <span class="c9">[{{ position.workAddress }}]</span>
                         </div>
                         <span><em class="c7">月薪： </em>{{ position.salaryMin }}k-{{ position.salaryMax }}k</span>

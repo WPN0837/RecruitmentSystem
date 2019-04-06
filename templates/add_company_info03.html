@@ -20,10 +20,18 @@
                                 <div class="portrait_upload" id="portraitNo0">
                                     <span>上传创始人头像</span>
                                 </div>
-                                <div class="portraitShow dn" id="portraitShow0">
+                                {% if c.founder %}
+                                <div class="portraitShow" id="portraitShow0">
+                                    <img width="120" height="120" src="/{{ c.founder.photo }}"/>
+                                    <span>更换头像</span>
+                                </div>
+                                    {% else %}
+                                    <div class="portraitShow dn" id="portraitShow0">
                                     <img width="120" height="120" src=""/>
                                     <span>更换头像</span>
                                 </div>
+                                {% endif %}
+
                                 <input type="file" value="" title="支持jpg、jpeg、gif、png格式，文件小于5M"
                                        onchange="img_check(this,'/recruitment/founder_photo.html',120,120,5,'myfiles0','myfiles0_error','portraitNo0','portraitShow0','type0','leaderInfos0');"
                                        name="myfiles" id="myfiles0" class="myfiles"/>
@@ -33,18 +41,18 @@
                                 <span style="display:none;" id="myfiles0_error" class="error"></span>
                             </div>
                             <h3>创始人姓名</h3>
-                            <input type="text" placeholder="请输入创始人姓名" name="name" id="name" class="s_input1 valid"/>
+                            <input type="text" placeholder="请输入创始人姓名" value="{{ c.founder.founder_name }}" name="name" id="name" class="s_input1 valid"/>
                             <h3>当前职位</h3>
-                            <input type="text" placeholder="请输入当前职位，如：创始人兼CEO" name="position" id="position0"
+                            <input type="text" placeholder="请输入当前职位，如：创始人兼CEO" value="{{ c.founder.current_position }}" name="position" id="position0"
                                    class="s_input1 valid"/>
                             <h3>新浪微博</h3>
-                            <input type="text" placeholder="请输入创始人新浪微博地址" name="weibo" id="weibo0"/>
+                            <input type="text" placeholder="请输入创始人新浪微博地址" value="{{ c.founder.sina }}" name="weibo" id="weibo0"/>
                             <h3>创始人简介</h3>
                             <textarea placeholder="请输入该创始人的个人履历等，建议按照时间倒序分条展示" maxlength="1000" name="remark"
-                                      id="description0"></textarea>
+                                      id="description0">{{ c.founder.desc }}</textarea>
                             <div class="word_count">
                                 你还可以输入
-                                <span>500</span> 字
+                                <span>{{ l }}</span> 字
                             </div>
                         </div>
                     </div>

@@ -15,10 +15,10 @@
                     {% csrf_token %}
                     <input type="hidden" name="companyId" value="{{ c.id }}"/>
                     <h3>公司介绍</h3>
-                    <textarea placeholder="请分段详细描述公司简介、企业文化等" name="companyProfile" id="companyProfile"></textarea>
+                    <textarea placeholder="请分段详细描述公司简介、企业文化等" name="companyProfile" id="companyProfile">{{ c.introduction.introduction }}</textarea>
                     <div class="word_count">
                         你还可以输入
-                        <span>1000</span> 字
+                        <span>{{ l }}</span> 字
                     </div>
                     <div class="clear"></div>
                     <input type="button" id="step5Submit" value="保存，完成" class="btn_big fr"/>

@@ -9,7 +9,7 @@
             <dd class="c_notice">
                 <h4>恭喜你，公司信息已填写完善，你可以发布职位啦！</h4>
                 <a class="greylink" href="{% url 'PostJob' %}">发布新职位</a>
-                <a class="greylink" href="myhome.html"> 进入我的公司主页</a>
+                <a class="greylink" href="{% url 'recruitment:my_home_detail' %}"> 进入我的公司主页</a>
             </dd>
         </dl>
     </div>

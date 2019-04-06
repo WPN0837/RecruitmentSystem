@@ -6,13 +6,14 @@ from .models import User
 import re
 import json
 from utils.check_code import create_validate_code
-from .tasks import send_register_email, send_reset_email
+from .tasks import send_register_email, send_reset_email,send_submit_resume_email
 import time
 import base64
-from common.models import HotCity
+from common.models import HotCity, SubmitResume
 from Recruitment.models import Position, PositionInfo, CompanyTag, IndustrySector, Company
 from utils.common import code
 from datetime import datetime, timedelta
+from django.conf import settings
 
 
 # Create your views here.
@@ -277,6 +278,7 @@ class AboutView(View):
     '''
     关于
     '''
+
     def get(self, request):
         email = request.session.get('email', '')
         u = User.objects.filter(email=email).first()
@@ -289,6 +291,7 @@ class ListView(View):
     '''
     职位信息列表
     '''
+
     def get(self, request):
         salary = ['2k以下', '2k-5k', '5k-10k', '10k-15k', '15k-25k', '25k-50k', '50k以上']
         workYear = ['不限', '应届毕业生', '1年以下', '1-3年', '3-5年', '5-10年', '10年以上']
@@ -362,6 +365,7 @@ class SearchView(View):
     '''
     搜索
     '''
+
     def get(self, request):
         salary = ['2k以下', '2k-5k', '5k-10k', '10k-15k', '15k-25k', '25k-50k', '50k以上']
         workYear = ['不限', '应届毕业生', '1年以下', '1-3年', '3-5年', '5-10年', '10年以上']
@@ -519,3 +523,120 @@ def filter(positions, csy, cwr, cen, cje, cae, cws, cpn, ccy):
                 ccy_positions.append(i)
         positions = ccy_positions
     return positions
+
+
+class CompanyDetailView(View):
+    '''
+    公司详细信息
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        cid = request.GET.get('id', 0)
+        try:
+            c = Company.objects.filter(id=int(cid)).first()
+        except Exception as e:
+            return HttpResponse('error')
+        return render(request, 'company_info.html', {
+            'c': c,
+            'user': u,
+        })
+
+
+class PositionDetailView(View):
+    '''
+    职位详细信息
+    '''
+
+    def get(self, request):
+        pid = request.GET.get('id', 0)
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        try:
+            p = PositionInfo.objects.filter(id=int(pid)).first()
+            c = p.company
+            sectors = c.industry_sector.all()
+        except Exception as e:
+            return HttpResponse('error')
+        return render(request, 'position_detail1.html', {
+            'user': u,
+            'p': p,
+            'c': c,
+            'sectors': sectors,
+        })
+
+
+class SubmitResumeView(View):
+    '''
+    投递简历
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        pid = request.GET.get('id', 0)
+        try:
+            p = PositionInfo.objects.filter(id=int(pid)).first()
+            if not p:
+                raise Exception
+        except Exception as e:
+            return HttpResponse('error')
+        if not hasattr(u, 'resume'):
+            return HttpResponse('error')
+        if u.resume.default == 1:
+            token = base64.b64encode(json.dumps({'email': email, 'time': time.time()}).encode('utf-8')).decode('utf-8')
+            url = 'http://%s/resume.html?token=%s' % (settings.SELF_HOST_NAME, token)
+        else:
+            url = 'http://%s/%s' % (settings.SELF_HOST_NAME, u.resume.resume_file.resume_file)
+        SubmitResume.objects.create(resume=u.resume, position=p)
+        data = {'email': p.company.user.email, 'url': url, 'name': p.company.abbreviation_name,
+                'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'position': p.position,
+                'add_time': p.addTime.strftime("%Y-%m-%d %H:%M:%S")}
+        send_submit_resume_email.delay(data)
+        return render(request, 'success.html', {
+            'user': u,
+        })
+
+class ResumeView(View):
+    '''
+    查看简历
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        token = request.GET.get('token', None)
+        if token:
+            token = base64.b64decode(token.encode('utf-8')).decode('utf-8')
+            dic = json.loads(token)
+            email = dic.get('email', '')
+            user = User.objects.filter(email=email).first()
+            if not user:
+                return HttpResponse('error')
+            resume = user.resume if hasattr(user, 'resume') else None
+            resume_info = resume.resume_info if hasattr(resume, 'resume_info') else None
+            hope_work = resume.hope_work if hasattr(resume, 'hope_work') else None
+            work_experiences = resume.work_experience.all() if hasattr(resume, 'work_experience') else None
+            project_experiences = resume.project_experience.all() if hasattr(resume,
+                                                                             'project_experience') else None
+            educational_experiences = resume.educational_experience.all() if hasattr(resume,
+                                                                                     'educational_experience') else None
+            self_detail = resume.self_detail if hasattr(resume, 'self_detail') else None
+            gallerys = resume.gallery.all() if hasattr(resume, 'gallery') else None
+            return render(request, 'preview.html', {
+                'user': user,
+                'resume': resume,
+                'resume_info': resume_info,
+                'hope_work': hope_work,
+                'work_experiences': work_experiences,
+                'project_experiences': project_experiences,
+                'educational_experiences': educational_experiences,
+                'self_detail': self_detail,
+                'gallerys': gallerys,
+            })
+        return HttpResponse('error')

@@ -96,6 +96,65 @@ def ResumeInfoImageView(request):
             return HttpResponse(json.dumps(res))
 
 
+@csrf_exempt
+def ResumeUploadView(request):
+    '''
+    上传简历
+    '''
+    if request.method == 'POST':
+        res = {}
+        uid = request.POST.get('userId', '')
+        img = request.FILES['newResume']
+        url = 'static/JobHunting/resume/' + str(uuid.uuid1()) + img._name
+        try:
+            with open(url, 'wb')as IMG:
+                for i in img.file:
+                    IMG.write(i)
+            u = User.objects.filter(id=int(uid)).first()
+            r = u.resume
+            if hasattr(r, 'resume_file'):
+                r.resume_file.resume_file = url
+                r.resume_file.save()
+            else:
+                ResumeFile.objects.create(resume=r, resume_file=url)
+            res = {'success': True,
+                   'content': {'nearbyName': r.title, 'time': r.resume_file.addTime.strftime("%Y-%m-%d %H:%M:%S"),
+                               'url': url},
+                   'code': 1}
+        except Exception as e:
+            res['success'] = False
+            res['code'] = 0
+        finally:
+            return HttpResponse(json.dumps(res))
+
+
+def ResumeDelView(request):
+    '''
+    删除简历
+    :param request:
+    :return:
+    '''
+    if request.method == 'GET':
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        try:
+            if u.type:
+                return HttpResponse('error')
+            if not hasattr(u, 'resume'):
+                return redirect('user:my_resume')
+            if not hasattr(u.resume, 'resume_file'):
+                return HttpResponse(json.dumps({'success': False}))
+            # u.resume.resume_file=None
+            ResumeFile.objects.filter(resume=u.resume).delete()
+            u.resume.default = 1
+            u.resume.save()
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False}))
+        return HttpResponse(json.dumps({'success': True}))
+
+
 class ResumeInfoView(View):
     '''
     基本信息
@@ -245,6 +304,10 @@ class WorkExperienceDelView(View):
     '''
 
     def post(self, request):
+        email = request.session.get('email', '')
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return redirect('login')
         wid = request.POST.get('id', None)
         if WorkExperience.objects.filter(id=int(wid)).exists():
             WorkExperience.objects.filter(id=int(wid)).delete()
@@ -326,6 +389,10 @@ class ProjectExperienceViewDelView(View):
     '''
 
     def post(self, request):
+        email = request.session.get('email', '')
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return redirect('login')
         pid = request.POST.get('id')
         if ProjectExperience.objects.filter(id=int(pid)).exists():
             ProjectExperience.objects.filter(id=int(pid)).delete()
@@ -486,6 +553,10 @@ class GalleryDelView(View):
     '''
 
     def post(self, request):
+        email = request.session.get('email', '')
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return redirect('login')
         gid = request.POST.get('id', None)
         # rid = request.POST.get('rid', None)
         # r = Resume.objects.filter(id=int(rid)).first()
@@ -507,27 +578,74 @@ class ResumePreviewView(View):
     '''
 
     def get(self, request):
-        email = request.session.get('email', None)
-        if email:
-            user = User.objects.get(email=email)
-            resume = user.resume if hasattr(user, 'resume') else None
-            resume_info = resume.resume_info if hasattr(resume, 'resume_info') else None
-            hope_work = resume.hope_work if hasattr(resume, 'hope_work') else None
-            work_experiences = resume.work_experience.all() if hasattr(resume, 'work_experience') else None
-            project_experiences = resume.project_experience.all() if hasattr(resume,
-                                                                             'project_experience') else None
-            educational_experiences = resume.educational_experience.all() if hasattr(resume,
-                                                                                     'educational_experience') else None
-            self_detail = resume.self_detail if hasattr(resume, 'self_detail') else None
-            gallerys = resume.gallery.all() if hasattr(resume, 'gallery') else None
-            return render(request, 'preview.html', {
-                'user': user,
-                'resume': resume,
-                'resume_info': resume_info,
-                'hope_work': hope_work,
-                'work_experiences': work_experiences,
-                'project_experiences': project_experiences,
-                'educational_experiences': educational_experiences,
-                'self_detail': self_detail,
-                'gallerys': gallerys,
-            })
+        email = request.session.get('email', '')
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return redirect('login')
+        resume = user.resume if hasattr(user, 'resume') else None
+        resume_info = resume.resume_info if hasattr(resume, 'resume_info') else None
+        hope_work = resume.hope_work if hasattr(resume, 'hope_work') else None
+        work_experiences = resume.work_experience.all() if hasattr(resume, 'work_experience') else None
+        project_experiences = resume.project_experience.all() if hasattr(resume,
+                                                                         'project_experience') else None
+        educational_experiences = resume.educational_experience.all() if hasattr(resume,
+                                                                                 'educational_experience') else None
+        self_detail = resume.self_detail if hasattr(resume, 'self_detail') else None
+        gallerys = resume.gallery.all() if hasattr(resume, 'gallery') else None
+        return render(request, 'preview.html', {
+            'user': user,
+            'resume': resume,
+            'resume_info': resume_info,
+            'hope_work': hope_work,
+            'work_experiences': work_experiences,
+            'project_experiences': project_experiences,
+            'educational_experiences': educational_experiences,
+            'self_detail': self_detail,
+            'gallerys': gallerys,
+        })
+
+
+class DefaultResumeView(View):
+    '''
+    默认简历设置
+    '''
+
+    def get(self, request):
+        res = {'success': True, 'content': [{'isDefault': True, 'type': '附件简历', 'perfect': True},
+                                            {'isDefault': True, 'type': '在线简历', 'perfect': True}]}
+        email = request.session.get('email', '')
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return redirect('login')
+        if not hasattr(user, 'resume'):
+            return redirect('user:my_resume')
+        if user.resume.default:
+            res['content'][0]['isDefault'] = False
+        else:
+            res['content'][1]['isDefault'] = False
+        if not hasattr(user.resume, 'resume_file'):
+            res['content'][0]['perfect'] = False
+        return HttpResponse(json.dumps(res))
+
+    def post(self, request):
+        t = request.POST.get('type', None)
+        email = request.session.get('email', '')
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return HttpResponse(json.dumps({'success': False, 'msg': '修改失败1'}))
+        if t:
+            try:
+                t = int(t)
+            except Exception as e:
+                return HttpResponse(json.dumps({'success': False, 'msg': '修改失败2'}))
+            if not hasattr(user, 'resume'):
+                return HttpResponse(json.dumps({'success': False, 'msg': '修改失败3'}))
+            if t == 1:
+                user.resume.default = 1
+                user.resume.save()
+            elif t == 0:
+                user.resume.default = 0
+                user.resume.save()
+            else:
+                return HttpResponse(json.dumps({'success': False, 'msg': '修改失败4'}))
+        return HttpResponse(json.dumps({'success': True}))

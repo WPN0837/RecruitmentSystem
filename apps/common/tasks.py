@@ -23,3 +23,14 @@ def send_reset_email(data):
     if send_status:
         return True
     return False
+
+
+@app.task
+def send_submit_resume_email(data):
+    email_title = '投递简历通知'
+    email_body = '尊敬的{}公司HR,您于{}发布的职位收到简历投递，请立即查看\n简历地址：{}\n时间：{}'.format(data['name'], data['add_time'], data['url'],
+                                                                          data['time'])
+    send_status = send_mail(email_title, email_body, settings.EMAIL_HOST_USER, [data['email']])
+    if send_status:
+        return True
+    return False

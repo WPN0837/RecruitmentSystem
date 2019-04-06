@@ -33,7 +33,7 @@
                 <a href="{% url 'recruitment:positions' %}">有效职位</a>
             </dd>
             <dd>
-                <a href="positions.html">已下线职位</a>
+                <a href="{% url 'recruitment:position_offline' %}">已下线职位</a>
             </dd>
         </dl>
     </div>
@@ -50,7 +50,7 @@
                     <span>5</span> 个职位
                 </div>
                 <form id="jobForm">
-                    <input type="hidden" value="" name="id"/>
+                    <input type="hidden" value="{{ cp.id }}" name="id"/>
                     <input type="hidden" value="create" name="preview"/>
                     <input type="hidden" value="{{ c.id }}" name="companyId"/>
                     <input type="hidden" value="c29d4a7c35314180bf3be5eb3f00048f" name="resubmitToken"/>
@@ -59,8 +59,9 @@
                         <tr>
                             <td width="25"><span class="redstar">*</span></td>
                             <td width="85">职位类别</td>
-                            <td><input type="hidden" id="positionType" value="" name="positionType"/> <input
-                                    type="button" value="请选择职位类别" id="select_category" class="selectr selectr_380"/>
+                            <td><input type="hidden" id="positionType" value="{{ cp.positionType }}" name="positionType"/>
+                                <input
+                                    type="button" value="{{ cp.positionType }}" id="select_category" class="selectr selectr_380"/>
                                 <div class="dn" id="box_job" style="display: none;">
                                     {% for p1 in p %}
                                         <dl>
@@ -89,13 +90,13 @@
                         <tr>
                             <td><span class="redstar">*</span></td>
                             <td>职位名称</td>
-                            <td><input type="text" placeholder="请输入职位名称，如：产品经理" value="" name="positionName"
+                            <td><input type="text" placeholder="请输入职位名称，如：产品经理" value="{{ cp.position }}" name="positionName"
                                        id="positionName"/></td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>所属部门</td>
-                            <td><input type="text" placeholder="请输入所属部门" value="" name="department"
+                            <td><input type="text" placeholder="请输入所属部门" value="{{ cp.department }}" name="department"
                                        id="department"/></td>
                         </tr>
                         </tbody>
@@ -107,9 +108,13 @@
                             <td width="85">工作性质</td>
                             <td>
                                 <ul class="profile_radio clearfix reset">
-                                    <li> 全职<em></em> <input type="radio" name="jobNature" value="全职"/></li>
-                                    <li> 兼职<em></em> <input type="radio" name="jobNature" value="兼职"/></li>
-                                    <li> 实习<em></em> <input type="radio" name="jobNature" value="实习"/></li>
+                                    {% for nature in natures %}
+                                    {% if nature == cp.jobNature %}
+                                        <li class="current"> {{ nature }}<em></em> <input type="radio" name="jobNature" checked class="valid" value="{{ nature }}"/></li>
+                                    {% else %}
+                                        <li> {{ nature }}<em></em> <input type="radio" class="valid" name="jobNature" value="{{ nature }}"/></li>
+                                    {% endif %}
+                                    {% endfor %}
                                 </ul>
                             </td>
                         </tr>
@@ -120,12 +125,12 @@
                             <td>
                                 <div class="salary_range">
                                     <div>
-                                        <input type="text" placeholder="最低月薪" value="" id="salaryMin"
+                                        <input type="text" placeholder="最低月薪" value="{{ cp.salaryMin }}" id="salaryMin"
                                                name="salaryMin"/>
                                         <span>k</span>
                                     </div>
                                     <div>
-                                        <input type="text" placeholder="最高月薪" value="" id="salaryMax"
+                                        <input type="text" placeholder="最高月薪" value="{{ cp.salaryMax }}" id="salaryMax"
                                                name="salaryMax"/>
                                         <span>k</span>
                                     </div>
@@ -136,7 +141,7 @@
                         <tr>
                             <td><span class="redstar">*</span></td>
                             <td>工作城市</td>
-                            <td><input type="text" placeholder="请输入工作城市，如：北京" value="上海" name="workAddress"
+                            <td><input type="text" placeholder="请输入工作城市，如：北京" value="{{ cp.workAddress }}" name="workAddress"
                                        id="workAddress"/></td>
                         </tr>
                         </tbody>
@@ -146,8 +151,8 @@
                         <tr>
                             <td width="25"><span class="redstar">*</span></td>
                             <td width="85">工作经验</td>
-                            <td><input type="hidden" id="experience" value="" name="workYear"/>
-                                <input type="button" value="请选择工作经验" id="select_experience"
+                            <td><input type="hidden" id="experience" value="{{ cp.workYear }}" name="workYear"/>
+                                <input type="button" value="{{ cp.workYear }}" id="select_experience"
                                        class="selectr selectr_380"/>
                                 <div class="boxUpDown boxUpDown_380 dn" id="box_experience" style="display: none;">
                                     <ul>
@@ -166,8 +171,8 @@
                             <td><span class="redstar">*</span></td>
                             <td>学历要求</td>
                             <!--<h3><span>(最高月薪不能大于最低月薪的2倍)</span></h3> -->
-                            <td><input type="hidden" id="education" value="" name="education"/>
-                                <input type="button" value="请选择学历要求" id="select_education" class="selectr selectr_380"/>
+                            <td><input type="hidden" id="education" value="{{ cp.education }}" name="education"/>
+                                <input type="button" value="{{ cp.education }}" id="select_education" class="selectr selectr_380"/>
                                 <div class="boxUpDown boxUpDown_380 dn" id="box_education" style="display: none;">
                                     <ul>
                                         <li> 不限</li>
@@ -186,7 +191,7 @@
                         <tr>
                             <td width="25"><span class="redstar">*</span></td>
                             <td width="85">职位诱惑</td>
-                            <td><input type="text" placeholder="20字描述该职位的吸引力，如：福利待遇、发展前景等" value=""
+                            <td><input type="text" placeholder="20字描述该职位的吸引力，如：福利待遇、发展前景等" value="{{ cp.positionAdvantage }}"
                                        name="positionAdvantage" class="input_520" id="positionAdvantage"/></td>
                         </tr>
                         <tr>
@@ -194,16 +199,16 @@
                             <td>职位描述</td>
                             <td>
                                 <span class="c9 f14">(建议分条描述工作职责等。请勿输入公司邮箱、联系电话及其他外链，否则将自动删除)</span>
-                                <textarea id="content" cols="150" rows="50"></textarea>
+                                <textarea id="content" cols="150" rows="50">{{ cp.positionDetail|safe }}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <td><span class="redstar">*</span></td>
                             <td>工作地址</td>
-                            <td><input type="text" placeholder="请输入详细的工作地址" value="" name="positionAddress"
-                                       class="input_520" id="positionAddress"/> <input type="hidden" value=""
-                                                                                       name="positionLng" id="lng"/>
-                                <input type="hidden" value="" name="positionLat" id="lat"/>
+                            <td><input type="text" placeholder="请输入详细的工作地址" value="{{ cp.positionAddress }}" name="positionAddress"
+                                       class="input_520" id="positionAddress"/>
+                                <input type="hidden" value="{{ cp.positionLng }}" name="positionLng" id="lng"/>
+                                <input type="hidden" value="{{ cp.positionLat }}" name="positionLat" id="lat"/>
                                 <div class="work_place f14">
                                     我们将在职位详情页以地图方式精准呈现给用户
                                     <a id="mapPreview" href="javascript:;">预览地图</a>

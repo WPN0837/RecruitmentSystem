@@ -57,7 +57,7 @@ $(function(){
 		var companyid = $('#companyid').val();
 		$.ajax({
 			type:'post',
-			url: ctx+'/companyLabel/removeOneLabelToCompany.json',
+			url: '/companyLabel/removeOneLabelToCompany.json',
 			data:{companyId:companyid,label:labelVal},
 			dataType: 'json'
 		}).add_company_info06(function (result) {
@@ -86,7 +86,7 @@ $(function(){
 			if(judge){
 				$.ajax({
 					type:'post',
-					url: ctx+'/companyLabel/pasteOneLabelToCompany.json',
+					url: '/companyLabel/pasteOneLabelToCompany.json',
 					data:{companyId:companyid,label:labelVal},
 					dataType: 'json'
 				}).add_company_info06(function (result) {
@@ -145,7 +145,7 @@ $(function(){
     		var resumeName = $('input[name="resumeName"]:checked',form).val();
     		$(form).find(":submit").attr("disabled", true);
     		$.ajax({
-				url:ctx+'/mycenter/resume/setDefaultResume.json',
+				url:'/mycenter/resume/setDefaultResume.json',
 				type:'POST',
 	        	data: {type:resumeName}
 			}).done(function(result) {
@@ -193,7 +193,7 @@ $(function(){
     		var resubmitToken = $('#resubmitToken').val();
     		$(form).find(":submit").attr("disabled", true);
     		$.ajax({
-    			url: ctx+'/mycenter/deliverResumeBeforce.json',
+    			url: '/mycenter/deliverResumeBeforce.json',
     			data:{
     				userId:userid,
     				positionId:jobid,
@@ -256,7 +256,7 @@ $(function(){
 	$('.resumeShowAll .setDefault').bind('click',function(){
 		var type= $(this).attr('rel');
 		$.ajax({
-			url:ctx+'/mycenter/resume/setDefaultResume.json',
+			url:'/mycenter/resume/setDefaultResume.json',
 			type:'POST',
         	data: {type:type},
         	dataType:'json'
@@ -403,7 +403,7 @@ $(function(){
     		var resubmitToken = $('#resubmitToken').val();
     		$(form).find(":submit").attr("disabled", true);
     		$.ajax({
-				url:ctx+'/resume/saveConfirmAndDeliver.json',
+				url:'/resume/saveConfirmAndDeliver.json',
 				type:'POST',
 	        	data: {
 	        		name:name,
@@ -470,7 +470,7 @@ $(function(){
 		var id = _this.attr('data-id');
 		var num = _this.attr('data-no');
 		$.ajax({
-			url:ctx+'/mycenter/expeUsefulIncrement.json',
+			url:'/mycenter/expeUsefulIncrement.json',
 			type:'POST',
         	data: {expeId:id,type:1},
         	dataType:'json'
@@ -504,7 +504,7 @@ $(function(){
 				var id = $('#jobid').val();
 				var resubmitToken = $('#resubmitToken').val();
 				$.ajax({
-					url:ctx+'/mycenter/collectPositoin.json',
+					url:'/mycenter/collectPositoin.json',
 					type:'POST',
 					data:{
 						positionId:id,
@@ -543,7 +543,7 @@ $(function(){
 
 function popQR(){
 	$.ajax({
-		url:ctx+"/mycenter/showQRCode",
+		url:"/mycenter/showQRCode",
 		type:"GET"
 		/*async:false*/
 	}).done(function(data){
@@ -565,7 +565,7 @@ function popQR(){
 		 type = $('#deliverResumeConfirm input[name="type"]').val();
 	 }
 		$.ajax({
-			url: ctx+'/mycenter/deliverResumeBeforce.json',
+			url: '/mycenter/deliverResumeBeforce.json',
 			type:'POST',
 			async:false,
 			data:{
@@ -610,7 +610,7 @@ function popQR(){
 
 function openProfileBox(type){
 	$.ajax({
-		url: ctx+'/resume/queryConfirmInfo.json',
+		url: '/resume/queryConfirmInfo.json',
 		data:{type:type},
 		dataType: 'json'
 	}).done(function (data) {
@@ -676,7 +676,7 @@ function errorTipsSet(msg){
 						'<td align="center"><h4 class="error_msg" style="width:400px;">'+msg+'</h4></td>'+
 					'</tr>'+
 					'<tr>'+
-						'<td align="center"><a href="'+ctx+'/resume/myresume.html" target="_blank" class="btn_s">马上去完善</a></td>'+
+						'<td align="center"><a href="'+'/resume/myresume.html" target="_blank" class="btn_s">马上去完善</a></td>'+
 					'</tr>'+
 				'</table>'+
 			'</div>',

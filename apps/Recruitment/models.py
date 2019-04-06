@@ -1,5 +1,4 @@
 from django.db import models
-from common.models import City, User
 
 
 class IndustrySector(models.Model):
@@ -72,8 +71,8 @@ class CompanyProduct(models.Model):
     product_name = models.CharField(max_length=50, verbose_name='产品名称', blank=True)
     product_url = models.URLField(max_length=200, verbose_name='产品URL', blank=True, null=True)
     product_desc = models.CharField(max_length=500, verbose_name='产品简介', blank=True, null=True)
-    company = models.ForeignKey('Company', verbose_name='公司', related_name='product', on_delete=models.CASCADE,
-                                blank=True)
+    company = models.OneToOneField('Company', verbose_name='公司', related_name='product', on_delete=models.CASCADE,
+                                   blank=True)
 
     class Meta:
         verbose_name = '公司产品'
@@ -83,6 +82,7 @@ class CompanyProduct(models.Model):
         return self.product_name
 
 
+# from common.models import User
 class Company(models.Model):
     '''
     公司信息
@@ -117,7 +117,8 @@ class Company(models.Model):
     founder = models.OneToOneField('CompanyFoundingTeam', verbose_name='创始团队', blank=True, null=True,
                                    on_delete=models.CASCADE,
                                    related_name='company')
-    user = models.OneToOneField(User, verbose_name='用户', on_delete=models.CASCADE, related_name='company', blank=True)
+    user = models.OneToOneField('common.User', verbose_name='用户', on_delete=models.CASCADE, related_name='company',
+                                blank=True)
     level = models.IntegerField(db_index=True, verbose_name='等级', blank=True, default=0)
 
     class Meta:
@@ -127,13 +128,18 @@ class Company(models.Model):
     def __str__(self):
         return self.full_name
 
+    @property
+    def sector(self):
+        return ','.join([i.sector for i in self.industry_sector.all()])
+
 
 class CompanyIntroduction(models.Model):
     '''
     公司介绍
     '''
     introduction = models.TextField(verbose_name='公司介绍', blank=True)
-    company = models.OneToOneField('Company', verbose_name='公司', on_delete=models.CASCADE, blank=True)
+    company = models.OneToOneField('Company', verbose_name='公司', on_delete=models.CASCADE, blank=True,
+                                   related_name='introduction')
 
     class Meta:
         verbose_name = '公司介绍'

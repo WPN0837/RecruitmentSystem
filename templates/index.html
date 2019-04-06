@@ -19,17 +19,58 @@
                 <li><a href="{% url 'PostJob' %}" rel="nofollow">发布职位</a></li>
             {% endif %}
         </ul>
-        <ul class="loginTop">
-            {% if not user %}
+        {% if user %}
+            {% if user.type %}
+                <dl class="collapsible_menu">
+                    <dt>
+                        <span>{{ user.email }}</span>
+                        <span class="red dn" id="noticeDot-1"></span>
+                        <i></i>
+                    </dt>
+                    <dd style="display: none;">
+                        <a href="{% url 'recruitment:positions' %}">我发布的职位</a>
+                    </dd>
+                    <dd style="display: none;">
+                        <a href="positions.html">我收到的简历</a>
+                    </dd>
+                    <dd class="btm" style="display: none;">
+                        <a href="{% url 'recruitment:my_home_detail' %}">我的公司主页</a>
+                    </dd>
+                    <dd style="display: none;">
+                        <a href="accountBind.html">帐号设置</a>
+                    </dd>
+                    <dd class="logout" style="display: none;">
+                        <a rel="nofollow" href="{% url 'logout' %}">退出</a>
+                    </dd>
+                </dl>
+            {% else %}
+                <dl class="collapsible_menu">
+                    <dt>
+                        <span>{{ user.email }}</span>
+                        <span class="red dn" id="noticeDot-0"></span>
+                        <i></i>
+                    </dt>
+                    <dd>
+                        <a href="collections.html">我收藏的职位</a>
+                    </dd>
+                    <dd class="btm">
+                        <a href="subscribe.html">我的订阅</a>
+                    </dd>
+                    <dd>
+                        <a href="accountBind.html">帐号设置</a>
+                    </dd>
+                    <dd class="logout">
+                        <a rel="nofollow" href="{% url 'logout' %}">退出</a>
+                    </dd>
+                </dl>
+            {% endif %}
+        {% else %}
+            <ul class="loginTop">
                 <li><a href="{% url 'login' %}" rel="nofollow">登录</a></li>
                 <li>|</li>
                 <li><a href="{% url 'register' %}" rel="nofollow">注册</a></li>
-            {% else %}
-                <li><a href="#" rel="nofollow">{{ user.email }}</a></li>
-                <li>|</li>
-                <li><a href="{% url 'logout' %}" rel="nofollow">注销</a></li>
-            {% endif %}
-        </ul>
+            </ul>
+        {% endif %}
     </div>
 {% endblock %}
 {% block container %}
@@ -40,7 +81,8 @@
                     <div class="menu_main">
                         <h2>{{ p1.name }}<span></span></h2>
                         {% for hot in p1.hot_p %}
-                            <a href="{% url 'list' %}?pn={{ hot.name }}" style="text-decoration: none">{{ hot.name }}</a>
+                            <a href="{% url 'list' %}?pn={{ hot.name }}"
+                               style="text-decoration: none">{{ hot.name }}</a>
                         {% endfor %}
                     </div>
                     <div class="menu_sub dn">
@@ -161,7 +203,7 @@
         <ul id="da-thumbs" class="da-thumbs">
             {% for company in hot_company %}
                 <li>
-                    <a href="#" target="_blank">
+                    <a href="{% url 'company_detail' %}?id={{ company.id }}" target="_blank">
                         <img src="{{ company.logo }}" width="113" height="113"
                              alt="{{ company.abbreviation_name }}"/>
                         <div class="hot_info">
@@ -175,7 +217,7 @@
                 </li>
             {% endfor %}
             <li class="last">
-                <a href="#" target="_blank">
+                <a href="{% url 'company_detail' %}?id={{ last_company.id }}" target="_blank">
                     <img src="{{ last_company.logo }}" width="113" height="113"
                          alt="{{ last_company.abbreviation_name }}"/>
                     <div class="hot_info">
@@ -198,7 +240,7 @@
                     <li class="clearfix">
                         <div class="hot_pos_l">
                             <div class="mb10">
-                                <a href="#" title="{{ position.position }}" target="_blank">{{ position.position }}</a>
+                                <a href="{% url 'position_detail' %}?id={{ position.id }}" title="{{ position.position }}" target="_blank">{{ position.position }}</a>
                                 <span class="c9">[{{ position.workAddress }}]</span>
                             </div>
                             <span><em class="c7">月薪： </em>{{ position.salaryMin }}k-{{ position.salaryMax }}k</span>
@@ -211,7 +253,8 @@
                             <!-- <a  class="wb">分享到微博</a> -->
                         </div>
                         <div class="hot_pos_r">
-                            <div class="mb10 recompany"><a href="#" target="_blank">{{ position.abbreviation_name }}</a>
+                            <div class="mb10 recompany"><a href="{% url 'company_detail' %}?id={{ position.cid }}"
+                                                           target="_blank">{{ position.abbreviation_name }}</a>
                             </div>
                             <span><em class="c7">领域：</em>{{ position.sector }}</span>
                             <span><em class="c7">创始人：</em>{{ position.founder_name }}</span>
@@ -233,7 +276,7 @@
                     <li class="clearfix">
                         <div class="hot_pos_l">
                             <div class="mb10">
-                                <a href="#" title="{{ position.position }}" target="_blank">{{ position.position }}</a>
+                                <a href="{% url 'position_detail' %}?id={{ position.id }}" title="{{ position.position }}" target="_blank">{{ position.position }}</a>
                                 <span class="c9">[{{ position.workAddress }}]</span>
                             </div>
                             <span><em class="c7">月薪： </em>{{ position.salaryMin }}k-{{ position.salaryMax }}k</span>
@@ -246,7 +289,8 @@
                             <!-- <a  class="wb">分享到微博</a> -->
                         </div>
                         <div class="hot_pos_r">
-                            <div class="mb10 recompany"><a href="#" target="_blank">{{ position.abbreviation_name }}</a>
+                            <div class="mb10 recompany"><a href="{% url 'company_detail' %}?id={{ position.cid }}"
+                                                           target="_blank">{{ position.abbreviation_name }}</a>
                             </div>
                             <span><em class="c7">领域：</em>{{ position.sector }}</span>
                             <span><em class="c7">创始人：</em>{{ position.founder_name }}</span>

@@ -21,6 +21,8 @@ urlpatterns = [
     path('resume.html', ResumeView.as_view(), name='resume'),
     path('resumeinfo.html', ResumeInfoView.as_view(), name='resumeinfo'),
     path('resumeinfoimage.html', ResumeInfoImageView, name='resumeinfoimage'),
+    path('resume-upload.html', ResumeUploadView, name='resumeupload'),
+    path('resume-del.html', ResumeDelView, name='resumedel'),
     path('hopework.html', HopeWorkView.as_view(), name='hopework'),
     path('workexperience.html', WorkExperienceView.as_view(), name='workexperience'),
     path('projectexperience.html', ProjectExperienceView.as_view(), name='projectexperience'),
@@ -32,4 +34,5 @@ urlpatterns = [
     path('educationalexperiencedel.html', EducationalExperienceDelView.as_view(), name='educationalexperiencedel'),
     path('projectexperiencedeldel.html', ProjectExperienceViewDelView.as_view(), name='projectexperiencedeldel'),
     path('workExperiencedel.html', WorkExperienceDelView.as_view(), name='workExperiencedel'),
+    path('default-resume.html', DefaultResumeView.as_view(), name='default_resume'),
 ]
