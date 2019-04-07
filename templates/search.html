@@ -12,7 +12,7 @@
                 <dd>
                     {% for s in salary %}
                         <div>
-                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ s }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ s }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                style="text-decoration: none">{{ s }}</a>
                         </div>
                     {% endfor %}
@@ -26,7 +26,7 @@
                 <dd>
                     {% for s in workYear %}
                         <div>
-                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ s }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ s }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                style="text-decoration: none">{{ s }}</a>
                         </div>
                     {% endfor %}
@@ -40,7 +40,7 @@
                 <dd>
                     {% for s in education %}
                         <div>
-                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ s }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ s }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                style="text-decoration: none">{{ s }}</a>
                         </div>
                     {% endfor %}
@@ -54,7 +54,7 @@
                 <dd>
                     {% for s in jobNature %}
                         <div>
-                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ s }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ s }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                style="text-decoration: none">{{ s }}</a>
                         </div>
                     {% endfor %}
@@ -68,7 +68,7 @@
                 <dd>
                     {% for s in addTime %}
                         <div>
-                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ s }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                            <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ s }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                style="text-decoration: none">{{ s }}</a>
                         </div>
                     {% endfor %}
@@ -145,10 +145,10 @@
             {% for s in hotCity %}
                 <dd>
                     {% if s == cws %}
-                        <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s }}&pn={{ cpn }}&cy={{ ccy }}"
+                        <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                            class="current">{{ s }}</a>
                     {% else %}
-                        <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s }}&pn={{ cpn }}&cy={{ ccy }}"
+                        <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                         >{{ s }}</a>
                     {% endif %}
                     |
@@ -169,10 +169,10 @@
                         <dd>
                             {% for s in w.1 %}
                                 {% if cws == s.0 %}
-                                    <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s.0 }}&pn={{ cpn }}&cy={{ ccy }}"
+                                    <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s.0 }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                        class="current">{{ s.0 }}</a>
                                 {% else %}
-                                    <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s.0 }}&pn={{ cpn }}&cy={{ ccy }}">{{ s.0 }}</a>
+                                    <a href="{% url 'search' %}?kd={{ kd }}&spc={{ spc }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s.0 }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}">{{ s.0 }}</a>
                                 {% endif %}
                             {% endfor %}
                         </dd>
@@ -181,7 +181,7 @@
             </dd>
         </dl>
         <ul class="hot_pos reset">
-            {% for position in hot_positions %}
+            {% for position in hot_positions.current_page_data_list %}
                 <li class="clearfix">
                     <div class="hot_pos_l">
                         <div class="mb10">
@@ -199,10 +199,10 @@
                     </div>
                     <div class="hot_pos_r">
                         <div class="apply">
-                            <a href="toudi.html" target="_blank">投个简历</a>
+                            <a href="{% url 'position_detail' %}?id={{ position.id }}" target="_blank">投个简历</a>
                         </div>
                         <div class="mb10 recompany">
-                            <a href="#" target="_blank">{{ position.abbreviation_name }}</a>
+                            <a href="{% url 'company_detail' %}?id={{ position.cid }}" target="_blank">{{ position.abbreviation_name }}</a>
                         </div>
                         <span><em class="c7">领域：</em>{{ position.sector }}</span>
                         <span><em class="c7">创始人：</em>{{ position.founder_name }}</span>
@@ -218,7 +218,26 @@
                 </li>
             {% endfor %}
         </ul>
-        <div class="Pagination"></div>
+        <div class="Pagination myself">
+            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page=1"
+               title="1">首页</a>
+            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ hot_positions.previous_page }}"
+               title="{{ hot_positions.previous_page }}">上一页 </a>
+            {% for s in hot_positions.page_num_range %}
+                {% if page == s %}
+                    <span class="current" title="{{ s }}">{{ s }}</span>
+                {% else %}
+                    <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ s }}"
+                       title="{{ s }}">{{ s }}</a>
+                {% endif %}
+            {% endfor %}
+
+
+            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ hot_positions.next_page }}"
+               title="{{ hot_positions.next_page }}">下一页 </a>
+            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ hot_positions.num_pages }}"
+               title="{{ hot_positions.num_pages }}">尾页</a>
+        </div>
     </div>
     <a id="backtop" title="回到顶部" rel="nofollow"></a>
 {% endblock %}

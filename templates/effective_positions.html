@@ -7,19 +7,16 @@
                 我收到的简历
             </dt>
             <dd>
-                <a href="unHandleResumes.html">待处理简历</a>
+                <a href="{% url 'recruitment:unprocessed_resume' %}">待处理简历</a>
             </dd>
             <dd>
-                <a href="canInterviewResumes.html">待定简历</a>
+                <a href="{% url 'recruitment:indefinite_resume' %}">待定简历</a>
             </dd>
             <dd>
-                <a href="haveNoticeResumes.html">已通知面试简历</a>
+                <a href="{% url 'recruitment:interview_resume' %}">已通知面试简历</a>
             </dd>
             <dd>
-                <a href="haveRefuseResumes.html">不合适简历</a>
-            </dd>
-            <dd class="btm">
-                <a href="autoFilterResumes.html">自动过滤简历</a>
+                <a href="{% url 'recruitment:not_suitable_resume' %}">不合适简历</a>
             </dd>
         </dl>
         <dl class="company_center_aside">

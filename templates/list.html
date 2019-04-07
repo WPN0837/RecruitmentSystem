@@ -33,13 +33,13 @@
                         <a href="{% url 'recruitment:positions' %}">我发布的职位</a>
                     </dd>
                     <dd style="display: none;">
-                        <a href="positions.html">我收到的简历</a>
+                        <a href="{% url 'recruitment:unprocessed_resume' %}">我收到的简历</a>
                     </dd>
                     <dd class="btm" style="display: none;">
                         <a href="{% url 'recruitment:my_home_detail' %}">我的公司主页</a>
                     </dd>
                     <dd style="display: none;">
-                        <a href="accountBind.html">帐号设置</a>
+                        <a href="{% url 'update_pwd' %}">帐号设置</a>
                     </dd>
                     <dd class="logout" style="display: none;">
                         <a rel="nofollow" href="{% url 'logout' %}">退出</a>
@@ -59,7 +59,7 @@
                         <a href="subscribe.html">我的订阅</a>
                     </dd>
                     <dd>
-                        <a href="accountBind.html">帐号设置</a>
+                        <a href="{% url 'update_pwd' %}">帐号设置</a>
                     </dd>
                     <dd class="logout">
                         <a rel="nofollow" href="{% url 'logout' %}">退出</a>
@@ -86,7 +86,7 @@
                 <dd>
                     {% for s in salary %}
                         <div>
-                            <a href="{% url 'list' %}?te={{ cte }}&sy={{ s }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                            <a href="{% url 'list' %}?te={{ cte }}&sy={{ s }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                style="text-decoration: none">{{ s }}</a>
                         </div>
                     {% endfor %}
@@ -100,7 +100,7 @@
                 <dd>
                     {% for s in workYear %}
                         <div>
-                            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ s }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ s }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                style="text-decoration: none">{{ s }}</a>
                         </div>
                     {% endfor %}
@@ -114,7 +114,7 @@
                 <dd>
                     {% for s in education %}
                         <div>
-                            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ s }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ s }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                style="text-decoration: none">{{ s }}</a>
                         </div>
                     {% endfor %}
@@ -128,7 +128,7 @@
                 <dd>
                     {% for s in jobNature %}
                         <div>
-                            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ s }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ s }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                style="text-decoration: none">{{ s }}</a>
                         </div>
                     {% endfor %}
@@ -142,7 +142,7 @@
                 <dd>
                     {% for s in addTime %}
                         <div>
-                            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ s }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}"
+                            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ s }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                style="text-decoration: none">{{ s }}</a>
                         </div>
                     {% endfor %}
@@ -220,10 +220,10 @@
             {% for s in hotCity %}
                 <dd>
                     {% if s == cws %}
-                        <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s }}&pn={{ cpn }}&cy={{ ccy }}"
+                        <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                            class="current">{{ s }}</a>
                     {% else %}
-                        <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s }}&pn={{ cpn }}&cy={{ ccy }}"
+                        <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                         >{{ s }}</a>
                     {% endif %}
                     |
@@ -244,10 +244,10 @@
                         <dd>
                             {% for s in w.1 %}
                                 {% if cws == s.0 %}
-                                    <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s.0 }}&pn={{ cpn }}&cy={{ ccy }}"
+                                    <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s.0 }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}"
                                        class="current">{{ s.0 }}</a>
                                 {% else %}
-                                    <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s.0 }}&pn={{ cpn }}&cy={{ ccy }}">{{ s.0 }}</a>
+                                    <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ s.0 }}&pn={{ cpn }}&cy={{ ccy }}&page={{ page }}">{{ s.0 }}</a>
                                 {% endif %}
                             {% endfor %}
                         </dd>
@@ -256,11 +256,12 @@
             </dd>
         </dl>
         <ul class="hot_pos reset">
-            {% for position in hot_positions %}
+            {% for position in hot_positions.current_page_data_list %}
                 <li class="clearfix">
                     <div class="hot_pos_l">
                         <div class="mb10">
-                            <a href="{% url 'position_detail' %}?id={{ position.id }}" title="{{ position.position }}" target="_blank">{{ position.position }}</a>
+                            <a href="{% url 'position_detail' %}?id={{ position.id }}" title="{{ position.position }}"
+                               target="_blank">{{ position.position }}</a>
                             <span class="c9">[{{ position.workAddress }}]</span>
                         </div>
                         <span><em class="c7">月薪： </em>{{ position.salaryMin }}k-{{ position.salaryMax }}k</span>
@@ -274,10 +275,11 @@
                     </div>
                     <div class="hot_pos_r">
                         <div class="apply">
-                            <a href="toudi.html" target="_blank">投个简历</a>
+                            <a href="{% url 'position_detail' %}?id={{ position.id }}" target="_blank">投个简历</a>
                         </div>
                         <div class="mb10 recompany">
-                            <a href="{% url 'company_detail' %}?id={{ position.cid }}" target="_blank">{{ position.abbreviation_name }}</a>
+                            <a href="{% url 'company_detail' %}?id={{ position.cid }}"
+                               target="_blank">{{ position.abbreviation_name }}</a>
                         </div>
                         <span><em class="c7">领域：</em>{{ position.sector }}</span>
                         <span><em class="c7">创始人：</em>{{ position.founder_name }}</span>
@@ -293,118 +295,27 @@
                 </li>
             {% endfor %}
         </ul>
-        <div class="Pagination"></div>
+        <div class="Pagination myself">
+            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page=1"
+               title="1">首页</a>
+            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ hot_positions.previous_page }}"
+               title="{{ hot_positions.previous_page }}">上一页 </a>
+            {% for s in hot_positions.page_num_range %}
+                {% if page == s %}
+                    <span class="current" title="{{ s }}">{{ s }}</span>
+                {% else %}
+                    <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ s }}"
+                       title="{{ s }}">{{ s }}</a>
+                {% endif %}
+            {% endfor %}
+
+
+            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ hot_positions.next_page }}"
+               title="{{ hot_positions.next_page }}">下一页 </a>
+            <a href="{% url 'list' %}?te={{ cte }}&sy={{ csy }}&wr={{ cwr }}&en={{ cen }}&je={{ cje }}&ae={{ cae }}&ws={{ cws }}&pn={{ cpn }}&cy={{ ccy }}&page={{ hot_positions.num_pages }}"
+               title="{{ hot_positions.num_pages }}">尾页</a>
+        </div>
     </div>
-    {#        <script>#}
-    {#            $(function () {#}
-    {#                /***************************#}
-    {#                 * 分页#}
-    {#                 */#}
-    {#                $('.Pagination').pager({#}
-    {#                    currPage: 1,#}
-    {#                    pageNOName: "pn",#}
-    {#                    form: "searchForm",#}
-    {#                    pageCount: 30,#}
-    {#                    pageSize: 5#}
-    {#                });#}
-    {##}
-    {#                $(".workplace dd").not('.more').children('a').click(function () {#}
-    {#                    $('#lc').val(1);#}
-    {#                    editForm("cityInput", $(this).html());#}
-    {#                });#}
-    {##}
-    {#                $("#box_expectCity dd span").click(function () {#}
-    {#                    $('#lc').val(1);#}
-    {#                    editForm("cityInput", $(this).html());#}
-    {#                });#}
-    {##}
-    {#                $('#options dd div').click(function () {#}
-    {#                    var firstName = $(this).parents('dl').children('dt').text();#}
-    {#                    var fn = $.trim(firstName);#}
-    {#                    if (fn == "月薪范围") {#}
-    {#                        editForm("yxInput", $(this).html());#}
-    {#                    } else if (fn == "工作经验") {#}
-    {#                        editForm("gjInput", $(this).html());#}
-    {#                    } else if (fn == "最低学历") {#}
-    {#                        editForm("xlInput", $(this).html());#}
-    {#                    } else if (fn == "工作性质") {#}
-    {#                        editForm("gxInput", $(this).html());#}
-    {#                    } else if (fn == "发布时间") {#}
-    {#                        editForm("stInput", $(this).html());#}
-    {#                    }#}
-    {#                });#}
-    {##}
-    {#                $('#selected ul').delegate('li span.select_remove', 'click', function (event) {#}
-    {#                    var firstName = $(this).parent('li').find('strong').text();#}
-    {#                    var fn = $.trim(firstName);#}
-    {#                    if (fn == "月薪范围")#}
-    {#                        editForm("yxInput", "");#}
-    {#                    else if (fn == "工作经验")#}
-    {#                        editForm("gjInput", "");#}
-    {#                    else if (fn == "最低学历")#}
-    {#                        editForm("xlInput", "");#}
-    {#                    else if (fn == "工作性质")#}
-    {#                        editForm("gxInput", "");#}
-    {#                    else if (fn == "发布时间")#}
-    {#                        editForm("stInput", "");#}
-    {#                });#}
-    {##}
-    {#                /* search结果飘绿	*/#}
-    {#                (function ($) {#}
-    {#                    var searchVal = $('#search_input').val();#}
-    {#                    var reg = /\s/g;#}
-    {#                    searchVal = searchVal.replace(reg, "").split("");#}
-    {##}
-    {#                    var resultL = '';#}
-    {#                    var resultR = '';#}
-    {#                    $('.hot_pos li').each(function () {#}
-    {#                        resultL = $('.hot_pos_l a', this).text().split("");#}
-    {#                        $.each(resultL, function (i, v) {#}
-    {#                            if ($.inArray(v.toLowerCase(), searchVal) != -1 || $.inArray(v.toUpperCase(), searchVal) != -1) {#}
-    {#                                resultL[i] = '<span>' + v + '</span>';#}
-    {#                            }#}
-    {#                        });#}
-    {#                        $('.hot_pos_l a', this).html(resultL.join(''));#}
-    {##}
-    {#                        resultR = $('.hot_pos_r .mb10 a', this).text().split("");#}
-    {#                        $.each(resultR, function (i, v) {#}
-    {#                            if ($.inArray(v.toLowerCase(), searchVal) != -1 || $.inArray(v.toUpperCase(), searchVal) != -1) {#}
-    {#                                resultR[i] = '<span>' + v + '</span>';#}
-    {#                            }#}
-    {#                        });#}
-    {#                        $('.hot_pos_r .mb10 a', this).html(resultR.join(''));#}
-    {#                    });#}
-    {##}
-    {#                })(jQuery);#}
-    {##}
-    {#                //didi tip#}
-    {#                if ($.cookie('didiTip') != 1 && false) {#}
-    {#                    $('#tip_didi').show();#}
-    {#                }#}
-    {#                $('#tip_didi a').click(function () {#}
-    {#                    $(this).parent().remove();#}
-    {#                    $.cookie('didiTip', 1, {expires: 30, path: '/'});#}
-    {#                });#}
-    {##}
-    {#            });#}
-    {##}
-    {#            function editForm(inputId, inputValue) {#}
-    {#                $("#" + inputId).val(inputValue);#}
-    {#                var keyword = $.trim($('#search_input').val());#}
-    {#                var reg = /[`~!@\$%\^\&\*\(\)_<>\?:"\{\},\\\/;'\[\]]/ig;#}
-    {#                var re = /#/g;#}
-    {#                var r = /\./g;#}
-    {#                var kw = keyword.replace(reg, "");#}
-    {##}
-    {#                if (kw == '') {#}
-    {#                    $('#searchForm').attr('action', '/list.html?type=所有职位').submit();#}
-    {#                } else {#}
-    {#                    kw = kw.replace(re, '井');#}
-    {#                    kw = kw.replace(r, '。');#}
-    {#                    $('#searchForm').attr('action', '/list.html?key=' + kw).submit();#}
-    {#                }#}
-    {#            }#}
-    {#        </script>#}
     <div class="clear"></div>
     <input type="hidden" id="resubmitToken" value=""/>
     <a id="backtop" title="回到顶部" rel="nofollow"></a>

@@ -6,7 +6,7 @@ from .models import User
 import re
 import json
 from utils.check_code import create_validate_code
-from .tasks import send_register_email, send_reset_email,send_submit_resume_email
+from .tasks import send_register_email, send_reset_email, send_submit_resume_email
 import time
 import base64
 from common.models import HotCity, SubmitResume
@@ -14,6 +14,7 @@ from Recruitment.models import Position, PositionInfo, CompanyTag, IndustrySecto
 from utils.common import code
 from datetime import datetime, timedelta
 from django.conf import settings
+from utils.Paginator import my_Paginator
 
 
 # Create your views here.
@@ -319,6 +320,11 @@ class ListView(View):
         cws = request.GET.get('ws', '')  # 工作城市
         cpn = request.GET.get('pn', '')  # 职位
         ccy = request.GET.get('cy', '')  # 公司
+        page = request.GET.get('page', 1)  # 页码
+        try:
+            page = int(page)
+        except Exception as e:
+            return HttpResponse('error')
         if cte == 'hot':
             positions = PositionInfo.objects.raw(
                 'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.views_count desc) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.founder_id = rcf.id) on rp.company_id = rc.id;')
@@ -338,6 +344,7 @@ class ListView(View):
                 i.sector = ','.join([i[0] for i in IndustrySector.objects.filter(company=i.cid).values_list('sector')])
                 i.tag = CompanyTag.objects.filter(company=i.cid).values_list('name')
         positions = filter(positions, csy, cwr, cen, cje, cae, cws, cpn, ccy)
+        positions = my_Paginator(positions, 10, 6, page)
         return render(request, 'list.html', {
             'user': u,
             'hot_positions': positions,
@@ -358,6 +365,7 @@ class ListView(View):
             'cws': cws,
             'cpn': cpn,
             'ccy': ccy,
+            'page': page,
         })
 
 
@@ -394,6 +402,11 @@ class SearchView(View):
         cws = request.GET.get('ws', '')  # 工作城市
         cpn = request.GET.get('pn', '')  # 职位
         ccy = request.GET.get('cy', '')  # 公司
+        page = request.GET.get('page', 1)  # 页码
+        try:
+            page = int(page)
+        except Exception as e:
+            return HttpResponse('error')
         if spc == '1':
             positions = PositionInfo.objects.raw(
                 'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`position` LIKE %s or r.positionType LIKE %s ) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.founder_id = rcf.id) on rp.company_id = rc.id;',
@@ -405,6 +418,7 @@ class SearchView(View):
         else:
             positions = []
         positions = filter(positions, csy, cwr, cen, cje, cae, cws, cpn, ccy)
+        positions = my_Paginator(positions, 10, 6, page)
         return render(request, 'search.html', {
             'user': u,
             'hot_positions': positions,
@@ -426,6 +440,7 @@ class SearchView(View):
             'cws': cws,
             'cpn': cpn,
             'ccy': ccy,
+            'page': page,
         })
 
 
@@ -559,6 +574,13 @@ class PositionDetailView(View):
             sectors = c.industry_sector.all()
         except Exception as e:
             return HttpResponse('error')
+        if u and u.type:
+            return render(request, 'position_detail.html', {
+                'user': u,
+                'p': p,
+                'c': c,
+                'sectors': sectors,
+            })
         return render(request, 'position_detail1.html', {
             'user': u,
             'p': p,
@@ -586,12 +608,13 @@ class SubmitResumeView(View):
             return HttpResponse('error')
         if not hasattr(u, 'resume'):
             return HttpResponse('error')
-        if u.resume.default == 1:
-            token = base64.b64encode(json.dumps({'email': email, 'time': time.time()}).encode('utf-8')).decode('utf-8')
-            url = 'http://%s/resume.html?token=%s' % (settings.SELF_HOST_NAME, token)
-        else:
-            url = 'http://%s/%s' % (settings.SELF_HOST_NAME, u.resume.resume_file.resume_file)
-        SubmitResume.objects.create(resume=u.resume, position=p)
+        # if u.resume.default == 1:
+        #     token = base64.b64encode(json.dumps({'email': email, 'time': time.time()}).encode('utf-8')).decode('utf-8')
+        #     url = 'http://%s/resume.html?token=%s' % (settings.SELF_HOST_NAME, token)
+        # else:
+        #     url = 'http://%s/%s' % (settings.SELF_HOST_NAME, u.resume.resume_file.resume_file)
+        url = 'http://%s/recruitment/unprocessed-resume.html' % settings.SELF_HOST_NAME
+        SubmitResume.objects.create(resume=u.resume, position=p, sort=u.resume.default)
         data = {'email': p.company.user.email, 'url': url, 'name': p.company.abbreviation_name,
                 'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'position': p.position,
                 'add_time': p.addTime.strftime("%Y-%m-%d %H:%M:%S")}
@@ -599,6 +622,7 @@ class SubmitResumeView(View):
         return render(request, 'success.html', {
             'user': u,
         })
+
 
 class ResumeView(View):
     '''
@@ -617,6 +641,14 @@ class ResumeView(View):
             email = dic.get('email', '')
             user = User.objects.filter(email=email).first()
             if not user:
+                return HttpResponse('error')
+            spid = dic.get('id', '')
+            if spid:
+                try:
+                    SubmitResume.objects.filter(id=int(spid)).update(status=1)
+                except Exception as e:
+                    return HttpResponse('error')
+            else:
                 return HttpResponse('error')
             resume = user.resume if hasattr(user, 'resume') else None
             resume_info = resume.resume_info if hasattr(resume, 'resume_info') else None
@@ -640,3 +672,43 @@ class ResumeView(View):
                 'gallerys': gallerys,
             })
         return HttpResponse('error')
+
+
+class UpdatePwd(View):
+    '''
+    修改密码
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        return render(request, 'updatePwd.html', {
+            'user': u,
+        })
+
+    def post(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        oldPassword = request.POST.get('oldPassword', '')
+        newPassword = request.POST.get('newPassword', '')
+        newPassword2 = request.POST.get('newPassword2', '')
+        m = md5()
+        m.update('zhaopin'.encode('utf8'))
+        m.update(oldPassword.encode('utf8'))
+        old_pwd = m.hexdigest()
+        if u.pwd != old_pwd:
+            return HttpResponse(json.dumps({'success': False, 'msg': '旧密码错误'}))
+        if newPassword and newPassword == newPassword2 and 16 >= len(newPassword) >= 6:
+            if newPassword == oldPassword:
+                return HttpResponse(json.dumps({'success': False, 'msg': '旧密码不能与新密码相同'}))
+            m = md5()
+            m.update('zhaopin'.encode('utf8'))
+            m.update(newPassword.encode('utf8'))
+            pwd = m.hexdigest()
+            User.objects.filter(email=email, pwd=old_pwd).update(pwd=pwd)
+            return HttpResponse(json.dumps({'success': True}))
+        return HttpResponse(json.dumps({'success': False, 'msg': '修改密码错误'}))

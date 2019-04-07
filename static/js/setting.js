@@ -7,9 +7,9 @@ $(function(){
 		$.ajax({
 			data:{recordCode:recordCode},
         	type:'POST',        	
-        	url:ctx+'/user/resendActive.json'
+        	url:'/user/resendActive.json'
         }).done(function(result) {
-        	if(result.add_company_info06){
+        	if(result.success){
         		$.colorbox({inline:true, href:$("#resend_success"),title:"验证邮件发送成功"});
         	}else{
         		alert(result.msg);
@@ -126,31 +126,29 @@ $(function(){
     		isLeave = true;
     		var email = $('#user_hasLoginEmail').val();    		 
     		var password = $('#user_hasLoginPassword').val();
-    		var type=$('#user_HasAccount').attr('value');//默认  0新帐号   1 已有帐号 null当做0	
-    		var resubmitToken = $('#resubmitToken').val();
+    		var type=$('#user_HasAccount').attr('value');//默认  0新帐号   1 已有帐号 null当做0
     		var idCode = $('#idCode').val();   
     		$(form).find(":submit").attr("disabled", true);
     		$.ajax({
     			type:'post',
-    			data:{idCode:idCode,resubmitToken:resubmitToken,type:type,confirm:false,choseUser:1,email:email,password:password},
-    			url:ctx+'/user/bindEmail.json',	   
+    			data:{idCode:idCode,type:type,confirm:false,choseUser:1,email:email,password:password},
+    			url:'/user/bindEmail.json',	   
     			dataType:'json',
     			success:function(result){
-    				$('#resubmitToken').val(result.resubmitToken);	    				
-    				if(result.add_company_info06){
+    				if(result.success){
     					if(result.code==5 || result.code ==8 || result.code ==11 || result.code ==14 ){
-    						window.location.href = ctx+'/user/registerSuccess.html';
+    						window.location.href = '/user/registerSuccess.html';
     					}else{
     						//result.content == recordCode  == idCode
-    						window.location.href = ctx+'/user/bindAccountActive.html?recordCode=' + result.content;	
+    						window.location.href = '/user/bindAccountActive.html?recordCode=' + result.content;	
     					}  					
-    				}else if(result.add_company_info06 == false && result.code ==0 ){
+    				}else if(result.success == false && result.code ==0 ){
     					/*密码错误和页面超时的提示信息*/
 						$('#hasLagouAccount_beError').html(result.msg).show();   					
-    				}else if(result.add_company_info06 == false && result.code ==100){
+    				}else if(result.success == false && result.code ==100){
     					//邮箱未注册提示的错误
     					$('#hasLagouAccount_EmailBeError').html(result.msg).show(); 
-    				}else if(result.add_company_info06 == false && result.code ==1){
+    				}else if(result.success == false && result.code ==1){
     					$('#accountBindType').html('邮箱');
     					$('#user_hasBindAccount').html(result.msg);
     					$('#user_loginCurrentAccount').html(result.content);
@@ -161,7 +159,7 @@ $(function(){
     						$.colorbox.close();
     						parent.jQuery.colorbox.close();
     					});	    					
-    				}else if(result.add_company_info06 == false && result.code == 2){
+    				}else if(result.success == false && result.code == 2){
     					$.colorbox({inline:true, href:$("#bindReplace"),title:"帐号绑定"});
     					$('#user_oldAccount').html(result.content[1]);
     					$('#user_typeAccount').html(result.content[2]);    					
@@ -226,21 +224,19 @@ $(function(){
 		var password = $('#user_hasLoginPassword').val();
 		var type=$('#user_HasAccount').attr('value');//默认  0新帐号   1 已有帐号 null当做0	
 		var userType = $('.register_radio li.current input').val();//0-个人用户 1-企业用户  null-未选择
-		var idCode = $('#idCode').val();   
-		var resubmitToken = $('#resubmitToken').val();
+		var idCode = $('#idCode').val();
 		var choseUser = $('.chooseAccount label.current').find('span.c3').attr('value');
 		$.ajax({
 			type:'post',
-			data:{idCode:idCode, resubmitToken:resubmitToken, type:type,comfirm:true,choseUser:choseUser,userType:userType,email:email,password:password},
-			url:ctx+'/user/bindEmail.json',	
+			data:{idCode:idCode,  type:type,comfirm:true,choseUser:choseUser,userType:userType,email:email,password:password},
+			url:'/user/bindEmail.json',	
 			success:function(result){
 				isLeave = true;
-				$('#resubmitToken').val(result.resubmitToken);
-				if(result.add_company_info06){
+				if(result.success){
 					if(result.code==5 || result.code ==8 || result.code ==11 || result.code ==14 ){
-						window.location.href = ctx+'/user/registerSuccess.html';
+						window.location.href = '/user/registerSuccess.html';
 					}else{
-						window.location.href = ctx+'/user/bindAccountActive.html?recordCode=' + result.content;
+						window.location.href = '/user/bindAccountActive.html?recordCode=' + result.content;
 					} 				    					
 				}else{	
 					if(result.msg == undefined){//重复提交
@@ -307,33 +303,31 @@ $(function(){
     	submitHandler:function(form){    
     		var email = $('#user_LoginEmail').val();    		 
     		var password = $('#user_LoginPassword').val();
-    		var type=$('#user_NoAccount').attr('value');//默认  0新帐号   1 已有帐号 null当做0	
-    		var resubmitToken = $('#resubmitToken').val();
+    		var type=$('#user_NoAccount').attr('value');//默认  0新帐号   1 已有帐号 null当做0
     		var userType = $('.register_radio li.current input').val();//0-个人用户 1-企业用户  null-未选择
     		var idCode = $('#idCode').val();   
     		$(form).find(":submit").attr("disabled", true);
     		$.ajax({
     			type:'post',
-    			data:{idCode:idCode,resubmitToken:resubmitToken,type:type,confirm:false,choseUser:1,userType:userType,email:email,password:password},
-    			url:ctx+'/user/bindEmail.json',	   
+    			data:{idCode:idCode,type:type,confirm:false,choseUser:1,userType:userType,email:email,password:password},
+    			url:'/user/bindEmail.json',	   
     			dataType:'json',
     			success:function(result){
-    				$('#resubmitToken').val(result.resubmitToken);	    				
-    				if(result.add_company_info06){
+    				if(result.success){
     					if(result.code==5 || result.code ==8 || result.code ==11 || result.code ==14 ){
-    						window.location.href = ctx+'/user/registerSuccess.html';
+    						window.location.href = '/user/registerSuccess.html';
     					}else{
     						//result.content == recordCode  == idCode
-    						window.location.href = ctx+'/user/bindAccountActive.html?recordCode=' + result.content;	
+    						window.location.href = '/user/bindAccountActive.html?recordCode=' + result.content;	
     					}  					
-    				}else if(result.add_company_info06 == false && result.code ==0 ){
+    				}else if(result.success == false && result.code ==0 ){
     					/*密码错误和页面超时的提示信息*/
 						//$('#hasNoAccount_beError').html(result.msg).show();
     					$('#noLagouAccount_beError').html(result.msg).show();
-    				}else if(result.add_company_info06 == false && result.code ==100){
+    				}else if(result.success == false && result.code ==100){
     					//邮箱未注册提示的错误
     					//$('#noLagouAccount_beError').html(result.msg).show(); 
-    				}else if(result.add_company_info06 == false && result.code ==1){
+    				}else if(result.success == false && result.code ==1){
     					$('#accountBindType').html('邮箱');
     					$('#user_hasBindAccount').html(result.msg);
     					$('#user_loginCurrentAccount').html(result.content);
@@ -344,7 +338,7 @@ $(function(){
     						$.colorbox.close();
     						parent.jQuery.colorbox.close();
     					});	    					
-    				}else if(result.add_company_info06 == false && result.code == 2){
+    				}else if(result.success == false && result.code == 2){
     					$.colorbox({inline:true, href:$("#bindReplace"),title:"帐号绑定"});
     					$('#user_oldAccount').html(result.content[1]);
     					$('#user_typeAccount').html(result.content[2]);    					
@@ -375,21 +369,19 @@ $(function(){
 		var password = $('#user_LoginPassword').val();
 		var type=$('#user_NoAccount').attr('value');//默认  0新帐号   1 已有帐号 null当做0	
 		var userType = $('.register_radio li.current input').val();//0-个人用户 1-企业用户  null-未选择
-		var idCode = $('#idCode').val();   
-		var resubmitToken = $('#resubmitToken').val();
+		var idCode = $('#idCode').val();
 		var choseUser = $('.chooseAccount label.current').find('span.c3').attr('value');
 		$.ajax({
 			type:'post',
-			data:{idCode:idCode, resubmitToken:resubmitToken, type:type,comfirm:true,choseUser:choseUser,userType:userType,email:email,password:password},
-			url:ctx+'/user/bindEmail.json',	
+			data:{idCode:idCode,  type:type,comfirm:true,choseUser:choseUser,userType:userType,email:email,password:password},
+			url:'/user/bindEmail.json',	
 			success:function(result){
 				isLeave = true;
-				$('#resubmitToken').val(result.resubmitToken);
-				if(result.add_company_info06){
+				if(result.success){
 					if(result.code==5 || result.code ==8 || result.code ==11 || result.code ==14 ){
-						window.location.href = ctx+'/user/registerSuccess.html';
+						window.location.href = '/user/registerSuccess.html';
 					}else{
-						window.location.href = ctx+'/user/bindAccountActive.html?recordCode=' + result.content;
+						window.location.href = '/user/bindAccountActive.html?recordCode=' + result.content;
 					} 				    					
 				}else{	
 					if(result.msg == undefined){//重复提交
@@ -418,11 +410,11 @@ $(function(){
 	
 	/*弹出确认取消绑定qq弹窗后的确定按钮*/
 	$('#user_confirmUnbind').click(function(){
-		window.location.href=ctx+'/ologin/unbindOAuthAccount.html?origin=qq';
+		window.location.href='/ologin/unbindOAuthAccount.html?origin=qq';
 	})
 	/*弹出确认取消绑定微博弹窗后的确定按钮*/
 	$('#user_confirmUnbindSina').click(function(){
-		window.location.href=ctx+'/ologin/unbindOAuthAccount.html?origin=sina';
+		window.location.href='/ologin/unbindOAuthAccount.html?origin=sina';
 	})
 	/*确认取消绑定的取消按钮，无刷新，直接关闭弹窗*/
 	$('#confirmUnbind .cancel,#confirmUnbindSina .cancel , #confirm_unbindService .cancel').click(function(){
@@ -488,22 +480,19 @@ $(function(){
     		var oldpassword = $('#oldpassword').val();
     		var newpassword = $('#newpassword').val();
     		var comfirmpassword = $('#comfirmpassword').val();
-    		var resubmitToken = $('#resubmitToken').val();
     		$.ajax({
-    			url:ctx+'/user/updatePwd.json',
+    			url:'/update-pwd.html',
     			type:'POST',
     			data:{
     				oldPassword:oldpassword,
     				newPassword:newpassword,
     				newPassword2:comfirmpassword,
-    				resubmitToken:resubmitToken
     			},
             	dataType:'json'
     		}).done(function(result){
-				$('#resubmitToken').val(result.resubmitToken);
-    			if(result.add_company_info06){
+    			if(result.success){
     				$.colorbox({inline:true, href:$("#updatePassword"),title:"修改密码成功"});
-    				setCountdown(4,'updatePassword h4 span',ctx+"/user/logout.html");	//调用倒计时
+    				setCountdown(4,'updatePassword h4 span',"/logout.html");	//调用倒计时
     			}else{
     				$('#updatePwd_beError').html(result.msg).show();
     			}
@@ -514,13 +503,13 @@ $(function(){
 	//解除招聘服务页面
 	/*$('.user_confirmDel').click(function(){
 		$.ajax({
-			url:ctx+'/user/closeService.json',
+			url:'/user/closeService.json',
 			type:'POST',
 			dataType:'json'
 		}).done(function(result){
 			if(result.success){
 				$.colorbox({inline:true, href:$("#unbindService"),title:"确定解除招聘服务"});
-				//setCountdown(4,'unbindService h4 span',ctx+"/corpCenter/bindStep1.html");	//调用倒计时
+				//setCountdown(4,'unbindService h4 span',"/corpCenter/bindStep1.html");	//调用倒计时
 			}else{
 				alert(result.msg);
 			}
@@ -531,13 +520,13 @@ $(function(){
 	});
 	$('#confirm_unbind').click(function(){
 		$.ajax({
-			url:ctx+'/user/closeService.json',
+			url:'/user/closeService.json',
 			type:'POST',
 			dataType:'json'
 		}).done(function(result){
-			if(result.add_company_info06){
+			if(result.success){
 				$.colorbox({inline:true, href:$("#unbindService"),title:"解除招聘服务"});
-				setCountdown(4,'unbindService h4 span',ctx+"/corpCenter/bindStep1.html");	//调用倒计时
+				setCountdown(4,'unbindService h4 span',"/corpCenter/bindStep1.html");	//调用倒计时
 			}else{
 				alert(result.msg);
 			}

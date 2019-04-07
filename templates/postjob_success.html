@@ -1,0 +1,58 @@
+{% extends 'positions_base.html' %}
+{% block script %}
+{% endblock %}
+{% block container %}
+    <div class="sidebar">
+        <a class="btn_create" href="{% url 'PostJob' %}">发布新职位</a>
+        <dl class="company_center_aside">
+            <dt>
+                我收到的简历
+            </dt>
+            <dd>
+                <a href="{% url 'recruitment:unprocessed_resume' %}">待处理简历</a>
+            </dd>
+            <dd>
+                <a href="{% url 'recruitment:indefinite_resume' %}">待定简历</a>
+            </dd>
+            <dd>
+                <a href="{% url 'recruitment:interview_resume' %}">已通知面试简历</a>
+            </dd>
+            <dd>
+                <a href="{% url 'recruitment:not_suitable_resume' %}">不合适简历</a>
+            </dd>
+        </dl>
+        <dl class="company_center_aside">
+            <dt>
+                我发布的职位
+            </dt>
+            <dd>
+                <a href="{% url 'recruitment:positions' %}">有效职位</a>
+            </dd>
+            <dd>
+                <a href="{% url 'recruitment:position_offline' %}">已下线职位</a>
+            </dd>
+        </dl>
+    </div>
+    <!-- end .sidebar -->
+    <div class="content">
+        <dl class="company_center_content">
+            <dt>
+                <h1>
+                    <em></em>
+                    发布新职位
+                </h1>
+            </dt>
+            <dd>
+                <div class="publish_tip">
+                    <h2>恭喜你，职位发布成功！</h2>
+                    <a target="_blank" href="{% url 'recruitment:position_detail' %}?id={{ pid }}">预览职位</a><br>
+                    <a class="greylink" href="{% url 'PostJob' %}">继续发布新职位</a><br>
+                    <a class="greylink" href="{% url 'recruitment:my_home_detail' %}"> 进入我的公司主页</a><br>
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <script src="/static/js/jobs.min.js" type="text/javascript"></script>
+    <div class="clear"></div>
+    <a rel="nofollow" title="回到顶部" id="backtop" style="display: none;"></a>
+{% endblock %}

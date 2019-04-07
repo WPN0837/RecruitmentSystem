@@ -76,9 +76,34 @@ class User(models.Model):
 
 
 class SubmitResume(models.Model):
+    '''
+    投递的简历
+    '''
+    status_choices = (
+        (0, '未阅读'),
+        (1, '已阅读')
+    )
+    sort_choices = (
+        (0, '附件简历'),
+        (1, '在线简历')
+    )
+    delete_choices = (
+        (0, '删除'),
+        (1, '未删除')
+    )
+    offer_choices = (
+        (0, '未处理'),
+        (1, '已通知面试'),
+        (2, '待定'),
+        (3, '不合适')
+    )
     resume = models.ForeignKey('JobHunting.Resume', verbose_name='简历', blank=True, on_delete=models.CASCADE)
     position = models.ForeignKey('Recruitment.PositionInfo', verbose_name='职位', blank=True, on_delete=models.CASCADE)
     add_time = models.DateTimeField(verbose_name='投递时间', blank=True, auto_now_add=True)
+    status = models.SmallIntegerField(verbose_name='简历状态', choices=status_choices, default=0, blank=True)
+    sort = models.SmallIntegerField(verbose_name='简历类型', choices=sort_choices, default=1, blank=True)
+    delete = models.SmallIntegerField(verbose_name='删除', choices=delete_choices, default=1, blank=True)
+    offer = models.SmallIntegerField(verbose_name='简历是否通过状态', choices=offer_choices, default=0, blank=True)
 
     class Meta:
         verbose_name = '收藏职位'

@@ -1,11 +1,16 @@
 from django.shortcuts import HttpResponse, render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
-from common.models import User, City
+from common.models import User, City, SubmitResume
 from .models import IndustrySector, Company, TagSort, CompanyTag, CompanyFoundingTeam, CompanyProduct, \
     CompanyIntroduction, Position, PositionInfo
 import json
 import uuid
+import base64
+from django.conf import settings
+import time
+from datetime import datetime
+from common.tasks import send_submit_resume_pass_email, send_inter_email
 
 
 # Create your views here.
@@ -75,16 +80,17 @@ class PostJobView(View):
         c = u.company
         if pid:
             try:
-                p = PositionInfo.objects.filter(id=int(pid)).update(positionType=positionType, position=position,
-                                                                    department=department, jobNature=jobNature,
-                                                                    salaryMin=salaryMin, salaryMax=salaryMax,
-                                                                    workAddress=workAddress, workYear=workYear,
-                                                                    education=education,
-                                                                    positionAdvantage=positionAdvantage,
-                                                                    positionDetail=positionDetail,
-                                                                    positionAddress=positionAddress,
-                                                                    positionLng=positionLng, positionLat=positionLat,
-                                                                    email=email, )
+                PositionInfo.objects.filter(id=int(pid)).update(positionType=positionType, position=position,
+                                                                department=department, jobNature=jobNature,
+                                                                salaryMin=salaryMin, salaryMax=salaryMax,
+                                                                workAddress=workAddress, workYear=workYear,
+                                                                education=education,
+                                                                positionAdvantage=positionAdvantage,
+                                                                positionDetail=positionDetail,
+                                                                positionAddress=positionAddress,
+                                                                positionLng=positionLng, positionLat=positionLat,
+                                                                email=email, )
+                res = {'success': True, 'content': '/recruitment/post-position.html?id=%s' % pid}
             except Exception as e:
                 return HttpResponse('error')
         else:
@@ -96,7 +102,7 @@ class PostJobView(View):
                 company=c
             )
             p.save()
-        res = {'success': True, 'content': '/recruitment/positions.html'}
+            res = {'success': True, 'content': '/recruitment/post-position.html?id=%s' % p.id}
         return HttpResponse(json.dumps(res))
 
 
@@ -284,8 +290,8 @@ class AddCompany04View(View):
 
         if c.product:
             CompanyProduct.objects.filter(company=c).update(product_poster=product_poster, product_url=product_url,
-                                                                product_desc=product_desc,
-                                                                product_name=product_name)
+                                                            product_desc=product_desc,
+                                                            product_name=product_name)
         else:
             if product_name:
                 p = CompanyProduct(product_poster=product_poster, product_url=product_url,
@@ -540,3 +546,390 @@ class MyCompanyDetailView(View):
             'user': u,
             'c': c,
         })
+
+
+class PostPositionView(View):
+    '''
+    职位发布成功
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        pid = request.GET.get('id', 0)
+        return render(request, 'postjob_success.html', {
+            'user': u,
+            'pid': pid
+        })
+
+
+class UnprocessedResumeView(View):
+    '''
+    未处理的简历
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        c = u.company
+        srs = SubmitResume.objects.filter(position__company=c, offer=0, delete=1).order_by('-id')
+        rd = request.GET.get('rd', '')
+        rs = request.GET.get('rs', '')
+        read = [['', '不限'], [0, '未阅读'], [1, '已阅读']]
+        sort = [['', '不限'], [0, '附件简历'], [1, '在线简历']]
+        if rd:
+            try:
+                rd = int(rd)
+            except Exception as e:
+                return HttpResponse('error')
+            srs = srs.filter(status=rd)
+        if rs:
+            try:
+                rs = int(rs)
+            except Exception as e:
+                return HttpResponse('error')
+            srs = srs.filter(sort=rs)
+        for i in srs:
+            if i.resume.default == 1:
+                token = base64.b64encode(
+                    json.dumps({'email': email, 'id': i.id, 'time': time.time()}).encode('utf-8')).decode(
+                    'utf-8')
+                url = 'http://%s/resume.html?token=%s' % (settings.SELF_HOST_NAME, token)
+            else:
+                url = 'http://%s/%s' % (settings.SELF_HOST_NAME, u.resume.resume_file.resume_file)
+            setattr(i, 'resume_url', url)
+        l = len(srs)
+        return render(request, 'unprocessed_resume.html', {
+            'user': u,
+            'srs': srs,
+            'read': read,
+            'sort': sort,
+            'rd': rd,
+            'rs': rs,
+            'l': l,
+        })
+
+
+class IndefiniteResumeView(View):
+    '''
+    未确定的简历
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        c = u.company
+        srs = SubmitResume.objects.filter(position__company=c, offer=2, delete=1).order_by('-id')
+        rd = request.GET.get('rd', '')
+        rs = request.GET.get('rs', '')
+        read = [['', '不限'], [0, '未阅读'], [1, '已阅读']]
+        sort = [['', '不限'], [0, '附件简历'], [1, '在线简历']]
+        if rd:
+            try:
+                rd = int(rd)
+            except Exception as e:
+                return HttpResponse('error')
+            srs = srs.filter(status=rd)
+        if rs:
+            try:
+                rs = int(rs)
+            except Exception as e:
+                return HttpResponse('error')
+            srs = srs.filter(sort=rs)
+        for i in srs:
+            if i.resume.default == 1:
+                token = base64.b64encode(
+                    json.dumps({'email': email, 'id': i.id, 'time': time.time()}).encode('utf-8')).decode(
+                    'utf-8')
+                url = 'http://%s/resume.html?token=%s' % (settings.SELF_HOST_NAME, token)
+            else:
+                url = 'http://%s/%s' % (settings.SELF_HOST_NAME, u.resume.resume_file.resume_file)
+            setattr(i, 'resume_url', url)
+        l = len(srs)
+        return render(request, 'indefinite_resume.html', {
+            'user': u,
+            'srs': srs,
+            'read': read,
+            'sort': sort,
+            'rd': rd,
+            'rs': rs,
+            'l': l,
+        })
+
+    def post(self, request):
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        try:
+            id_str = request.POST.get('deliverIds', '')
+            if id_str:
+                id_list = list(map(int, id_str.split(',')))
+                SubmitResume.objects.filter(id__in=id_list).update(offer=2)
+        except Exception as e:
+            return HttpResponse('error')
+        return HttpResponse(json.dumps({'success': True}))
+
+
+class InterviewResumeView(View):
+    def get(self, request):
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        c = u.company
+        srs = SubmitResume.objects.filter(position__company=c, offer=1, delete=1).order_by('-id')
+        rd = request.GET.get('rd', '')
+        rs = request.GET.get('rs', '')
+        read = [['', '不限'], [0, '未阅读'], [1, '已阅读']]
+        sort = [['', '不限'], [0, '附件简历'], [1, '在线简历']]
+        if rd:
+            try:
+                rd = int(rd)
+            except Exception as e:
+                return HttpResponse('error')
+            srs = srs.filter(status=rd)
+        if rs:
+            try:
+                rs = int(rs)
+            except Exception as e:
+                return HttpResponse('error')
+            srs = srs.filter(sort=rs)
+        for i in srs:
+            if i.resume.default == 1:
+                token = base64.b64encode(
+                    json.dumps({'email': email, 'id': i.id, 'time': time.time()}).encode('utf-8')).decode(
+                    'utf-8')
+                url = 'http://%s/resume.html?token=%s' % (settings.SELF_HOST_NAME, token)
+            else:
+                url = 'http://%s/%s' % (settings.SELF_HOST_NAME, u.resume.resume_file.resume_file)
+            setattr(i, 'resume_url', url)
+        l = len(srs)
+        return render(request, 'interview_resume.html', {
+            'user': u,
+            'srs': srs,
+            'read': read,
+            'sort': sort,
+            'rd': rd,
+            'rs': rs,
+            'l': l,
+        })
+
+
+class NotSuitableResumeViewAll(View):
+    '''
+    批量处理不合适的简历
+    '''
+
+    def post(self, request):
+        email = request.session.get('email', None)
+        if not email:
+            return redirect('login')
+        try:
+            id_str = request.POST.get('deliverIds', '')
+            if id_str:
+                id_list = list(map(int, id_str.split(',')))
+                data = {'email': '', 'content': '',
+                        'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+                for i in id_list:
+                    SubmitResume.objects.filter(id=i).update(offer=3)
+                    sr = SubmitResume.objects.filter(id=i).first()
+                    content = '尊敬的 {} 先生/女士，很遗憾的通知您：您对{}岗位投递的简历不满足该公司的需求，祝您生活愉快！'.format(sr.resume.resume_info.name,
+                                                                                         sr.position.position)
+                    data['email'] = sr.resume.user.email
+                    data['content'] = content
+                    send_submit_resume_pass_email.delay(data)
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False}))
+        return HttpResponse(json.dumps({'success': True}))
+
+
+class NotSuitableResumeView(View):
+    '''
+    单个处理不合适的简历
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', None)
+        if email:
+            u = User.objects.filter(email=email).first()
+        else:
+            return redirect('login')
+        c = u.company
+        srs = SubmitResume.objects.filter(position__company=c, offer=3, delete=1).order_by('-id')
+        rd = request.GET.get('rd', '')
+        rs = request.GET.get('rs', '')
+        read = [['', '不限'], [0, '未阅读'], [1, '已阅读']]
+        sort = [['', '不限'], [0, '附件简历'], [1, '在线简历']]
+        if rd:
+            try:
+                rd = int(rd)
+            except Exception as e:
+                return HttpResponse('error')
+            srs = srs.filter(status=rd)
+        if rs:
+            try:
+                rs = int(rs)
+            except Exception as e:
+                return HttpResponse('error')
+            srs = srs.filter(sort=rs)
+        for i in srs:
+            if i.resume.default == 1:
+                token = base64.b64encode(
+                    json.dumps({'email': email, 'id': i.id, 'time': time.time()}).encode('utf-8')).decode(
+                    'utf-8')
+                url = 'http://%s/resume.html?token=%s' % (settings.SELF_HOST_NAME, token)
+            else:
+                url = 'http://%s/%s' % (settings.SELF_HOST_NAME, u.resume.resume_file.resume_file)
+            setattr(i, 'resume_url', url)
+        l = len(srs)
+        return render(request, 'notSuitable_resume.html', {
+            'user': u,
+            'srs': srs,
+            'read': read,
+            'sort': sort,
+            'rd': rd,
+            'rs': rs,
+            'l': l,
+        })
+
+    def post(self, request):
+        email = request.session.get('email', None)
+        if not email:
+            return redirect('login')
+        try:
+            srid = request.POST.get('id', '')
+            if srid:
+                SubmitResume.objects.filter(id=int(srid)).update(offer=3)
+            sr = SubmitResume.objects.filter(id=int(srid)).first()
+            content = '尊敬的 {} 先生/女士，很遗憾的通知您：您对{}岗位投递的简历不满足该公司的需求，祝您生活愉快！'.format(sr.resume.resume_info.name,
+                                                                            sr.position.position)
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False}))
+        return HttpResponse(json.dumps({'success': True, 'content': {'content': content}}))
+
+
+class InterviewView(View):
+    '''
+    面试通知
+    '''
+
+    def post(self, request):
+        email = request.session.get('email', None)
+        if not email:
+            return redirect('login')
+        email = request.POST.get('email', '')
+        srid = request.POST.get('positionId', '')
+        name = request.POST.get('name', '')
+        try:
+            sr = SubmitResume.objects.filter(id=int(srid)).first()
+            if not sr:
+                raise Exception
+            res = {'success': True,
+                   'content': {'email': email, 'name': name,
+                               'subject': '{}的面试通知'.format(sr.position.position),
+                               'interAdd': '', 'linkPhone': '',
+                               'linkMan': '', 'content': '', 'positionName': sr.position.position,
+                               'companyName': sr.position.company.abbreviation_name}}
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False}))
+        return HttpResponse(json.dumps(res))
+
+
+class SendMailView(View):
+    '''
+    不合适简历通知
+    '''
+
+    def post(self, request):
+        email = request.session.get('email', None)
+        if not email:
+            return redirect('login')
+        try:
+            srid = request.POST.get('deliverIds', '')
+            sr = SubmitResume.objects.filter(id=int(srid)).first()
+            content = request.POST.get('content', '')
+            data = {'email': sr.resume.user.email, 'content': content,
+                    'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+            send_submit_resume_pass_email.delay(data)
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False}))
+        return HttpResponse(json.dumps({'success': True}))
+
+
+class SendInterMailView(View):
+    '''
+    邮箱面试通知
+    '''
+
+    def post(self, request):
+        email = request.session.get('email', None)
+        if not email:
+            return redirect('login')
+        data = {'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+        data['name'] = request.POST.get('name', '')
+        data['email'] = request.POST.get('email', '')
+        data['subject'] = request.POST.get('subject', '')
+        data['interTime'] = request.POST.get('interTime', '')
+        data['interAdd'] = request.POST.get('interAdd', '')
+        data['linkMan'] = request.POST.get('linkMan', '')
+        data['linkPhone'] = request.POST.get('linkPhone', '')
+        data['content'] = request.POST.get('content', '')
+        data['positionName'] = request.POST.get('positionName', '')
+        data['companyName'] = request.POST.get('companyName', '')
+        srid = request.POST.get('deliverId', '')
+        try:
+            SubmitResume.objects.filter(id=int(srid)).update(offer=1)
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False}))
+        send_inter_email.delay(data)
+        res = {'success': True}
+        return HttpResponse(json.dumps(res))
+
+
+class ResumeDelViewAll(View):
+    '''
+    批量删除简历
+    '''
+
+    def post(self, request):
+        email = request.session.get('email', None)
+        if not email:
+            return redirect('login')
+        try:
+            id_str = request.POST.get('deliverIds', '')
+            if id_str:
+                id_list = list(map(int, id_str.split(',')))
+                SubmitResume.objects.filter(id__in=id_list).update(delete=0)
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False}))
+        return HttpResponse(json.dumps({'success': True}))
+
+
+class ResumeDelView(View):
+    '''
+    单个删除简历
+    '''
+
+    def post(self, request):
+        email = request.session.get('email', None)
+        if not email:
+            return redirect('login')
+        try:
+            srid = request.POST.get('deliverIds', '')
+            if srid:
+                SubmitResume.objects.filter(id=int(srid)).update(delete=0)
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False}))
+        return HttpResponse(json.dumps({'success': True}))

@@ -36,6 +36,7 @@ urlpatterns = [
     path('company-detail.html', CompanyDetailView.as_view(), name='company_detail'),
     path('position-detail.html', PositionDetailView.as_view(), name='position_detail'),
     path('resume.html', ResumeView.as_view(), name='resume'),
+    path('update-pwd.html', UpdatePwd.as_view(), name='update_pwd'),
     path('submit-resume.html', SubmitResumeView.as_view(), name='submit_resume'),
     path('user/', include('JobHunting.urls', namespace='user')),
     path('recruitment/', include('Recruitment.urls', namespace='recruitment')),
