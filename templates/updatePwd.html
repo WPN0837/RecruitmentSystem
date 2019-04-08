@@ -51,10 +51,10 @@
                         <i></i>
                     </dt>
                     <dd>
-                        <a href="collections.html">我收藏的职位</a>
+                        <a href="{% url 'user:my_collection' %}">我收藏的职位</a>
                     </dd>
                     <dd class="btm">
-                        <a href="subscribe.html">我的订阅</a>
+                        <a href="{% url 'user:my_subscription' %}">我的订阅</a>
                     </dd>
                     <dd>
                         <a href="{% url 'update_pwd' %}">帐号设置</a>
@@ -101,19 +101,19 @@
                         <tr>
                             <td class="label">当前密码</td>
                             <td><input type="password" maxlength="16" id="oldpassword" name="oldpassword"
-                                       style="background-image: url(style/images/img/0CQnd2Jos49xUAAAAASUVORK5CYII=quot); background-repeat: no-repeat; background-attachment: scroll; background-position: right center;"/>
+                                       style=" background-repeat: no-repeat; background-attachment: scroll; background-position: right center;"/>
                                 <span id="updatePwd_beError" style="display:none;" class="error"> </span></td>
                         </tr>
                         <tr>
                             <td class="label">新密码</td>
                             <td><input type="password" maxlength="16" id="newpassword" name="newpassword"
-                                       style="background-image: url(style/images/img/a6y3y0Wx5kbFHvGuXzkgf0xhKnPzA4UTyaTB8Ph8AvcHi3fnsrZ7Wore02YViqVOrRXXPhfqP8j6MYlawoAAAAASUVORK5CYII=quot); background-repeat: no-repeat; background-attachment: scroll; background-position: right center;"/>
+                                       style=" background-repeat: no-repeat; background-attachment: scroll; background-position: right center;"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="label">确认密码</td>
                             <td><input type="password" maxlength="16" id="comfirmpassword" name="comfirmpassword"
-                                       style="background-image: url(style/images/img/a6y3y0Wx5kbFHvGuXzkgf0xhKnPzA4UTyaTB8Ph8AvcHi3fnsrZ7Wore02YViqVOrRXXPhfqP8j6MYlawoAAAAASUVORK5CYII=quot); background-repeat: no-repeat; background-attachment: scroll; background-position: right center;"/>
+                                       style=" background-repeat: no-repeat; background-attachment: scroll; background-position: right center;"/>
                             </td>
                         </tr>
                         <tr>

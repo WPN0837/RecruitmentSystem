@@ -54,6 +54,8 @@ class CompanyFoundingTeam(models.Model):
     sina = models.URLField(max_length=200, blank=True, verbose_name='新浪微博')
     desc = models.CharField(max_length=500, blank=True, verbose_name='创始人简介')
     photo = models.ImageField(upload_to='Company/FoundingTeam/Founder', verbose_name='创始人头像')
+    company = models.OneToOneField('Company', on_delete=models.CASCADE, related_name='founder', verbose_name='公司',
+                                   blank=True)
 
     class Meta:
         verbose_name = '公司创始团队信息'
@@ -114,9 +116,6 @@ class Company(models.Model):
     development_stage = models.CharField(max_length=50, verbose_name='发展阶段', default=0)
     desc = models.CharField(max_length=50, verbose_name='一句话介绍', blank=True)
     tags = models.ManyToManyField('CompanyTag', verbose_name='标签', related_name='company', blank=True)
-    founder = models.OneToOneField('CompanyFoundingTeam', verbose_name='创始团队', blank=True, null=True,
-                                   on_delete=models.CASCADE,
-                                   related_name='company')
     user = models.OneToOneField('common.User', verbose_name='用户', on_delete=models.CASCADE, related_name='company',
                                 blank=True)
     level = models.IntegerField(db_index=True, verbose_name='等级', blank=True, default=0)
@@ -203,3 +202,18 @@ class PositionInfo(models.Model):
 
     def __str__(self):
         return self.position
+
+
+class CompanyAuthFile(models.Model):
+    '''
+    公司认证文件
+    '''
+    file_path = models.FilePathField(verbose_name='路径', blank=True)
+    company = models.OneToOneField('Company', on_delete=models.CASCADE, blank=True, verbose_name='公司')
+
+    class Meta:
+        verbose_name = '公司认证文件'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.company.abbreviation_name

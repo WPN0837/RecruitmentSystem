@@ -8,7 +8,7 @@
                 <ul id="navheader" class="reset">
                     <li><a href="{% url 'index' %}">首页</a></li>
                     <li><a href="companylist.html">公司</a></li>
-                    <li><a rel="nofollow" href="">简历管理</a></li>
+                    <li><a rel="nofollow" href="{% url 'recruitment:unprocessed_resume' %}">简历管理</a></li>
                     <li><a rel="nofollow" href="{% url 'PostJob' %}">发布职位</a></li>
                 </ul>
                 <dl class="collapsible_menu">
@@ -21,13 +21,13 @@
                         <a href="{% url 'recruitment:positions' %}">我发布的职位</a>
                     </dd>
                     <dd style="display: none;">
-                        <a href="positions.html">我收到的简历</a>
+                        <a href="{% url 'recruitment:unprocessed_resume' %}">我收到的简历</a>
                     </dd>
                     <dd class="btm" style="display: none;">
                         <a href="{% url 'recruitment:my_home_detail' %}">我的公司主页</a>
                     </dd>
                     <dd style="display: none;">
-                        <a href="accountBind.html">帐号设置</a>
+                        <a href="{% url 'update_pwd' %}">帐号设置</a>
                     </dd>
                     <dd class="logout" style="display: none;">
                         <a rel="nofollow" href="{% url 'logout' %}">退出</a>
@@ -46,13 +46,13 @@
                         <i></i>
                     </dt>
                     <dd>
-                        <a href="collections.html">我收藏的职位</a>
+                        <a href="{% url 'user:my_collection' %}">我收藏的职位</a>
                     </dd>
                     <dd class="btm">
-                        <a href="subscribe.html">我的订阅</a>
+                        <a href="{% url 'user:my_subscription' %}">我的订阅</a>
                     </dd>
                     <dd>
-                        <a href="accountBind.html">帐号设置</a>
+                        <a href="{% url 'update_pwd' %}">帐号设置</a>
                     </dd>
                     <dd class="logout">
                         <a rel="nofollow" href="{% url 'logout' %}">退出</a>

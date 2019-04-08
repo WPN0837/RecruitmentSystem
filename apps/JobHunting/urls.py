@@ -35,4 +35,6 @@ urlpatterns = [
     path('projectexperiencedeldel.html', ProjectExperienceViewDelView.as_view(), name='projectexperiencedeldel'),
     path('workExperiencedel.html', WorkExperienceDelView.as_view(), name='workExperiencedel'),
     path('default-resume.html', DefaultResumeView.as_view(), name='default_resume'),
+    path('my-collection.html', MyCollectionView.as_view(), name='my_collection'),
+    path('my-subscription.html', MySubscriptionView.as_view(), name='my_subscription'),
 ]

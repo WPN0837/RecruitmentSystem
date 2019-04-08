@@ -49,13 +49,13 @@
                         <i></i>
                     </dt>
                     <dd>
-                        <a href="collections.html">我收藏的职位</a>
+                        <a href="{% url 'user:my_collection' %}">我收藏的职位</a>
                     </dd>
                     <dd class="btm">
-                        <a href="subscribe.html">我的订阅</a>
+                        <a href="{% url 'user:my_subscription' %}">我的订阅</a>
                     </dd>
                     <dd>
-                        <a href="accountBind.html">帐号设置</a>
+                        <a href="{% url 'update_pwd' %}">帐号设置</a>
                     </dd>
                     <dd class="logout">
                         <a rel="nofollow" href="{% url 'logout' %}">退出</a>
@@ -95,13 +95,25 @@
                         {{ p.position }}
                     </h1>
                 </dt>
-                <div class="jd_collection" id="jobCollection">
-                    <div class="jd_collection_success">
-                        <span>已成功收藏该职位，</span>
-                        <a class="jd_collection_page" href="collections.html">查看全部</a>
-                        <a class="jd_collection_x" href="javascript:;"></a>
+                <input type="hidden" value="{{ p.id }}" id="jobid">
+                {% if collection %}
+                    <div class="jd_collection collected" id="jobCollection">
+                        <div class="jd_collection_success">
+                            <span>已成功收藏该职位，</span>
+                            <a class="jd_collection_page" href="{% url 'user:my_collection' %}">查看全部</a>
+                            <a class="jd_collection_x" href="javascript:;"></a>
+                        </div>
                     </div>
-                </div>
+                {% else %}
+                    <div class="jd_collection" id="jobCollection">
+                        <div class="jd_collection_success">
+                            <span>已成功收藏该职位，</span>
+                            <a class="jd_collection_page" href="{% url 'user:my_collection' %}">查看全部</a>
+                            <a class="jd_collection_x" href="javascript:;"></a>
+                        </div>
+                    </div>
+                {% endif %}
+
                 <dd class="job_request">
                     <span class="red">{{ p.salaryMin }}k-{{ p.salaryMax }}k</span>
                     <span>{{ p.workAddress }}</span>

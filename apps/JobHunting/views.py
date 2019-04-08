@@ -3,9 +3,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.views import View
 from common.models import User
+from Recruitment.models import PositionInfo
 from .models import *
 import json
 import uuid
+from utils.Paginator import my_Paginator
 
 
 # Create your views here.
@@ -649,3 +651,63 @@ class DefaultResumeView(View):
             else:
                 return HttpResponse(json.dumps({'success': False, 'msg': '修改失败4'}))
         return HttpResponse(json.dumps({'success': True}))
+
+
+class MyCollectionView(View):
+    '''
+    我收藏的职位
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        page = request.GET.get('page', 1)  # 页码
+        try:
+            page = int(page)
+        except Exception as e:
+            return HttpResponse('error')
+        pcs = PositionCollection.objects.filter(user=u).order_by('-id')
+        pcs = my_Paginator(pcs, 10, 6, page)
+        return render(request, 'collections.html', {
+            'user': u,
+            'pcs': pcs,
+            'page': page,
+        })
+
+    def post(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        objid = request.POST.get('positionId', 0)
+        t = request.POST.get('type', '')
+        try:
+            t = int(t)
+            objid = int(objid)
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False, 'msg': '操作失败'}))
+        if t == 1:
+            if not PositionInfo.objects.filter(id=objid).exists():
+                return HttpResponse(json.dumps({'success': False, 'msg': '收藏错误'}))
+            if not PositionCollection.objects.filter(user_id=u.id, position_id=objid).exists():
+                PositionCollection.objects.create(user=u, position_id=objid)
+            return HttpResponse(json.dumps({'success': True, 'content': {'showStts': 0}}))
+        elif t == 0:
+            if not PositionInfo.objects.filter(id=objid).exists():
+                return HttpResponse(json.dumps({'success': False, 'msg': '取消收藏错误'}))
+            if PositionCollection.objects.filter(user_id=u.id, position_id=objid).exists():
+                PositionCollection.objects.filter(user=u, position_id=objid).delete()
+            return HttpResponse(json.dumps({'success': True, 'content': {'showStts': 1}}))
+        else:
+            return HttpResponse(json.dumps({'success': False, 'msg': '操作失败'}))
+
+
+class MySubscriptionView(View):
+    '''
+    我的订阅
+    '''
+
+    def get(self, request):
+        pass

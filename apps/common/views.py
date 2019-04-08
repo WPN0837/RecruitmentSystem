@@ -10,7 +10,8 @@ from .tasks import send_register_email, send_reset_email, send_submit_resume_ema
 import time
 import base64
 from common.models import HotCity, SubmitResume
-from Recruitment.models import Position, PositionInfo, CompanyTag, IndustrySector, Company
+from Recruitment.models import Position, PositionInfo, CompanyTag, IndustrySector, Company, CompanyAuthFile
+from JobHunting.models import PositionCollection
 from utils.common import code
 from datetime import datetime, timedelta
 from django.conf import settings
@@ -35,15 +36,18 @@ class IndexView(View):
             setattr(i, 'hot_p', sorted(hot_p, key=lambda x: x.hot, reverse=True)[:5])
         hot_search = Position.objects.filter(level=3).order_by('-hot')[:10]
         hot_company = Company.objects.order_by('-level')[:6]
-        last_company = hot_company[5]
+        if len(hot_company) < 5:
+            last_company = None
+        else:
+            last_company = hot_company[5]
         hot_company = hot_company[:5]
         hot_positions = PositionInfo.objects.raw(
-            'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.views_count desc LIMIT 0,15) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.founder_id = rcf.id) on rp.company_id = rc.id;')
+            'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.views_count desc LIMIT 0,15) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;')
         for i in hot_positions:
             i.sector = ','.join([i[0] for i in IndustrySector.objects.filter(company=i.cid).values_list('sector')])
             i.tag = CompanyTag.objects.filter(company=i.cid).values_list('name')
         new_positions = PositionInfo.objects.raw(
-            'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.id desc LIMIT 0,15) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.founder_id = rcf.id) on rp.company_id = rc.id;')
+            'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.id desc LIMIT 0,15) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;')
         for i in hot_positions:
             i.sector = ','.join([i[0] for i in IndustrySector.objects.filter(company=i.cid).values_list('sector')])
             i.tag = CompanyTag.objects.filter(company=i.cid).values_list('name')
@@ -327,19 +331,19 @@ class ListView(View):
             return HttpResponse('error')
         if cte == 'hot':
             positions = PositionInfo.objects.raw(
-                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.views_count desc) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.founder_id = rcf.id) on rp.company_id = rc.id;')
+                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.views_count desc) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;')
             for i in positions:
                 i.sector = ','.join([i[0] for i in IndustrySector.objects.filter(company=i.cid).values_list('sector')])
                 i.tag = CompanyTag.objects.filter(company=i.cid).values_list('name')
         elif cte == 'new':
             positions = PositionInfo.objects.raw(
-                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.id desc) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.founder_id = rcf.id) on rp.company_id = rc.id;')
+                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.id desc) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;')
             for i in positions:
                 i.sector = ','.join([i[0] for i in IndustrySector.objects.filter(company=i.cid).values_list('sector')])
                 i.tag = CompanyTag.objects.filter(company=i.cid).values_list('name')
         else:
             positions = PositionInfo.objects.raw(
-                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.founder_id = rcf.id) on rp.company_id = rc.id;')
+                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;')
             for i in positions:
                 i.sector = ','.join([i[0] for i in IndustrySector.objects.filter(company=i.cid).values_list('sector')])
                 i.tag = CompanyTag.objects.filter(company=i.cid).values_list('name')
@@ -409,11 +413,11 @@ class SearchView(View):
             return HttpResponse('error')
         if spc == '1':
             positions = PositionInfo.objects.raw(
-                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`position` LIKE %s or r.positionType LIKE %s ) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.founder_id = rcf.id) on rp.company_id = rc.id;',
+                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`position` LIKE %s or r.positionType LIKE %s ) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;',
                 params=['%{}%'.format(kd), '%{}%'.format(kd)])
         elif spc == '2':
             positions = PositionInfo.objects.raw(
-                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (SELECT full_name,abbreviation_name,scope,development_stage,id,founder_id from recruitment_company WHERE full_name LIKE %s or abbreviation_name LIKE %s ) as rc LEFT join recruitment_companyfoundingteam as rcf on rc.founder_id = rcf.id LEFT join recruitment_positioninfo as rp on rp.company_id = rc.id;',
+                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (SELECT full_name,abbreviation_name,scope,development_stage,id,founder_id from recruitment_company WHERE full_name LIKE %s or abbreviation_name LIKE %s ) as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id LEFT join recruitment_positioninfo as rp on rp.company_id = rc.id;',
                 params=['%{}%'.format(kd), '%{}%'.format(kd)])
         else:
             positions = []
@@ -553,9 +557,11 @@ class CompanyDetailView(View):
             c = Company.objects.filter(id=int(cid)).first()
         except Exception as e:
             return HttpResponse('error')
+        auth = CompanyAuthFile.objects.filter(company=c).exists()
         return render(request, 'company_info.html', {
             'c': c,
             'user': u,
+            'auth': auth,
         })
 
 
@@ -581,11 +587,13 @@ class PositionDetailView(View):
                 'c': c,
                 'sectors': sectors,
             })
+        collection = PositionCollection.objects.filter(user_id=u.id, position_id=int(pid)).exists()
         return render(request, 'position_detail1.html', {
             'user': u,
             'p': p,
             'c': c,
             'sectors': sectors,
+            'collection': collection,
         })
 
 
@@ -712,3 +720,16 @@ class UpdatePwd(View):
             User.objects.filter(email=email, pwd=old_pwd).update(pwd=pwd)
             return HttpResponse(json.dumps({'success': True}))
         return HttpResponse(json.dumps({'success': False, 'msg': '修改密码错误'}))
+
+
+class CompanyListView(View):
+    '''
+    公司列表
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        return render(request, 'companylist.html', {
+            'user': u,
+        })

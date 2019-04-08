@@ -45,4 +45,6 @@ urlpatterns = [
     path('send_inter_mail.html', SendInterMailView.as_view(), name='send_inter_mail'),
     path('resume-del.html', ResumeDelView.as_view(), name='resume_del'),
     path('resume-del-all.html', ResumeDelViewAll.as_view(), name='resume_del_all'),
+    path('company-auth.html', CompanyAuthView, name='company_auth'),
+    path('auth-success.html', CompanyAuthSuccessView.as_view(), name='auth_success'),
 ]

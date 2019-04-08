@@ -60,8 +60,8 @@ $(function(){
 			url: '/companyLabel/removeOneLabelToCompany.json',
 			data:{companyId:companyid,label:labelVal},
 			dataType: 'json'
-		}).add_company_info06(function (result) {
-			if(result.add_company_info06){
+		}).success(function (result) {
+			if(result.success){
 				_this.parent().remove();
 			}else{
 				alert(result.msg);
@@ -89,8 +89,8 @@ $(function(){
 					url: '/companyLabel/pasteOneLabelToCompany.json',
 					data:{companyId:companyid,label:labelVal},
 					dataType: 'json'
-				}).add_company_info06(function (result) {
-					if(result.add_company_info06){
+				}).success(function (result) {
+					if(result.success){
 						$('#hasLabels').append('<li><span>'+labelVal+'</span><i>x</i></li>');
 					}else{
 						alert(result.msg);
@@ -149,7 +149,7 @@ $(function(){
 				type:'POST',
 	        	data: {type:resumeName}
 			}).done(function(result) {
-	        	if(result.add_company_info06){
+	        	if(result.success){
 	        		top.location.reload();
 	        	}else{
 					console.log(result.msg);
@@ -190,7 +190,6 @@ $(function(){
     		if($('input[type="checkbox"]',form).attr('checked')){
     			checkDefault = 1;
     		}
-    		var resubmitToken = $('#resubmitToken').val();
     		$(form).find(":submit").attr("disabled", true);
     		$.ajax({
     			url: '/mycenter/deliverResumeBeforce.json',
@@ -198,14 +197,12 @@ $(function(){
     				userId:userid,
     				positionId:jobid,
     				type:resumeName,
-    				remember:checkDefault,
-    				resubmitToken:resubmitToken
+    				remember:checkDefault
     			},
 				type:'POST',
             	dataType:'json'
 			}).done(function(r) {
-        		$('#resubmitToken').val(r.resubmitToken);
-	        	if(r.add_company_info06){
+	        	if(r.success){
 	        		$("#deliverResumesSuccess p.count").html(r.msg);
 	        		if(r.code == 10){
 	        			$("#deliverResumesSuccess p.share").removeClass('dn');
@@ -261,7 +258,7 @@ $(function(){
         	data: {type:type},
         	dataType:'json'
 		}).done(function(result) {
-        	if(result.add_company_info06){
+        	if(result.success){
         		top.location.reload();
         	}else{
 				console.log(result.msg);
@@ -400,7 +397,6 @@ $(function(){
     		var email = $('input[name="email"]',form).val();
     		var type = $('input[name="type"]',form).val();
     		var jobid = $('#jobid').val();
-    		var resubmitToken = $('#resubmitToken').val();
     		$(form).find(":submit").attr("disabled", true);
     		$.ajax({
 				url:'/resume/saveConfirmAndDeliver.json',
@@ -414,13 +410,11 @@ $(function(){
 	        		email:email,
 	        		type:type,
 	        		positionId:jobid,
-	        		deliver:true,
-					resubmitToken:resubmitToken
+	        		deliver:true
 	        	},
             	dataType:'json'
 			}).done(function(r) {
-	    		$('#resubmitToken').val(r.resubmitToken);
-	        	if(r.add_company_info06){
+	        	if(r.success){
 	        		$("div#deliverResumesSuccess p.count").html(r.msg);
 					if(r.code == 10){
 	        			$("#deliverResumesSuccess p.share").removeClass('dn');
@@ -475,7 +469,7 @@ $(function(){
         	data: {expeId:id,type:1},
         	dataType:'json'
 		}).done(function(result) {
-        	if(result.add_company_info06){
+        	if(result.success){
         		num++;
         		_this.children('span').text(num);
         	}else{
@@ -502,19 +496,16 @@ $(function(){
 				_this.children('.jd_collection_success').stop(true,true).fadeIn(200).delay(3000).fadeOut(200);
 			}else{
 				var id = $('#jobid').val();
-				var resubmitToken = $('#resubmitToken').val();
 				$.ajax({
-					url:'/mycenter/collectPositoin.json',
+					url:'/user/my-collection.html',
 					type:'POST',
 					data:{
 						positionId:id,
-						type:1,
-						resubmitToken:resubmitToken
+						type:1
 					},
 					dataType:'json'
 				}).done(function(result){
-					if(result.add_company_info06){
-			    		$('#resubmitToken').val(result.resubmitToken);
+					if(result.success){
 						_this.addClass('collected');
 						_this.children('.jd_collection_success').stop(true,true).fadeIn(200).delay(3000).fadeOut(200);
 						jobCollection = true;
@@ -547,7 +538,7 @@ function popQR(){
 		type:"GET"
 		/*async:false*/
 	}).done(function(data){
-		if(data.add_company_info06){
+		if(data.success){
 			$('.saoma .drop_l img').attr("src",data.content);
 			$('#deliverResumesSuccess .weixinQR .qr img').attr("src",data.content);
 			$('#deliverResumesSuccess .weixinQR').removeClass('dn');
@@ -559,7 +550,6 @@ function popQR(){
  * 申请职位
  */
  function sendResume(userId,jobId,force,typeDefault){
-	 var resubmitToken = $('#resubmitToken').val();
 	 var type = null;
 	 if(typeDefault){
 		 type = $('#deliverResumeConfirm input[name="type"]').val();
@@ -572,13 +562,11 @@ function popQR(){
 				userId:userId,
 				positionId:jobId,
 				force:force,
-				type:type,
-				resubmitToken:resubmitToken
+				type:type
 			},
         	dataType:'json'
 		}).done(function (r) {
-    		$('#resubmitToken').val(r.resubmitToken);
-			if(r.add_company_info06){
+			if(r.success){
 				$("#deliverResumesSuccess p.count").html(r.msg);
 				if(r.code == 10){
         			$("#deliverResumesSuccess p.share").removeClass('dn');
@@ -614,7 +602,7 @@ function openProfileBox(type){
 		data:{type:type},
 		dataType: 'json'
 	}).done(function (data) {
-		if(data.add_company_info06){
+		if(data.success){
 			//弹出个人信息确认 前 补充信息
 			$('#basicInfoForm input[name="name"]').val(data.content.name);
 			if(data.content.highestEducation){
@@ -720,7 +708,7 @@ function file_check(obj,action_url,id)
 			success: function (jsonStr) {
 				var json = eval('(' + jsonStr + ')');
 				$('#loadingImg').css("visibility","hidden");
-				if(json.add_company_info06){
+				if(json.success){
 					var nearbyName = '';
 					if(json.content.nearbyName.length>18){
 						nearbyName = json.content.nearbyName.substring(0,15)+'...';

@@ -6,7 +6,7 @@
         </a>
         <ul class="reset" id="navheader">
             <li class="current"><a href="{% url 'index' %}">首页</a></li>
-            <li><a href="companylist.html">公司</a></li>
+            <li><a href="{% url 'company_list' %}">公司</a></li>
             {% if user %}
                 {% if user.type == 0 %}
                     <li><a href="{% url 'user:my_resume' %}" rel="nofollow">我的简历</a></li>
@@ -51,10 +51,10 @@
                         <i></i>
                     </dt>
                     <dd>
-                        <a href="collections.html">我收藏的职位</a>
+                        <a href="{% url 'user:my_collection' %}">我收藏的职位</a>
                     </dd>
                     <dd class="btm">
-                        <a href="subscribe.html">我的订阅</a>
+                        <a href="{% url 'user:my_subscription' %}">我的订阅</a>
                     </dd>
                     <dd>
                         <a href="{% url 'update_pwd' %}">帐号设置</a>

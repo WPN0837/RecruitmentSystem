@@ -1,4 +1,6 @@
 from django.db import models
+
+
 # from common.models import User
 
 
@@ -206,9 +208,6 @@ class Gallery(models.Model):
 
     def __str__(self):
         return self.resume.title
-
-
-# from Recruitment.models import PositionInfo
 
 
 class PositionCollection(models.Model):

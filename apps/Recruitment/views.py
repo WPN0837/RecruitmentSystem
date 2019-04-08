@@ -2,8 +2,7 @@ from django.shortcuts import HttpResponse, render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from common.models import User, City, SubmitResume
-from .models import IndustrySector, Company, TagSort, CompanyTag, CompanyFoundingTeam, CompanyProduct, \
-    CompanyIntroduction, Position, PositionInfo
+from .models import *
 import json
 import uuid
 import base64
@@ -116,7 +115,10 @@ class AddCompany01View(View):
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
-        c = u.company
+        if hasattr(u, 'company'):
+            c = u.company
+        else:
+            c = None
         return render(request, 'add_company_info01.html', {
             'sectors': sectors,
             'user': u,
@@ -176,6 +178,8 @@ class AddCompany02View(View):
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
         c = u.company
         tag_sorts = TagSort.objects.all()
         c_tags = {i.name: CompanyTag.objects.filter(tag_sort=i) for i in tag_sorts}
@@ -211,9 +215,9 @@ class AddCompany03View(View):
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
-        c = u.company
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
+        c = u.company
         if not hasattr(u.company, 'founder'):
             l = 500
         else:
@@ -236,7 +240,7 @@ class AddCompany03View(View):
         sina = request.POST.get('weibo', None)
         desc = request.POST.get('remark', None)
         c = u.company
-        if c.founder:
+        if hasattr(c, 'founder'):
             c.founder.founder_name = founder_name
             c.founder.current_position = current_position
             c.founder.sina = sina
@@ -247,10 +251,8 @@ class AddCompany03View(View):
         else:
             f = CompanyFoundingTeam(founder_name=founder_name, current_position=current_position, sina=sina,
                                     desc=desc,
-                                    photo=photo)
+                                    photo=photo, company=c)
             f.save()
-            c.founder = f
-            c.save()
             return redirect('recruitment:company04')
 
 
@@ -264,7 +266,7 @@ class AddCompany04View(View):
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
-        if c.product:
+        if hasattr(c, 'product'):
             l = 500 - len(c.product.product_desc)
         else:
             l = 500
@@ -288,16 +290,15 @@ class AddCompany04View(View):
         product_url = request.POST.get('productInfos[0].productUrl', None)
         product_desc = request.POST.get('productInfos[0].productProfile', None)
 
-        if c.product:
+        if hasattr(c, 'product'):
             CompanyProduct.objects.filter(company=c).update(product_poster=product_poster, product_url=product_url,
                                                             product_desc=product_desc,
                                                             product_name=product_name)
         else:
-            if product_name:
-                p = CompanyProduct(product_poster=product_poster, product_url=product_url,
-                                   product_desc=product_desc,
-                                   product_name=product_name, company=c)
-                p.save()
+            p = CompanyProduct(product_poster=product_poster, product_url=product_url,
+                               product_desc=product_desc,
+                               product_name=product_name, company=c)
+            p.save()
         return redirect('recruitment:company05')
 
 
@@ -348,6 +349,8 @@ class AddCompany06View(View):
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
         c = u.company
         return render(request, 'add_company_info06.html', {
             'user': u,
@@ -539,12 +542,16 @@ class MyCompanyDetailView(View):
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
+        if not u.type:
+            return HttpResponse('error')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
+        auth = CompanyAuthFile.objects.filter(company=c).exists()
         return render(request, 'myhome.html', {
             'user': u,
             'c': c,
+            'auth': auth,
         })
 
 
@@ -577,6 +584,10 @@ class UnprocessedResumeView(View):
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
+        if not u.type:
+            return HttpResponse('error')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
         c = u.company
         srs = SubmitResume.objects.filter(position__company=c, offer=0, delete=1).order_by('-id')
         rd = request.GET.get('rd', '')
@@ -627,6 +638,10 @@ class IndefiniteResumeView(View):
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
+        if not u.type:
+            return HttpResponse('error')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
         c = u.company
         srs = SubmitResume.objects.filter(position__company=c, offer=2, delete=1).order_by('-id')
         rd = request.GET.get('rd', '')
@@ -682,12 +697,20 @@ class IndefiniteResumeView(View):
 
 
 class InterviewResumeView(View):
+    '''
+    已面试的简历
+    '''
+
     def get(self, request):
         email = request.session.get('email', None)
         if email:
             u = User.objects.filter(email=email).first()
         else:
             return redirect('login')
+        if not u.type:
+            return HttpResponse('error')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
         c = u.company
         srs = SubmitResume.objects.filter(position__company=c, offer=1, delete=1).order_by('-id')
         rd = request.GET.get('rd', '')
@@ -761,11 +784,14 @@ class NotSuitableResumeView(View):
     '''
 
     def get(self, request):
-        email = request.session.get('email', None)
-        if email:
-            u = User.objects.filter(email=email).first()
-        else:
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
             return redirect('login')
+        if not u.type:
+            return HttpResponse('error')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
         c = u.company
         srs = SubmitResume.objects.filter(position__company=c, offer=3, delete=1).order_by('-id')
         rd = request.GET.get('rd', '')
@@ -814,7 +840,7 @@ class NotSuitableResumeView(View):
                 SubmitResume.objects.filter(id=int(srid)).update(offer=3)
             sr = SubmitResume.objects.filter(id=int(srid)).first()
             content = '尊敬的 {} 先生/女士，很遗憾的通知您：您对{}岗位投递的简历不满足该公司的需求，祝您生活愉快！'.format(sr.resume.resume_info.name,
-                                                                            sr.position.position)
+                                                                                 sr.position.position)
         except Exception as e:
             return HttpResponse(json.dumps({'success': False}))
         return HttpResponse(json.dumps({'success': True, 'content': {'content': content}}))
@@ -933,3 +959,66 @@ class ResumeDelView(View):
         except Exception as e:
             return HttpResponse(json.dumps({'success': False}))
         return HttpResponse(json.dumps({'success': True}))
+
+
+@csrf_exempt
+def CompanyAuthView(request):
+    '''
+    公司认证
+    '''
+    if request.method == 'GET':
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        if not u.type:
+            return HttpResponse('error')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
+        c = u.company
+        return render(request, 'auth.html', {
+            'user': u,
+            'c': c,
+        })
+
+    if request.method == 'POST':
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        if not u.type:
+            return HttpResponse('error')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
+        c = u.company
+        img = request.FILES['businessLicenes']
+        url = 'static/Company/auth/' + str(uuid.uuid1()) + img._name
+        try:
+            with open(url, 'wb')as IMG:
+                for i in img.file:
+                    IMG.write(i)
+            CompanyAuthFile.objects.create(file_path=url, company=c)
+        except Exception as e:
+            return HttpResponse(json.dumps({'success': False}))
+        finally:
+            return HttpResponse(json.dumps({'success': True}))
+
+
+class CompanyAuthSuccessView(View):
+    '''
+    公司认证成功
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        if not u.type:
+            return HttpResponse('error')
+        if not hasattr(u, 'company'):
+            return redirect('recruitment:company01')
+        c = u.company
+        return render(request, 'authSuccess.html', {
+            'user': u,
+        })
