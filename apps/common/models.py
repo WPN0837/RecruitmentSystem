@@ -71,10 +71,6 @@ class User(models.Model):
         return self.email
 
 
-# from JobHunting.models import Resume
-# from Recruitment.models import PositionInfo
-
-
 class SubmitResume(models.Model):
     '''
     投递的简历
@@ -109,3 +105,23 @@ class SubmitResume(models.Model):
         verbose_name = '收藏职位'
         verbose_name_plural = verbose_name
         unique_together = ['resume', 'position']
+
+    def __str__(self):
+        return '%s-%s' % (self.resume.title, self.position.position)
+
+
+class Banner(models.Model):
+    '''
+    首页轮播图
+    '''
+    img = models.ImageField(upload_to='banner', verbose_name='图片', blank=True)
+    url = models.URLField(verbose_name='跳转路径', blank=True)
+    alt = models.CharField(verbose_name='图片alt', max_length=20, blank=True)
+    level = models.IntegerField(verbose_name='权重', blank=True, default=0)
+
+    class Meta:
+        verbose_name = '首页轮播图'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.alt

@@ -9,7 +9,7 @@ from utils.check_code import create_validate_code
 from .tasks import send_register_email, send_reset_email, send_submit_resume_email
 import time
 import base64
-from common.models import HotCity, SubmitResume
+from common.models import HotCity, SubmitResume, Banner
 from Recruitment.models import Position, PositionInfo, CompanyTag, IndustrySector, Company, CompanyAuthFile
 from JobHunting.models import PositionCollection
 from utils.common import code
@@ -51,6 +51,9 @@ class IndexView(View):
         for i in hot_positions:
             i.sector = ','.join([i[0] for i in IndustrySector.objects.filter(company=i.cid).values_list('sector')])
             i.tag = CompanyTag.objects.filter(company=i.cid).values_list('name')
+        bs = Banner.objects.order_by('-level')[:3]
+        for i in range(len(bs)):
+            setattr(bs[i], 'tag', i + 1)
         return render(request, 'index.html', {
             'user': u,
             'p': p,
@@ -58,7 +61,8 @@ class IndexView(View):
             'new_positions': new_positions,
             'hot_search': hot_search,
             'hot_company': hot_company,
-            'last_company': last_company
+            'last_company': last_company,
+            'bs': bs,
         })
 
 

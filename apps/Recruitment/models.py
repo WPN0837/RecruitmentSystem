@@ -84,7 +84,6 @@ class CompanyProduct(models.Model):
         return self.product_name
 
 
-# from common.models import User
 class Company(models.Model):
     '''
     公司信息

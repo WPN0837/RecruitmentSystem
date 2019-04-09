@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from common.views import *
 from Recruitment.views import PostJobView
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,5 +43,8 @@ urlpatterns = [
     path('error.html', ErrorView.as_view(), name='error'),
     path('user/', include('JobHunting.urls', namespace='user')),
     path('recruitment/', include('Recruitment.urls', namespace='recruitment')),
-    re_path('.*', ErrorView.as_view())
+    re_path('((?!media).)* ', ErrorView.as_view())
 ]
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

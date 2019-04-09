@@ -107,7 +107,7 @@
                 </div>
             {% endfor %}
         </div>
-        <a class="subscribe" href="subscribe.html" target="_blank">订阅职位</a>
+        <a class="subscribe" href="{% url 'user:my_subscription' %}" target="_blank">订阅职位</a>
     </div>
     <div class="content">
         <div id="search_box">
@@ -169,37 +169,41 @@
         <script type="text/javascript" src="/static/js/search.min.js"></script>
         <div id="home_banner">
             <ul class="banner_bg">
-                <li class="banner_bg_1 current">
-                    <a href="h/subject/s_buyfundation.html?utm_source=DH__lagou&utm_medium=banner&utm_campaign=haomai"
-                       target="_blank"><img src="/static/images/d05a2cc6e6c94bdd80e074eb05e37ebd.jpg" width="612"
-                                            height="160" alt="好买基金——来了就给100万"/></a>
-                </li>
-                <li class="banner_bg_2">
-                    <a href="h/subject/s_worldcup.html?utm_source=DH__lagou&utm_medium=home&utm_campaign=wc"
-                       target="_blank"><img src="/static/images/c9d8a0756d1442caa328adcf28a38857.jpg" width="612"
-                                            height="160" alt="世界杯放假看球，老板我也要！"/></a>
-                </li>
-                <li class="banner_bg_3">
-                    <a href="h/subject/s_xiamen.html?utm_source=DH__lagou&utm_medium=home&utm_campaign=xiamen"
-                       target="_blank"><img src="/static/images/d03110162390422bb97cebc7fd2ab586.jpg" width="612"
-                                            height="160" alt="出北京记——第一站厦门"/></a>
-                </li>
+                {% for b in bs %}
+                    {% if b.tag == 1 %}
+                        <li class="banner_bg_{{ b.tag }} current">
+                            <a href="{{ b.url }}"
+                               target="_blank"><img src="{{ MEDIA_URL }}{{ b.img }}"
+                                                    width="612"
+                                                    height="160" alt="{{ b.alt }}"/></a>
+                        </li>
+                    {% else %}
+                        <li class="banner_bg_{{ b.tag }}">
+                            <a href="{{ b.url }}"
+                               target="_blank"><img src="{{ MEDIA_URL }}{{ b.img }}"
+                                                    width="612"
+                                                    height="160" alt="{{ b.alt }}"/></a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
             </ul>
             <div class="banner_control">
                 <em></em>
                 <ul class="thumbs">
-                    <li class="thumbs_1 current">
-                        <i></i>
-                        <img src="/static/images/4469b1b83b1f46c7adec255c4b1e4802.jpg" width="113" height="42"/>
-                    </li>
-                    <li class="thumbs_2">
-                        <i></i>
-                        <img src="/static/images/381b343557774270a508206b3a725f39.jpg" width="113" height="42"/>
-                    </li>
-                    <li class="thumbs_3">
-                        <i></i>
-                        <img src="/static/images/354d445c5fd84f1990b91eb559677eb5.jpg" width="113" height="42"/>
-                    </li>
+                    {% for b in bs %}
+                        {% if b.tag == 1 %}
+                            <li class="thumbs_{{ b.tag }} current">
+                                <i></i>
+                                <img src="{{ MEDIA_URL }}{{ b.img }}" width="113" height="42"/>
+                            </li>
+                        {% else %}
+                            <li class="thumbs_{{ b.tag }}">
+                                <i></i>
+                                <img src="{{ MEDIA_URL }}{{ b.img }}" width="113" height="42"/>
+                            </li>
+                        {% endif %}
+
+                    {% endfor %}
                 </ul>
             </div>
         </div><!--/#main_banner-->
@@ -243,7 +247,8 @@
                     <li class="clearfix">
                         <div class="hot_pos_l">
                             <div class="mb10">
-                                <a href="{% url 'position_detail' %}?id={{ position.id }}" title="{{ position.position }}" target="_blank">{{ position.position }}</a>
+                                <a href="{% url 'position_detail' %}?id={{ position.id }}"
+                                   title="{{ position.position }}" target="_blank">{{ position.position }}</a>
                                 <span class="c9">[{{ position.workAddress }}]</span>
                             </div>
                             <span><em class="c7">月薪： </em>{{ position.salaryMin }}k-{{ position.salaryMax }}k</span>
@@ -279,7 +284,8 @@
                     <li class="clearfix">
                         <div class="hot_pos_l">
                             <div class="mb10">
-                                <a href="{% url 'position_detail' %}?id={{ position.id }}" title="{{ position.position }}" target="_blank">{{ position.position }}</a>
+                                <a href="{% url 'position_detail' %}?id={{ position.id }}"
+                                   title="{{ position.position }}" target="_blank">{{ position.position }}</a>
                                 <span class="c9">[{{ position.workAddress }}]</span>
                             </div>
                             <span><em class="c7">月薪： </em>{{ position.salaryMin }}k-{{ position.salaryMax }}k</span>
