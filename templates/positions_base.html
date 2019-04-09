@@ -7,7 +7,7 @@
                                                        src="/static/images/logo.png"/> </a>
         <ul id="navheader" class="reset">
             <li><a href="{% url 'index' %}">首页</a></li>
-            <li><a href="companylist.html">公司</a></li>
+            <li><a href="{% url 'company_list' %}">公司</a></li>
             <li><a rel="nofollow" href="{% url 'recruitment:unprocessed_resume' %}">简历管理</a></li>
             <li class="current"><a rel="nofollow" href="{% url 'PostJob' %}">发布职位</a></li>
         </ul>
@@ -33,12 +33,6 @@
                 <a rel="nofollow" href="{% url 'logout' %}">退出</a>
             </dd>
         </dl>
-        <div id="noticeTip">
-            <span class="bot"></span>
-            <span class="top"></span>
-            <a target="_blank" href="delivery.html"><strong>1</strong>条新投递反馈</a>
-            <a class="closeNT" href="javascript:;"></a>
-        </div>
     </div>
 {% endblock %}
 {% block container %}

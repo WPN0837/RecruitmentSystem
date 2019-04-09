@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from common.views import *
 from Recruitment.views import PostJobView
 
@@ -39,6 +39,8 @@ urlpatterns = [
     path('resume.html', ResumeView.as_view(), name='resume'),
     path('update-pwd.html', UpdatePwd.as_view(), name='update_pwd'),
     path('submit-resume.html', SubmitResumeView.as_view(), name='submit_resume'),
+    path('error.html', ErrorView.as_view(), name='error'),
     path('user/', include('JobHunting.urls', namespace='user')),
     path('recruitment/', include('Recruitment.urls', namespace='recruitment')),
+    re_path('.*', ErrorView.as_view())
 ]

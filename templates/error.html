@@ -1,10 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'base.html' %}
+{% block header %}
+    <div class="wrapper">
+        <a class="logo" href="{% url 'index' %}">
+            <img width="229" height="43" alt="拉勾招聘-专注互联网招聘"
+                                                       src="/static/images/logo.png"/> </a>
+        {% if user %}
+            {% if user.type %}
+                <ul id="navheader" class="reset">
+                    <li><a href="{% url 'index' %}">首页</a></li>
+                    <li><a href="{% url 'company_list' %}">公司</a></li>
+                    <li><a rel="nofollow" href="{% url 'recruitment:unprocessed_resume' %}">简历管理</a></li>
+                    <li><a rel="nofollow" href="{% url 'PostJob' %}">发布职位</a></li>
+                </ul>
+                <dl class="collapsible_menu">
+                    <dt>
+                        <span>{{ user.email }}</span>
+                        <span class="red dn" id="noticeDot-1"></span>
+                        <i></i>
+                    </dt>
+                    <dd style="display: none;">
+                        <a href="{% url 'recruitment:positions' %}">我发布的职位</a>
+                    </dd>
+                    <dd style="display: none;">
+                        <a href="{% url 'recruitment:unprocessed_resume' %}">我收到的简历</a>
+                    </dd>
+                    <dd class="btm" style="display: none;">
+                        <a href="{% url 'recruitment:my_home_detail' %}">我的公司主页</a>
+                    </dd>
+                    <dd style="display: none;">
+                        <a href="{% url 'update_pwd' %}">帐号设置</a>
+                    </dd>
+                    <dd class="logout" style="display: none;">
+                        <a rel="nofollow" href="{% url 'logout' %}">退出</a>
+                    </dd>
+                </dl>
+            {% else %}
+                <ul id="navheader" class="reset">
+                    <li><a href="{% url 'index' %}">首页</a></li>
+                    <li><a href="{% url 'company_list' %}">公司</a></li>
+                    <li><a rel="nofollow" href="{% url 'user:my_resume' %}">我的简历</a></li>
+                </ul>
+                <dl class="collapsible_menu">
+                    <dt>
+                        <span>{{ user.email }}</span>
+                        <span class="red dn" id="noticeDot-0"></span>
+                        <i></i>
+                    </dt>
+                    <dd>
+                        <a href="{% url 'user:my_collection' %}">我收藏的职位</a>
+                    </dd>
+                    <dd>
+                        <a href="{% url 'user:resume_status' %}">我投递的职位</a>
+                    </dd>
+                    <dd class="btm">
+                        <a href="{% url 'user:my_subscription' %}">我的订阅</a>
+                    </dd>
+                    <dd>
+                        <a href="{% url 'update_pwd' %}">帐号设置</a>
+                    </dd>
+                    <dd class="logout">
+                        <a rel="nofollow" href="{% url 'logout' %}">退出</a>
+                    </dd>
+                </dl>
+            {% endif %}
+        {% else %}
+            <ul class="reset" id="navheader">
+                <li><a href="{% url 'index' %}">首页</a></li>
+                <li><a href="{% url 'company_list' %}">公司</a></li>
+                <li><a href="{% url 'user:my_resume' %}" rel="nofollow">我的简历</a></li>
+                <li><a href="{% url 'PostJob' %}" rel="nofollow">发布职位</a></li>
+            </ul>
+            <ul class="loginTop">
+                <li><a href="{% url 'login' %}" rel="nofollow">登录</a></li>
+                <li>|</li>
+                <li><a href="{% url 'register' %}" rel="nofollow">注册</a></li>
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block container %}
+    <div class="content_mid">
+        <dl class="c_section c_section_mid">
+            <dt>
+                <h2><em></em>ERROR</h2>
+            </dt>
+            <dd class="c_notice">
+                <h4>{{ msg }}</h4>
+                <a class="greylink" href="javascript:history.go(-1);">返回</a>
+                <a class="greylink" href="{% url 'index' %}"> 返回首页</a>
+            </dd>
+        </dl>
+    </div>
+    <div class="clear"></div>
+    <a rel="nofollow" title="回到顶部" id="backtop"></a>
+{% endblock %}

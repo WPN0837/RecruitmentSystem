@@ -268,7 +268,7 @@ class Reset03View(View):
         pwd1 = request.POST.get('pwd1', '')
         email = request.session.get('reset_email', None)
         if not email:
-            return HttpResponse('error')
+            return render(request, 'reset_update.html', {'msg': '操作失败'})
         if pwd == pwd1:
             m = md5()
             m.update('zhaopin'.encode('utf8'))
@@ -326,9 +326,11 @@ class ListView(View):
         ccy = request.GET.get('cy', '')  # 公司
         page = request.GET.get('page', 1)  # 页码
         try:
+            if not page:
+                page = 1
             page = int(page)
         except Exception as e:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if cte == 'hot':
             positions = PositionInfo.objects.raw(
                 'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.views_count desc) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;')
@@ -410,14 +412,14 @@ class SearchView(View):
         try:
             page = int(page)
         except Exception as e:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if spc == '1':
             positions = PositionInfo.objects.raw(
                 'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`position` LIKE %s or r.positionType LIKE %s ) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;',
                 params=['%{}%'.format(kd), '%{}%'.format(kd)])
         elif spc == '2':
             positions = PositionInfo.objects.raw(
-                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (SELECT full_name,abbreviation_name,scope,development_stage,id,founder_id from recruitment_company WHERE full_name LIKE %s or abbreviation_name LIKE %s ) as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id LEFT join recruitment_positioninfo as rp on rp.company_id = rc.id;',
+                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (SELECT full_name,abbreviation_name,scope,development_stage,id from recruitment_company WHERE full_name LIKE %s or abbreviation_name LIKE %s ) as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id LEFT join recruitment_positioninfo as rp on rp.company_id = rc.id;',
                 params=['%{}%'.format(kd), '%{}%'.format(kd)])
         else:
             positions = []
@@ -556,7 +558,7 @@ class CompanyDetailView(View):
         try:
             c = Company.objects.filter(id=int(cid)).first()
         except Exception as e:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=查看信息失败')
         auth = CompanyAuthFile.objects.filter(company=c).exists()
         return render(request, 'company_info.html', {
             'c': c,
@@ -579,7 +581,7 @@ class PositionDetailView(View):
             c = p.company
             sectors = c.industry_sector.all()
         except Exception as e:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=查看信息失败')
         if u and u.type:
             return render(request, 'position_detail.html', {
                 'user': u,
@@ -613,14 +615,9 @@ class SubmitResumeView(View):
             if not p:
                 raise Exception
         except Exception as e:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到职位信息')
         if not hasattr(u, 'resume'):
-            return HttpResponse('error')
-        # if u.resume.default == 1:
-        #     token = base64.b64encode(json.dumps({'email': email, 'time': time.time()}).encode('utf-8')).decode('utf-8')
-        #     url = 'http://%s/resume.html?token=%s' % (settings.SELF_HOST_NAME, token)
-        # else:
-        #     url = 'http://%s/%s' % (settings.SELF_HOST_NAME, u.resume.resume_file.resume_file)
+            return redirect('/error.html?msg=没有找到简历信息')
         url = 'http://%s/recruitment/unprocessed-resume.html' % settings.SELF_HOST_NAME
         SubmitResume.objects.create(resume=u.resume, position=p, sort=u.resume.default)
         data = {'email': p.company.user.email, 'url': url, 'name': p.company.abbreviation_name,
@@ -649,15 +646,15 @@ class ResumeView(View):
             email = dic.get('email', '')
             user = User.objects.filter(email=email).first()
             if not user:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=查看信息失败')
             spid = dic.get('id', '')
             if spid:
                 try:
                     SubmitResume.objects.filter(id=int(spid)).update(status=1)
                 except Exception as e:
-                    return HttpResponse('error')
+                    return redirect('/error.html?msg=查看信息失败')
             else:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=查看信息失败')
             resume = user.resume if hasattr(user, 'resume') else None
             resume_info = resume.resume_info if hasattr(resume, 'resume_info') else None
             hope_work = resume.hope_work if hasattr(resume, 'hope_work') else None
@@ -679,7 +676,7 @@ class ResumeView(View):
                 'self_detail': self_detail,
                 'gallerys': gallerys,
             })
-        return HttpResponse('error')
+        return redirect('/error.html?msg=查看信息失败')
 
 
 class UpdatePwd(View):
@@ -730,6 +727,69 @@ class CompanyListView(View):
     def get(self, request):
         email = request.session.get('email', '')
         u = User.objects.filter(email=email).first()
+        workAddress = [
+            ['ABCDEF', HotCity.objects.filter(first__in=[i for i in 'ABCDEF']).values_list('name')],
+            ['GHIJ', HotCity.objects.filter(first__in=[i for i in 'GHIJ']).values_list('name')],
+            ['KLMN', HotCity.objects.filter(first__in=[i for i in 'KLMN']).values_list('name')],
+            ['OPQR', HotCity.objects.filter(first__in=[i for i in 'OPQR']).values_list('name')],
+            ['STUV', HotCity.objects.filter(first__in=[i for i in 'STUV']).values_list('name')],
+            ['WXYZ', HotCity.objects.filter(first__in=[i for i in 'WXYZ']).values_list('name')],
+        ]
+        hotCity = ['全国', '北京', '上海', '广州', '深圳', '成都', '杭州', '武汉', '南京']
+        development_stage = {'初创型': ['未融资'], '成长型': ['天使轮', 'A轮', 'B轮'], '成熟型': ['C轮', 'D轮以上'], '已上市': ['上市公司']}
+        sectors = IndustrySector.objects.values_list('sector')
+        cws = request.GET.get('ws', '')  # 城市
+        cde = request.GET.get('de', '')  # 发展阶段
+        cir = request.GET.get('ir', '')  # 行业领域
+        page = request.GET.get('page', 1)  # 页码
+        try:
+            if not page:
+                page = 1
+            page = int(page)
+        except Exception as e:
+            return redirect('/error.html?msg=没有找到该页面')
+        companys = Company.objects.all()
+        if cws:
+            companys = companys.filter(city=cws)
+        if cde in development_stage:
+            companys = companys.filter(development_stage__in=development_stage[cde])
+        if cir:
+            companys = companys.filter(industry_sector__sector=cir)
+        Pag_obj = my_Paginator(companys, 15, 6, page)
+        companys_list = Pag_obj.current_page_data_list
+        for i in range(len(companys_list)):
+            if i % 3 == 0:
+                setattr(companys_list[i], 'num', 1)
+            else:
+                setattr(companys_list[i], 'num', 0)
+            setattr(companys_list[i], 'sectors', ','.join(j.sector for j in companys_list[i].industry_sector.all()))
+            setattr(companys_list[i], 'position_infos',
+                    PositionInfo.objects.filter(company_id=companys_list[i].id).order_by('-id')[:4])
         return render(request, 'companylist.html', {
             'user': u,
+            'workAddress': workAddress,
+            'hotCity': hotCity,
+            'development_stage': development_stage,
+            'sectors': sectors,
+            'Pag_obj': Pag_obj,
+            'companys_list': companys_list,
+            'cws': cws,
+            'cde': cde,
+            'cir': cir,
+            'page': page,
+        })
+
+
+class ErrorView(View):
+    '''
+    错误页面
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        msg = request.GET.get('msg', '没有找到该页面')
+        return render(request, 'error.html', {
+            'user': u,
+            'msg': msg,
         })

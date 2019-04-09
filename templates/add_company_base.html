@@ -5,7 +5,7 @@
                                                        src="/static/images/logo.png"/> </a>
         <ul id="navheader" class="reset">
             <li><a href="{% url 'index' %}">首页</a></li>
-            <li class="current"><a href="companylist.html">公司</a></li>
+            <li class="current"><a href="{% url 'company_list' %}">公司</a></li>
             <li><a rel="nofollow" href="{% url 'recruitment:unprocessed_resume' %}">简历管理</a></li>
             <li><a rel="nofollow" href="{% url 'PostJob' %}">发布职位</a></li>
         </ul>

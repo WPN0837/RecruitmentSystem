@@ -2,8 +2,8 @@ from django.shortcuts import HttpResponse, render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.views import View
-from common.models import User
-from Recruitment.models import PositionInfo
+from common.models import User, SubmitResume
+from Recruitment.models import PositionInfo, Position, IndustrySector
 from .models import *
 import json
 import uuid
@@ -143,12 +143,11 @@ def ResumeDelView(request):
             return redirect('login')
         try:
             if u.type:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=删除简历失败')
             if not hasattr(u, 'resume'):
                 return redirect('user:my_resume')
             if not hasattr(u.resume, 'resume_file'):
                 return HttpResponse(json.dumps({'success': False}))
-            # u.resume.resume_file=None
             ResumeFile.objects.filter(resume=u.resume).delete()
             u.resume.default = 1
             u.resume.save()
@@ -667,7 +666,7 @@ class MyCollectionView(View):
         try:
             page = int(page)
         except Exception as e:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         pcs = PositionCollection.objects.filter(user=u).order_by('-id')
         pcs = my_Paginator(pcs, 10, 6, page)
         return render(request, 'collections.html', {
@@ -710,4 +709,129 @@ class MySubscriptionView(View):
     '''
 
     def get(self, request):
-        pass
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        s = Subscription.objects.filter(user=u).first()
+        return render(request, 'subscribe01.html', {
+            'user': u,
+            's': s,
+        })
+
+
+class EditSubscriptionView(View):
+    '''
+    添加订阅
+    '''
+
+    def get(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        sid = request.GET.get('id', '')
+        p = Position.objects.filter(level=1).all()
+        isr = IndustrySector.objects.all()
+        sa = ['2k以下', '2k-5k', '5k-10k', '10k-15k', '15k-25k', '25k-50k', '50k以上']
+        fs = [['初创型', '刚成立或已获得天使投资'], ['成长型', '已获得A轮/B轮/C轮融资'], ['成熟型', '有D轮及以上的融资'], ['上市公司', '上市公司']]
+        s = None
+        if sid:
+            try:
+                s = Subscription.objects.filter(id=int(sid)).first()
+            except Exception as e:
+                return redirect('/error.html?msg=没有找到相关信息')
+        return render(request, 'subscribe.html', {
+            'user': u,
+            'p': p,
+            'isr': isr,
+            'sa': sa,
+            's': s,
+            'fs': fs,
+        })
+
+    def post(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        sid = request.POST.get('id', '')
+        cycle = request.POST.get('sendMailPer', '')
+        email = request.POST.get('email', '')
+        city = request.POST.get('city', '')
+        finance_stage = request.POST.get('financeStage', '')
+        industry_sector = request.POST.get('industryField', '')
+        position = request.POST.get('positionName', '')
+        salary = request.POST.get('salary', '')
+        if sid:
+            try:
+                sid = int(sid)
+                Subscription.objects.filter(user=u, id=sid).update(email=email, city=city, cycle=cycle,
+                                                                   finance_stage=finance_stage,
+                                                                   salary=salary,
+                                                                   industry_sector=industry_sector,
+                                                                   position=position)
+            except Exception as e:
+                return redirect('/error.html?msg=没有找到相关信息')
+        else:
+            if Subscription.objects.filter(user=u).exists():
+                return HttpResponse(json.dumps(
+                    {'success': False, 'content': {'commonError': '最多只能创建一个订阅器', 'cityError': '', 'stageError': ''}}))
+            try:
+                Subscription.objects.create(email=email, city=city, cycle=cycle, finance_stage=finance_stage,
+                                            salary=salary,
+                                            industry_sector=industry_sector, position=position, user=u)
+            except Exception as e:
+                return redirect('/error.html?msg=订阅失败')
+        return HttpResponse(json.dumps({'success': True, 'code': 0}))
+
+
+class DelSubscriptionView(View):
+    '''
+    删除订阅
+    '''
+
+    def post(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        sid = request.POST.get('id', '')
+        if sid:
+            try:
+                Subscription.objects.filter(id=int(sid)).delete()
+            except Exception as e:
+                return HttpResponse(json.dumps({'success': False, 'msg': '删除失败'}))
+            return HttpResponse(json.dumps({'success': True}))
+        return HttpResponse(json.dumps({'success': False, 'msg': '删除失败'}))
+
+
+class ResumeStatusView(View):
+    def get(self, request):
+        email = request.session.get('email', '')
+        u = User.objects.filter(email=email).first()
+        if not u:
+            return redirect('login')
+        tag = request.GET.get('tag', '0')
+        page = request.GET.get('page', 1)
+        try:
+            page = int(page)
+        except Exception as e:
+            return redirect('/error.html?msg=没有找到该页面')
+        srs = SubmitResume.objects.filter(resume__user=u).order_by('-id')
+        if tag == '1':
+            srs = srs.filter(status=1)
+        elif tag == '2':
+            srs = srs.filter(offer=1)
+        elif tag == '3':
+            srs = srs.filter(offer=3)
+        else:
+            tag = '0'
+        srs = my_Paginator(srs, 10, 6, page)
+        print(srs.__dict__)
+        return render(request, 'delivery.html', {
+            'user': u,
+            'srs': srs,
+            'tag': tag,
+            'page': page,
+        })

@@ -37,4 +37,7 @@ urlpatterns = [
     path('default-resume.html', DefaultResumeView.as_view(), name='default_resume'),
     path('my-collection.html', MyCollectionView.as_view(), name='my_collection'),
     path('my-subscription.html', MySubscriptionView.as_view(), name='my_subscription'),
+    path('edit-subscription.html', EditSubscriptionView.as_view(), name='edit_subscription'),
+    path('del-subscription.html', DelSubscriptionView.as_view(), name='del_subscription'),
+    path('resume-status.html', ResumeStatusView.as_view(), name='resume_status'),
 ]

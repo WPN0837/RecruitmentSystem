@@ -1,12 +1,12 @@
 ﻿{% extends 'base.html' %}
 {% block header %}
-<div class="wrapper">
+    <div class="wrapper">
         <a href="{% url 'index' %}" class="logo">
             <img src="/static/images/logo.png" width="229" height="43" alt="拉勾招聘-专注互联网招聘"/>
         </a>
         <ul class="reset" id="navheader">
-            <li class="current"><a href="{% url 'index' %}">首页</a></li>
-            <li><a href="companylist.html">公司</a></li>
+            <li><a href="{% url 'index' %}">首页</a></li>
+            <li class="current"><a href="{% url 'company_list' %}">公司</a></li>
             {% if user %}
                 {% if user.type == 0 %}
                     <li><a href="{% url 'user:my_resume' %}" rel="nofollow">我的简历</a></li>
@@ -53,6 +53,9 @@
                     <dd>
                         <a href="{% url 'user:my_collection' %}">我收藏的职位</a>
                     </dd>
+                    <dd>
+                        <a href="{% url 'user:resume_status' %}">我投递的职位</a>
+                    </dd>
                     <dd class="btm">
                         <a href="{% url 'user:my_subscription' %}">我的订阅</a>
                     </dd>
@@ -76,231 +79,144 @@
 {% block container %}
     <div class="clearfix">
         <div class="content_l">
-            <form id="companyListForm" name="companyListForm" method="get" action="h/c/companylist.html">
-                <input type="hidden" id="city" name="city" value="全国"/>
-                <input type="hidden" id="fs" name="fs" value=""/>
-                <input type="hidden" id="ifs" name="ifs" value=""/>
-                <input type="hidden" id="ol" name="ol" value=""/>
-                <dl class="hc_tag">
-                    <dt>
-                        <!--  <h2 class="fl">热门公司</h2> -->
-                        <ul class="workplace reset fr" id="workplaceSelect">
-                            <li><a href="javascript:void(0)" class="current">全国</a> |</li>
-                            <li><a href="javascript:void(0)">北京</a> |</li>
-                            <li><a href="javascript:void(0)">上海</a> |</li>
-                            <li><a href="javascript:void(0)">广州</a> |</li>
-                            <li><a href="javascript:void(0)">深圳</a> |</li>
-                            <li><a href="javascript:void(0)">成都</a> |</li>
-                            <li><a href="javascript:void(0)">杭州</a> |</li>
-                            <li><a href="javascript:void(0)">武汉</a> |</li>
-                            <li><a href="javascript:void(0)">南京</a> |</li>
-                            <li class="more"><a href="javascript:void(0)">其他</a>
-                                <div class="triangle citymore_arrow"></div>
+            <dl class="hc_tag">
+                <dt>
+                    <ul class="workplace reset fr" id="workplaceSelect">
+                        {% for s in hotCity %}
+                            <li>
+                                {% if s == cws %}
+                                    <a href="{% url 'company_list' %}?ws={{ s }}&de={{ cde }}&ir={{ cir }}&page={{ page }}"
+                                       class="current">{{ s }}</a>
+                                {% else %}
+                                    <a href="{% url 'company_list' %}?ws={{ s }}&de={{ cde }}&ir={{ cir }}&page={{ page }}"
+                                    >{{ s }}</a>
+                                {% endif %}
+                                |
                             </li>
-                            <li id="box_expectCity" class="searchlist_expectCity dn">
-                                <span class="bot"></span> <span
-                                    class="top"></span>
+                        {% endfor %}
+                        <li class="more">
+                            <a href="javascript:void(0)">其他</a>
+                            <div class="triangle citymore_arrow"></div>
+                        </li>
+                        <li id="box_expectCity" class="searchlist_expectCity dn">
+                            <span class="bot"></span>
+                            <span class="top"></span>
+                            {% for w in workAddress %}
                                 <dl>
                                     <dt>
-                                        ABCDEF
+                                        {{ w.0 }}
                                     </dt>
                                     <dd>
-                                        <span>北京</span>
-                                        <span>长春</span>
-                                        <span>成都</span>
-                                        <span>重庆</span>
-                                        <span>长沙</span>
-                                        <span>常州</span>
-                                        <span>东莞</span>
-                                        <span>大连</span>
-                                        <span>佛山</span>
-                                        <span>福州</span>
+                                        {% for s in w.1 %}
+                                            {% if cws == s.0 %}
+                                                <a href="{% url 'company_list' %}?ws={{ s.0 }}&de={{ cde }}&ir={{ cir }}&page={{ page }}"
+                                                   class="current">{{ s.0 }}</a>
+                                            {% else %}
+                                                <a href="{% url 'company_list' %}?ws={{ s.0 }}&de={{ cde }}&ir={{ cir }}&page={{ page }}">{{ s.0 }}</a>
+                                            {% endif %}
+                                        {% endfor %}
                                     </dd>
                                 </dl>
-                                <dl>
-                                    <dt>
-                                        GHIJ
-                                    </dt>
-                                    <dd>
-                                        <span>贵阳</span>
-                                        <span>广州</span>
-                                        <span>哈尔滨</span>
-                                        <span>合肥</span>
-                                        <span>海口</span>
-                                        <span>杭州</span>
-                                        <span>惠州</span>
-                                        <span>金华</span>
-                                        <span>济南</span>
-                                        <span>嘉兴</span>
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dt>
-                                        KLMN
-                                    </dt>
-                                    <dd>
-                                        <span>昆明</span>
-                                        <span>廊坊</span>
-                                        <span>宁波</span>
-                                        <span>南昌</span>
-                                        <span>南京</span>
-                                        <span>南宁</span>
-                                        <span>南通</span>
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dt>
-                                        OPQR
-                                    </dt>
-                                    <dd>
-                                        <span>青岛</span>
-                                        <span>泉州</span>
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dt>
-                                        STUV
-                                    </dt>
-                                    <dd>
-                                        <span>上海</span>
-                                        <span>石家庄</span>
-                                        <span>绍兴</span>
-                                        <span>沈阳</span>
-                                        <span>深圳</span>
-                                        <span>苏州</span>
-                                        <span>天津</span>
-                                        <span>太原</span>
-                                        <span>台州</span>
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dt>
-                                        WXYZ
-                                    </dt>
-                                    <dd>
-                                        <span>武汉</span>
-                                        <span>无锡</span>
-                                        <span>温州</span>
-                                        <span>西安</span>
-                                        <span>厦门</span>
-                                        <span>烟台</span>
-                                        <span>珠海</span>
-                                        <span>中山</span>
-                                        <span>郑州</span>
-                                    </dd>
-                                </dl>
-                            </li>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                </dt>
+                <dd>
+                    <dl>
+                        <dt>发展阶段：</dt>
+                        <dd>
+                            {% for s in development_stage %}
+                                {% if cde == s %}
+                                    <a class="current"
+                                       href="{% url 'company_list' %}?ws={{ cws }}&de={{ s }}&ir={{ cir }}&page={{ page }}">{{ s }}</a>
+                                {% else %}
+                                    <a href="{% url 'company_list' %}?ws={{ cws }}&de={{ s }}&ir={{ cir }}&page={{ page }}">{{ s }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>行业领域：</dt>
+                        <dd>
+                            {% for s in sectors %}
+                                {% if s.0 == cir %}
+                                    <a class="current"
+                                       href="{% url 'company_list' %}?ws={{ cws }}&de={{ cde }}&ir={{ s.0 }}&page={{ page }}">{{ s.0 }}</a>
+                                {% else %}
+                                    <a href="{% url 'company_list' %}?ws={{ cws }}&de={{ cde }}&ir={{ s.0 }}&page={{ page }}">{{ s.0 }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </dd>
+                    </dl>
+
+                </dd>
+            </dl>
+            <ul class="hc_list reset">
+                {% for company in companys_list %}
+                    {% if company.num %}
+                        <li style="clear:both;">
+                            {% else %}
+                        <li>
+                    {% endif %}
+                <a href="{% url 'company_detail' %}?id={{ company.id }}" target="_blank">
+                    <h3 title="{{ company.abbreviation_name }}">{{ company.abbreviation_name }}</h3>
+                    <div class="comLogo">
+                        <img src="{{ company.logo }}" width="190"
+                             height="190"
+                             alt="{{ company.abbreviation_name }}"/>
+                        <ul>
+                            <li>{{ company.sectors }}</li>
+                            <li>{{ company.city }}，{{ company.development_stage }}</li>
                         </ul>
-                    </dt>
-                    <dd>
-                        <dl>
-                            <dt>
-                                发展阶段：
-                            </dt>
-                            <dd>
-                                <a href="javascript:void(0)">初创型</a>
-                                <a href="javascript:void(0)">成长型</a>
-                                <a href="javascript:void(0)">成熟型</a>
-                                <a href="javascript:void(0)">已上市</a>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                行业领域：
-                            </dt>
-                            <dd>
-                                <a href="javascript:void(0)">移动互联网</a>
-                                <a href="javascript:void(0)">电子商务</a>
-                                <a href="javascript:void(0)">社交</a>
-                                <a href="javascript:void(0)">企业服务</a>
-                                <a href="javascript:void(0)">O2O</a>
-                                <a href="javascript:void(0)">教育</a>
-                                <a href="javascript:void(0)">文化艺术</a>
-                                <a href="javascript:void(0)">游戏</a>
-                                <a href="javascript:void(0)">在线旅游</a>
-                                <a href="javascript:void(0)">金融互联网</a>
-                                <a href="javascript:void(0)">健康医疗</a>
-                                <a href="javascript:void(0)">生活服务</a>
-                                <a href="javascript:void(0)">硬件</a>
-                                <a href="javascript:void(0)">搜索</a>
-                                <a href="javascript:void(0)">安全</a>
-                                <a href="javascript:void(0)">运动体育</a>
-                                <a href="javascript:void(0)">云计算\大数据</a>
-                                <a href="javascript:void(0)">移动广告</a>
-                                <a href="javascript:void(0)">社会化营销</a>
-                                <a href="javascript:void(0)">视频多媒体</a>
-                                <a href="javascript:void(0)">媒体</a>
-                                <a href="javascript:void(0)">智能家居</a>
-                                <a href="javascript:void(0)">智能电视</a>
-                                <a href="javascript:void(0)">分类信息</a>
-                                <a href="javascript:void(0)">招聘</a>
-                            </dd>
-                        </dl>
-                    </dd>
-                </dl>
-                <ul class="hc_list reset">
-                    <li style="clear:both;">
-                        <a href="h/c/25829.html" target="_blank">
-                            <h3 title="CCIC">CCIC</h3>
-                            <div class="comLogo">
-                                <img src="/static/images/logo_default.png" width="190" height="190" alt="CCIC"/>
-                                <ul>
-                                    <li>安全</li>
-                                    <li>深圳，D轮及以上</li>
-                                </ul>
-                            </div>
-                        </a>
-                        <a href="h/jobs/148928.html" target="_blank"> 环境监测工程师</a>
-                        <a href="h/jobs/148919.html" target="_blank"> 电学校准工程师</a>
-                        <a href="h/jobs/148931.html" target="_blank"> 能源管理项目经理</a>
-                        <ul class="reset ctags">
-                            <li>D轮及以上</li>
-                            <li>安全</li>
-                            <li>年终分红</li>
-                            <li>绩效奖金</li>
-                            <li>五险一金</li>
-                            <li>交通补助</li>
-                        </ul>
-                    </li>
+                    </div>
+                </a>
+                {% for position_info in company.position_infos %}
+                    <a href="{% url 'position_detail' %}?id={{ position_info.id }}"
+                       target="_blank"> {{ position_info.position }}</a>
+                {% endfor %}
+                <ul class="reset ctags">
+                    {% for t in company.tags.all %}
+                        <li>{{ t.name }}</li>
+                    {% endfor %}
                 </ul>
-                <div class="Pagination"></div>
-            </form>
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="Pagination myself">
+                <a href="{% url 'company_list' %}?ws={{ cws }}&de={{ cde }}&ir={{ cir }}&page=1"
+                   title="1">首页</a>
+                <a href="{% url 'company_list' %}?ws={{ cws }}&de={{ cde }}&ir={{ cir }}&page={{ Pag_obj.previous_page }}"
+                   title="{{ Pag_obj.previous_page }}">上一页 </a>
+                {% for s in Pag_obj.page_num_range %}
+                    {% if page == s %}
+                        <span class="current" title="{{ s }}">{{ s }}</span>
+                    {% else %}
+                        <a href="{% url 'company_list' %}?ws={{ cws }}&de={{ cde }}&ir={{ cir }}&page={{ s }}"
+                           title="{{ s }}">{{ s }}</a>
+                    {% endif %}
+                {% endfor %}
+                <a href="{% url 'company_list' %}?ws={{ cws }}&de={{ cde }}&ir={{ cir }}&page={{ Pag_obj.next_page }}"
+                   title="{{ Pag_obj.next_page }}">下一页 </a>
+                <a href="{% url 'company_list' %}?ws={{ cws }}&de={{ cde }}&ir={{ cir }}&page={{ Pag_obj.num_pages }}"
+                   title="{{ Pag_obj.num_pages }}">尾页</a>
+            </div>
         </div>
         <div class="content_r">
             <div class="subscribe_side">
-                <a href="subscribe.html" target="_blank">
+                <a href="{% url 'user:edit_subscription' %}" target="_blank">
                     <div class="subpos">
                         <span>订阅</span> 职位
                     </div>
                     <div class="c7">
                         拉勾网会根据你的筛选条件，定期将符合你要求的职位信息发给你
                     </div>
-                    <div class="count">
-                        已有
-                        <em>3</em>
-                        <em>4</em>
-                        <em>2</em>
-                        <em>1</em>
-                        <em>0</em> 人订阅
-                    </div>
-                    <i>我也要订阅职位</i> </a>
+                    <i>我也要订阅职位</i>
+                </a>
             </div>
         </div>
     </div>
-    <input type="hidden" value="" name="userid" id="userid"/>
+    <input type="hidden" value="{{ user.id }}" name="userid" id="userid"/>
     <script type="text/javascript" src="/static/js/company_list.min.js"></script>
-    <script>
-        $(function () {
-            /*分页 */
-            $('.Pagination').pager({
-                currPage: 1,
-                pageNOName: "pn",
-                form: "companyListForm",
-                pageCount: 20,
-                pageSize: 5
-            });
-        })
-    </script>
     <div class="clear"></div>
     <input type="hidden" id="resubmitToken" value=""/>
     <a id="backtop" title="回到顶部" rel="nofollow"></a>

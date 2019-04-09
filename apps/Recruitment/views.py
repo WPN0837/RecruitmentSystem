@@ -30,7 +30,7 @@ class PostJobView(View):
         if not u:
             return redirect('login')
         if not u.type:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
@@ -42,7 +42,7 @@ class PostJobView(View):
             try:
                 cp = PositionInfo.objects.filter(id=int(cpid)).first()
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=没有找到该页面')
         return render(request, 'PostJob.html', {
             'user': u,
             'c': c,
@@ -57,7 +57,7 @@ class PostJobView(View):
         if not u:
             return redirect('login')
         if not u.type:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=发布职位失败')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         pid = request.POST.get('id', '')
@@ -91,7 +91,7 @@ class PostJobView(View):
                                                                 email=email, )
                 res = {'success': True, 'content': '/recruitment/post-position.html?id=%s' % pid}
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=发布职位失败')
         else:
             p = PositionInfo(
                 positionType=positionType, position=position, department=department, jobNature=jobNature,
@@ -339,7 +339,7 @@ class AddCompany05View(View):
             else:
                 CompanyIntroduction.objects.create(introduction=introduction, company=c)
                 return redirect('recruitment:company06')
-        return HttpResponse('error')
+        return redirect('/error.html?msg=添加信息失败')
 
 
 class AddCompany06View(View):
@@ -520,14 +520,14 @@ class PositionDetailView(View):
                 c = p.company
                 sectors = c.industry_sector.all()
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=没有找到相关信息')
             return render(request, 'position_detail.html', {
                 'user': u,
                 'p': p,
                 'c': c,
                 'sectors': sectors,
             })
-        return HttpResponse('error')
+        return redirect('/error.html?msg=没有找到相关信息')
 
 
 class MyCompanyDetailView(View):
@@ -543,7 +543,7 @@ class MyCompanyDetailView(View):
         else:
             return redirect('login')
         if not u.type:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
@@ -585,7 +585,7 @@ class UnprocessedResumeView(View):
         else:
             return redirect('login')
         if not u.type:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
@@ -598,13 +598,13 @@ class UnprocessedResumeView(View):
             try:
                 rd = int(rd)
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=没有找到该页面')
             srs = srs.filter(status=rd)
         if rs:
             try:
                 rs = int(rs)
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=没有找到该页面')
             srs = srs.filter(sort=rs)
         for i in srs:
             if i.resume.default == 1:
@@ -639,7 +639,7 @@ class IndefiniteResumeView(View):
         else:
             return redirect('login')
         if not u.type:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
@@ -652,13 +652,13 @@ class IndefiniteResumeView(View):
             try:
                 rd = int(rd)
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=没有找到该页面')
             srs = srs.filter(status=rd)
         if rs:
             try:
                 rs = int(rs)
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=没有找到该页面')
             srs = srs.filter(sort=rs)
         for i in srs:
             if i.resume.default == 1:
@@ -692,7 +692,7 @@ class IndefiniteResumeView(View):
                 id_list = list(map(int, id_str.split(',')))
                 SubmitResume.objects.filter(id__in=id_list).update(offer=2)
         except Exception as e:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=信息修改失败')
         return HttpResponse(json.dumps({'success': True}))
 
 
@@ -708,7 +708,7 @@ class InterviewResumeView(View):
         else:
             return redirect('login')
         if not u.type:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
@@ -721,13 +721,13 @@ class InterviewResumeView(View):
             try:
                 rd = int(rd)
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=没有找到该页面')
             srs = srs.filter(status=rd)
         if rs:
             try:
                 rs = int(rs)
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=没有找到该页面')
             srs = srs.filter(sort=rs)
         for i in srs:
             if i.resume.default == 1:
@@ -789,7 +789,7 @@ class NotSuitableResumeView(View):
         if not u:
             return redirect('login')
         if not u.type:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
@@ -802,13 +802,13 @@ class NotSuitableResumeView(View):
             try:
                 rd = int(rd)
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=没有找到该页面')
             srs = srs.filter(status=rd)
         if rs:
             try:
                 rs = int(rs)
             except Exception as e:
-                return HttpResponse('error')
+                return redirect('/error.html?msg=没有找到该页面')
             srs = srs.filter(sort=rs)
         for i in srs:
             if i.resume.default == 1:
@@ -972,7 +972,7 @@ def CompanyAuthView(request):
         if not u:
             return redirect('login')
         if not u.type:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
@@ -987,7 +987,7 @@ def CompanyAuthView(request):
         if not u:
             return redirect('login')
         if not u.type:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
@@ -1015,7 +1015,7 @@ class CompanyAuthSuccessView(View):
         if not u:
             return redirect('login')
         if not u.type:
-            return HttpResponse('error')
+            return redirect('/error.html?msg=没有找到该页面')
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company

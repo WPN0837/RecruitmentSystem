@@ -10,7 +10,7 @@
             {% if user.type %}
                 <ul id="navheader" class="reset">
                     <li><a href="{% url 'index' %}">首页</a></li>
-                    <li><a href="companylist.html">公司</a></li>
+                    <li><a href="{% url 'company_list' %}">公司</a></li>
                     <li><a rel="nofollow" href="{% url 'recruitment:unprocessed_resume' %}">简历管理</a></li>
                     <li><a rel="nofollow" href="{% url 'PostJob' %}">发布职位</a></li>
                 </ul>
@@ -51,6 +51,9 @@
                     <dd>
                         <a href="{% url 'user:my_collection' %}">我收藏的职位</a>
                     </dd>
+                    <dd>
+                        <a href="{% url 'user:resume_status' %}">我投递的职位</a>
+                    </dd>
                     <dd class="btm">
                         <a href="{% url 'user:my_subscription' %}">我的订阅</a>
                     </dd>
@@ -75,12 +78,6 @@
                 <li><a href="{% url 'register' %}" rel="nofollow">注册</a></li>
             </ul>
         {% endif %}
-        <div id="noticeTip">
-            <span class="bot"></span>
-            <span class="top"></span>
-            <a target="_blank" href="delivery.html"><strong>1</strong>条新投递反馈</a>
-            <a class="closeNT" href="javascript:;"></a>
-        </div>
     </div>
 {% endblock %}
 {% block container %}

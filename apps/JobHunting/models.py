@@ -222,3 +222,22 @@ class PositionCollection(models.Model):
         verbose_name = '收藏职位'
         verbose_name_plural = verbose_name
         unique_together = ['user', 'position']
+
+
+class Subscription(models.Model):
+    '''
+    订阅信息
+    '''
+    email = models.EmailField(verbose_name='邮箱', blank=True)
+    cycle = models.IntegerField(verbose_name='周期/天', blank=True)
+    city = models.CharField(max_length=20, verbose_name='城市', blank=True)
+    finance_stage = models.CharField(max_length=5, verbose_name='发展阶段', blank=True)
+    industry_sector = models.CharField(verbose_name='行业领域', max_length=5, blank=True, null=True)
+    position = models.CharField(verbose_name='工作', max_length=20, blank=True, null=True)
+    salary = models.CharField(max_length=20, verbose_name='月薪', blank=True, null=True)
+    user = models.OneToOneField('common.User', on_delete=models.CASCADE, verbose_name='用户', blank=True)
+    add_time = models.DateTimeField(auto_now_add=True, verbose_name='添加时间', blank=True)
+
+    class Meta:
+        verbose_name = '订阅信息'
+        verbose_name_plural = verbose_name
