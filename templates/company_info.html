@@ -2,7 +2,7 @@
 {% block header %}
     <div class="wrapper">
         <a href="{% url 'index' %}" class="logo">
-            <img src="/static/images/logo.png" width="229" height="43" alt="拉勾招聘-专注互联网招聘"/>
+            <img src="/static/images/logo.png" width="229" height="43" alt="寻寻招聘-专注互联网招聘"/>
         </a>
         <ul class="reset" id="navheader">
             <li><a href="{% url 'index' %}">首页</a></li>
@@ -87,10 +87,10 @@
                     <h2 title="{{ c.full_name }}">{{ c.full_name }}</h2>
                     {% if auth %}
                         <em class="valid"></em>
-                        <span class="va dn">拉勾认证企业</span>
+                        <span class="va dn">认证企业</span>
                     {% else %}
                         <em class="unvalid"></em>
-                        <span class="va dn">拉勾未认证企业</span>
+                        <span class="va dn">未认证企业</span>
                     {% endif %}
                     <div class="clear"></div>
                     <h1 title="{{ c.full_name }}" class="fullname">{{ c.full_name }}</h1>

@@ -169,7 +169,7 @@ class LoginView(View):
             else:
                 request.session.set_expiry(0)
             request.session['email'] = email
-            if re.search('/login\.html|/register\.html|/update-password\.html', loginToUrl):
+            if re.search('(\/login\.html|\/register\.html|\/update-password\.html)', loginToUrl):
                 loginToUrl = ''
             res = {'success': 1, 'content': {'loginToUrl': loginToUrl}}
         return HttpResponse(json.dumps(res))
@@ -740,7 +740,8 @@ class CompanyListView(View):
             ['WXYZ', HotCity.objects.filter(first__in=[i for i in 'WXYZ']).values_list('name')],
         ]
         hotCity = ['全国', '北京', '上海', '广州', '深圳', '成都', '杭州', '武汉', '南京']
-        development_stage = {'初创型': ['未融资'], '成长型': ['天使轮', 'A轮', 'B轮'], '成熟型': ['C轮', 'D轮以上'], '已上市': ['上市公司']}
+        # development_stage = {'初创型': ['未融资'], '成长型': ['天使轮', 'A轮', 'B轮'], '成熟型': ['C轮', 'D轮以上'], '已上市': ['上市公司']}
+        development_stage = {'初创型': ['未融资', '天使轮', ], '成长型': ['A轮', 'B轮', 'C轮', ], '成熟型': ['D轮以上'], '已上市': ['上市公司']}
         sectors = IndustrySector.objects.values_list('sector')
         cws = request.GET.get('ws', '')  # 城市
         cde = request.GET.get('de', '')  # 发展阶段

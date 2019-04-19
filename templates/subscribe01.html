@@ -37,169 +37,36 @@
         <div class="content_l">
             <h1>我的职位订阅</h1>
             <div class="selected s1">
-                <input type="hidden" id="sid" value="{{ s.id }}">
-                <h2>{{ s.position }}</h2>
-                <div class="sbox">
-                    <a class="sclose" href="javascript:void(0)"></a>
-                    <a class="sedit" href="{% url 'user:edit_subscription' %}?id={{ s.id }}"></a>
-                </div>
-                <span>
+                {% if s %}
+                    <input type="hidden" id="sid" value="{{ s.id }}">
+                    <h2>{{ s.position }}</h2>
+                    <div class="sbox">
+                        <a class="sclose" href="javascript:void(0)"></a>
+                        <a class="sedit" href="{% url 'user:edit_subscription' %}?id={{ s.id }}"></a>
+                    </div>
+                    <span>
                     {{ s.city }}/{{ s.industry_sector }}/{{ s.finance_stage }}/{{ s.salary }}
-                </span>
+                    </span>
+                {% else %}
+                    <span>您还没有订阅！<a href="{% url 'user:edit_subscription' %}" target="_blank">点我订阅</a></span>
+                {% endif %}
             </div>
         </div>
         <div class="content_r">
             <div class="subscribe_side mb20 c5">
                 <a href="{% url 'user:edit_subscription' %}" target="_blank">
-                <div class="why">我们为什么强烈推荐你</div>
-                <h2>订阅</h2>
-                <ul class="reset">
-                    <li class="sub1">帮助你节省浏览和筛选时间，快速找到适合的职位信息。</li>
-                    <li class="sub2">我们会严格按照你订阅的频次和条件给你发送邮件，并对你的个人信息绝对保密。</li>
-                </ul>
-                <i>我也要订阅职位</i>
+                    <div class="why">我们为什么强烈推荐你</div>
+                    <h2>订阅</h2>
+                    <ul class="reset">
+                        <li class="sub1">帮助你节省浏览和筛选时间，快速找到适合的职位信息。</li>
+                        <li class="sub2">我们会严格按照你订阅的频次和条件给你发送邮件，并对你的个人信息绝对保密。</li>
+                    </ul>
+                    <i>我也要订阅职位</i>
                 </a>
             </div>
         </div>
     </div>
-    <input type="hidden" id="userid" name="userid" value="314873">
-
-    <!------------------------------------- 弹窗lightbox ----------------------------------------->
-    <div style="display:none;">
-        <!--
-            登录帐号订阅成功
-            1、已登录用户，且是自有用户，已验证，订阅职位<=1，提示订阅成功；接收邮箱默认为登录邮箱，可修改。
-            2、已登录用户，但是第三方用户，订阅职位<=1，提示订阅成功；接收邮箱手动输入可修改。
-            未登录帐号订阅成功
-            未登录用户，但填写的邮箱为已注册、已验证邮箱，且订阅职位<=1，订阅成功，点击确定显示登录框
-        -->
-        <div class="popup" id="subscribeSuccessLogined">
-            <h4>职位订阅成功！</h4>
-            <p>我们将定期发送订阅邮件至：<a>888888888@qq.com</a>，请注意查收。</p>
-            <table width="100%">
-                <tbody>
-                <tr>
-                    <td align="center"><a class="btn_s" href="subscribe.html">确&nbsp;定</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div><!--/#subscribeSuccessLogined-->
-
-        <!--
-         未登录未注册帐号订阅成功
-         提示注册框
-     -->
-        <div style="height:370px;" class="popup" id="subscribeSuccessRegister">
-            <h4>职位订阅成功！</h4>
-            <p>我们将定期发送订阅邮件至：<a><em></em></a>，请注意查收。</p>
-            <hr>
-            <p>现在只需设置密码就可成功注册拉勾，并可长期保存及管理订阅信息。</p>
-            <form id="registerPopForm">
-                <table width="100%">
-                    <tbody>
-                    <tr>
-                        <td>注册邮箱 :</td>
-                        <td><em></em></td>
-                    </tr>
-                    <tr>
-                        <td valign="top">注册密码 :</td>
-                        <td>
-                            <input type="password" placeholder="请输入注册密码" id="psw" name="password"
-                                   style="background-image: url(style/images/img/a6y3y0Wx5kbFHvGuXzkgf0xhKnPzA4UTyaTB8Ph8AvcHi3fnsrZ7Wore02YViqVOrRXXPhfqP8j6MYlawoAAAAASUVORK5CYII=quot); background-repeat: no-repeat; background-attachment: scroll; background-position: right center;">
-                            <span id="beError_register" style="display:none;" class="error"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <label for="checkbox" class="fl">
-                                <input type="checkbox" class="checkbox valid" checked="" name="checkbox"
-                                       id="checkbox">
-                                我已阅读并同意<a target="_blank" href="http://www.lagou.com/privacy.html">《拉勾用户协议》</a>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type="submit" value="注 册" class="btn_s">
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div><!--/#subscribeSuccessRegister-->
-
-        <!--
-           未登录注册帐号订阅成功
-           弹出框有登录按钮，提示登录
-       -->
-        <div class="popup" id="subscribeSuccessLogin">
-            <h4>职位订阅成功！</h4>
-            <p>我们将定期发送订阅邮件至：<a></a>，请注意查收。</p>
-            <table width="100%">
-                <tbody>
-                <tr>
-                    <td align="center"><a title="登录" class="btn inline cboxElement" href="#loginPop">登 录</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div><!--/#subscribeSuccessLogin-->
-
-        <!-- 登录框 -->
-        <div style="height:240px;" class="popup" id="loginPop">
-            <form id="loginForm">
-                <input type="text" placeholder="请输入登录邮箱地址" tabindex="1" name="email" id="email"
-                       style="background-image: url(style/images/img/0CQnd2Jos49xUAAAAASUVORK5CYII=quot); background-repeat: no-repeat; background-attachment: scroll; background-position: right center;">
-                <input type="password" placeholder="请输入密码" tabindex="2" name="password" id="password"
-                       style="background-image: url(style/images/img/0CQnd2Jos49xUAAAAASUVORK5CYII=quot); background-repeat: no-repeat; background-attachment: scroll; background-position: right center;">
-                <span id="beError" style="display:none;" class="error"></span>
-                <label for="remember" class="fl"><input type="checkbox" name="autoLogin" checked="checked" value=""
-                                                        id="remember"> 记住我</label>
-                <a target="_blank" class="fr" href="http://www.lagou.com/reset.html">忘记密码？</a>
-                <input type="submit" value="登 &nbsp; &nbsp; 录" id="submitLogin">
-            </form>
-            <div class="login_right">
-                <div>还没有拉勾帐号？</div>
-                <a class="registor_now" href="http://www.lagou.com/register.html">立即注册</a>
-                <div class="login_others">使用以下帐号直接登录:</div>
-                <a title="使用新浪微博帐号登录" class="icon_wb" target="_blank"
-                   href="http://www.lagou.com/ologin/auth/sina.html"></a>
-                <a title="使用腾讯QQ帐号登录" target="_blank" class="icon_qq"
-                   href="http://www.lagou.com/ologin/auth/qq.html"></a>
-            </div>
-        </div><!--/#loginPop-->
-
-        <!--退订-->
-        <div class="popup" id="cancelSub">
-            <h4>确认要退订该订阅？</h4>
-            <table width="100%">
-                <tbody>
-                <tr>
-                    <td align="center"><p>点击确认后你将不再收到拉勾为你提供的精准职位推送。</p></td>
-                </tr>
-                <tr>
-                    <td align="center">
-                        <input type="button" value="确认退订" id="confirmCancel" class="btn_s">
-                        <a class="btn_s" href="javascript:void(0)">取消</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div><!--/#cancelSub-->
-    </div>
-    <!------------------------------------- end ----------------------------------------->
-
     <script src="/static/js/sub.min.js"></script>
-    <!-- 退订 | 从邮箱进来订阅页  -->
-
-    <!-- 订阅成功弹出注册框 | 从邮箱进来订阅页  -->
-
-    <!-- 订阅成功弹出登录框 | 从邮箱进来订阅页  -->
-
-    <!-- 从激活页点换个邮箱进入订阅页 -->
     <div class="clear"></div>
-    <input type="hidden" value="37509432fb9e453a815da48821b7bf01" id="resubmitToken">
     <a rel="nofollow" title="回到顶部" id="backtop"></a>
-
 {% endblock %}

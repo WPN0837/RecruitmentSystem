@@ -2,7 +2,7 @@
 {% block body %}
 <div class="login_wrapper">
     <div class="login_header">
-        <a href="{% url 'index' %}"><img src="/static/images/logo_white.png" width="285" height="62" alt="拉勾招聘"/></a>
+        <a href="{% url 'index' %}"><img src="/static/images/logo_white.png" width="285" height="62" alt="寻寻招聘"/></a>
         <div id="cloud_s"><img src="/static/images/cloud_s.png" width="81" height="52" alt="cloud"/></div>
         <div id="cloud_m"><img src="/static/images/cloud_m.png" width="136" height="95" alt="cloud"/></div>
     </div>
@@ -26,7 +26,7 @@
 
         </form>
         <div class="login_right">
-            <div>还没有拉勾帐号？</div>
+            <div>还没有寻寻帐号？</div>
             <a href="{% url 'register' %}" class="registor_now">立即注册</a>
 
         </div>
@@ -52,7 +52,7 @@
             messages: {
                 email: {
                     required: "请输入登录邮箱地址",
-                    email: "请输入有效的邮箱地址，如：vivi@lagou.com"
+                    email: "请输入有效的邮箱地址，如：email@xx.com"
                 },
                 password: {
                     required: "请输入密码"
