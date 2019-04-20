@@ -2,6 +2,7 @@ from django.shortcuts import HttpResponse, render, redirect
 from hashlib import md5
 from io import BytesIO
 from django.views import View
+from django.db.models import F
 from .models import User
 import re
 import json
@@ -36,7 +37,7 @@ class IndexView(View):
             setattr(i, 'hot_p', sorted(hot_p, key=lambda x: x.hot, reverse=True)[:5])
         hot_search = Position.objects.filter(level=3).order_by('-hot')[:10]
         hot_company = Company.objects.order_by('-level')[:6]
-        if len(hot_company) < 5:
+        if len(hot_company) < 6:
             last_company = None
         else:
             last_company = hot_company[5]
@@ -593,7 +594,11 @@ class PositionDetailView(View):
                 'c': c,
                 'sectors': sectors,
             })
-        collection = PositionCollection.objects.filter(user_id=u.id, position_id=int(pid)).exists()
+        if u:
+            collection = PositionCollection.objects.filter(user_id=u.id, position_id=int(pid)).exists()
+        else:
+            collection = False
+        PositionInfo.objects.filter(id=int(pid)).update(views_count=F('views_count') + 1)
         return render(request, 'position_detail1.html', {
             'user': u,
             'p': p,

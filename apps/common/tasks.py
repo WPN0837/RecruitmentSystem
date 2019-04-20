@@ -15,7 +15,7 @@ def send_register_email(data):
     :return:
     '''
     email_title = '激活'
-    email_body = '尊敬的{}用户，感谢您注册XX招聘，请点击下面链接跳转激活，' \
+    email_body = '尊敬的{}用户，感谢您注册寻寻招聘，请点击下面链接跳转激活，' \
                  'http://{}/activation.html?token={}'.format(data['email'], settings.SELF_HOST_NAME, data['token'])
     send_status = send_mail(email_title, email_body, settings.EMAIL_HOST_USER, [data['email']])
     if send_status:

@@ -51,9 +51,9 @@
                                        href="{% url 'recruitment:position_detail' %}?id={{ position.id }}">{{ position.positionType }}-{{ position.position }}</a>
                                     <span>[{{ position.workAddress }}]</span>
                                 </h3>
-                                <span class="receivedResumeNo">
-                                    <a href="#">应聘简历（1）</a>
-                                </span>
+{#                                <span class="receivedResumeNo">#}
+{#                                    <a href="#">应聘简历（1）</a>#}
+{#                                </span>#}
                                 <div>
                                     {{ position.jobNature }} / {{ position.salaryMin }}k-{{ position.salaryMax }}k
                                     / {{ position.workYear }} / {{ position.education }}

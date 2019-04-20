@@ -59,7 +59,7 @@ class User(models.Model):
         (1, '已激活')
     )
     email = models.EmailField(verbose_name='邮箱', blank=True, unique=True, )
-    pwd = models.CharField(max_length=16, verbose_name='密码', blank=True)
+    pwd = models.CharField(max_length=200, verbose_name='密码', blank=True)
     type = models.SmallIntegerField(verbose_name='身份', choices=identity_choice, blank=True)
     activation = models.SmallIntegerField(verbose_name='激活', choices=activation_choices, default=0, blank=True)
 

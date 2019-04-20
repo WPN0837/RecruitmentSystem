@@ -679,7 +679,7 @@ class MyCollectionView(View):
         email = request.session.get('email', '')
         u = User.objects.filter(email=email).first()
         if not u:
-            return redirect('login')
+            return HttpResponse(json.dumps({'success': False, 'msg': '您还没有登录'}))
         objid = request.POST.get('positionId', 0)
         t = request.POST.get('type', '')
         try:

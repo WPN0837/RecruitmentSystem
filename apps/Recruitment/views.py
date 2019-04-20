@@ -359,6 +359,10 @@ class AddCompany06View(View):
 
 
 class EffectivePositionsView(View):
+    '''
+    有效职位列表
+    '''
+
     def get(self, request):
         email = request.session.get('email', None)
         if email:
@@ -366,7 +370,7 @@ class EffectivePositionsView(View):
         else:
             return redirect('login')
         c = u.company
-        positions = PositionInfo.objects.filter(status=0).all()
+        positions = PositionInfo.objects.filter(status=0, email=email).all()
         pn = len(positions)
         return render(request, 'effective_positions.html', {
             'user': u,
@@ -419,6 +423,11 @@ def FounderPhoto(request):
 
 @csrf_exempt
 def ProductPoster(request):
+    '''
+    上传产品海报图片
+    :param request:
+    :return:
+    '''
     if request.method == 'POST':
         img = request.FILES['myfiles']
         url = 'static/Company/Product/' + str(uuid.uuid1()) + img._name
@@ -463,7 +472,7 @@ class PositionOfflineView(View):
         else:
             return redirect('login')
         c = u.company
-        positions = PositionInfo.objects.filter(status=1).all()
+        positions = PositionInfo.objects.filter(status=1, email=email).all()
         pn = len(positions)
         return render(request, 'offline_positions.html', {
             'user': u,
@@ -473,10 +482,11 @@ class PositionOfflineView(View):
         })
 
     def post(self, request):
+        email = request.session.get('email', None)
         pid = request.POST.get('id', None)
         if pid:
             try:
-                PositionInfo.objects.filter(id=int(pid)).update(status=1)
+                PositionInfo.objects.filter(id=int(pid), email=email).update(status=1)
             except Exception as e:
                 res = {'success': False}
                 return HttpResponse(json.dumps(res))
@@ -492,10 +502,11 @@ class PositionDeleteView(View):
     '''
 
     def post(self, request):
+        email = request.session.get('email', None)
         pid = request.POST.get('id', None)
         if pid:
             try:
-                PositionInfo.objects.filter(id=int(pid)).update(status=2)
+                PositionInfo.objects.filter(id=int(pid), email=email).update(status=2)
             except Exception as e:
                 res = {'success': False}
                 return HttpResponse(json.dumps(res))
