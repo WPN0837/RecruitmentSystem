@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.html import format_html
 
 
 class Province(models.Model):
@@ -102,7 +103,7 @@ class SubmitResume(models.Model):
     offer = models.SmallIntegerField(verbose_name='简历是否通过状态', choices=offer_choices, default=0, blank=True)
 
     class Meta:
-        verbose_name = '收藏职位'
+        verbose_name = '投递的简历'
         verbose_name_plural = verbose_name
         unique_together = ['resume', 'position']
 
@@ -115,13 +116,21 @@ class Banner(models.Model):
     首页轮播图
     '''
     img = models.ImageField(upload_to='banner', verbose_name='图片', blank=True)
-    url = models.URLField(verbose_name='跳转路径', blank=True)
-    alt = models.CharField(verbose_name='图片alt', max_length=20, blank=True)
+    url = models.URLField(verbose_name='跳转路径', blank=True, null=True)
+    alt = models.CharField(verbose_name='图片alt', blank=True, max_length=20)
     level = models.IntegerField(verbose_name='权重', blank=True, default=0)
 
     class Meta:
         verbose_name = '首页轮播图'
         verbose_name_plural = verbose_name
+
+    def img_data(self):
+        return format_html(
+            '<img src="/media/{}" width="100px"/>',
+            self.img,
+        )
+
+    img_data.short_description = '图片'
 
     def __str__(self):
         return self.alt

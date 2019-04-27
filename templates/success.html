@@ -79,15 +79,20 @@
 {% endblock %}
 {% block container %}
     <div class="content_mid">
-        <!--发布职位成功 -->
         <dl class="c_section c_section_mid">
             <dt>
-                <h2><em></em>投递成功</h2>
+                <h2><em></em>{{ success }}</h2>
             </dt>
             <dd class="c_notice">
-                <h4>恭喜你，公司信息已填写完善，你可以发布职位啦！</h4>
-                <a class="greylink" href="{% url 'PostJob' %}">发布新职位</a>
-                <a class="greylink" href="{% url 'recruitment:my_home_detail' %}"> 进入我的公司主页</a>
+                <h4>{{ msg }}</h4>
+                {% if code == 1 %}
+                    <a class="greylink" href="{% url 'PostJob' %}">发布新职位</a>
+                    <a class="greylink" href="{% url 'recruitment:my_home_detail' %}"> 进入我的公司主页</a>
+                {% elif code == 2 %}
+                    <a class="greylink" href="{% url 'user:resume_status' %}">查看我投递的职位</a>
+                    <a class="greylink" href="{% url 'user:my_resume' %}"> 查看我的简历</a>
+                {% endif %}
+
             </dd>
         </dl>
     </div>

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.html import format_html
 
 
 class IndustrySector(models.Model):
@@ -119,6 +120,14 @@ class Company(models.Model):
                                 blank=True)
     level = models.IntegerField(db_index=True, verbose_name='等级', blank=True, default=0)
 
+    def logo_data(self):
+        return format_html(
+            '<img src="{}" width="100px"/>',
+            self.logo,
+        )
+
+    logo_data.short_description = 'Logo'
+
     class Meta:
         verbose_name = '公司信息'
         verbose_name_plural = verbose_name
@@ -167,7 +176,7 @@ class Position(models.Model):
 
 class PositionInfo(models.Model):
     '''
-    发布的招聘信息
+    职位信息
     '''
     status_choices = (
         (0, '有效职位'),
@@ -178,13 +187,13 @@ class PositionInfo(models.Model):
     position = models.CharField(db_index=True, max_length=20, blank=True, verbose_name='职位名称')
     department = models.CharField(max_length=20, blank=True, verbose_name='所属部门', null=True)
     jobNature = models.CharField(max_length=20, blank=True, verbose_name='工作性质')
-    salaryMin = models.IntegerField(blank=True, verbose_name='月薪l')
-    salaryMax = models.IntegerField(blank=True, verbose_name='月薪r')
+    salaryMin = models.IntegerField(blank=True, verbose_name='月薪下限')
+    salaryMax = models.IntegerField(blank=True, verbose_name='月薪上限')
     workAddress = models.CharField(max_length=20, blank=True, verbose_name='工作城市')
     workYear = models.CharField(max_length=20, blank=True, verbose_name='工作经验')
     education = models.CharField(max_length=20, blank=True, verbose_name='学历要求')
     positionAdvantage = models.CharField(max_length=21, blank=True, verbose_name='职位诱惑')
-    positionDetail = models.TextField(verbose_name='职位描述', blank=True)
+    positionDetail = models.TextField(verbose_name='职位描述', blank=True, null=True)
     positionAddress = models.TextField(max_length=150, verbose_name='工作地址', blank=True)
     email = models.EmailField(verbose_name='接收简历邮箱', blank=True)
     positionLng = models.CharField(max_length=20, verbose_name='经度', blank=True, null=True)
@@ -196,7 +205,7 @@ class PositionInfo(models.Model):
     views_count = models.IntegerField(verbose_name='浏览次数', default=0, blank=True)
 
     class Meta:
-        verbose_name = '发布的招聘信息'
+        verbose_name = '职位信息'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -207,8 +216,22 @@ class CompanyAuthFile(models.Model):
     '''
     公司认证文件
     '''
-    file_path = models.FilePathField(verbose_name='路径', blank=True)
+    status_choices = (
+        (0, '未处理'),
+        (1, '未通过'),
+        (2, '通过')
+    )
+    file_path = models.FilePathField(verbose_name='路径')
     company = models.OneToOneField('Company', on_delete=models.CASCADE, blank=True, verbose_name='公司')
+    status = models.SmallIntegerField(verbose_name='审核', choices=status_choices, default=0)
+
+    def image_data(self):
+        return format_html(
+            '<img src="/{}" width="100px"/>',
+            self.file_path,
+        )
+
+    image_data.short_description = '图片'
 
     class Meta:
         verbose_name = '公司认证文件'

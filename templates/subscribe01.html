@@ -54,7 +54,11 @@
         </div>
         <div class="content_r">
             <div class="subscribe_side mb20 c5">
-                <a href="{% url 'user:edit_subscription' %}" target="_blank">
+                {% if s %}
+                    <a href="{% url 'user:edit_subscription' %}?id={{ s.id }}" target="_blank">
+                {% else %}
+                    <a href="{% url 'user:edit_subscription' %}" target="_blank">
+                {% endif %}
                     <div class="why">我们为什么强烈推荐你</div>
                     <h2>订阅</h2>
                     <ul class="reset">

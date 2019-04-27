@@ -558,7 +558,7 @@ class MyCompanyDetailView(View):
         if not hasattr(u, 'company'):
             return redirect('recruitment:company01')
         c = u.company
-        auth = CompanyAuthFile.objects.filter(company=c).exists()
+        auth = CompanyAuthFile.objects.filter(company=c, status=2).exists()
         return render(request, 'myhome.html', {
             'user': u,
             'c': c,

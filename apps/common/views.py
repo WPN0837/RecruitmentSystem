@@ -43,7 +43,7 @@ class IndexView(View):
             last_company = hot_company[5]
         hot_company = hot_company[:5]
         hot_positions = PositionInfo.objects.raw(
-            'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.views_count desc LIMIT 0,15) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;')
+            'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id,r.views_count from recruitment_positioninfo as r where r.`status`=0 LIMIT 0,15) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id ORDER BY rp.views_count desc ;')
         for i in hot_positions:
             i.sector = ','.join([i[0] for i in IndustrySector.objects.filter(company=i.cid).values_list('sector')])
             i.tag = CompanyTag.objects.filter(company=i.cid).values_list('name')
@@ -338,13 +338,13 @@ class ListView(View):
             return redirect('/error.html?msg=没有找到该页面')
         if cte == 'hot':
             positions = PositionInfo.objects.raw(
-                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.views_count desc) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;')
+                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id,r.views_count from recruitment_positioninfo as r where r.`status`=0) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id ORDER BY rp.views_count desc;')
             for i in positions:
                 i.sector = ','.join([i[0] for i in IndustrySector.objects.filter(company=i.cid).values_list('sector')])
                 i.tag = CompanyTag.objects.filter(company=i.cid).values_list('name')
         elif cte == 'new':
             positions = PositionInfo.objects.raw(
-                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0 ORDER BY r.id desc) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id;')
+                'SELECT rp.id,rp.position,rp.salaryMin,rp.salaryMax,rp.workAddress,rp.workYear,rp.education,rp.positionAdvantage,rp.addTime,rc.full_name,rc.abbreviation_name,rc.scope,rc.development_stage,rcf.founder_name,rc.id as cid from (select r.id,r.workAddress,r.position,r.salaryMin,r.salaryMax,r.workYear,r.education,r.positionAdvantage,r.addTime,r.company_id from recruitment_positioninfo as r where r.`status`=0) as rp LEFT join (recruitment_company as rc LEFT join recruitment_companyfoundingteam as rcf on rc.id = rcf.company_id) on rp.company_id = rc.id ORDER BY rp.id DESC;')
             for i in positions:
                 i.sector = ','.join([i[0] for i in IndustrySector.objects.filter(company=i.cid).values_list('sector')])
                 i.tag = CompanyTag.objects.filter(company=i.cid).values_list('name')
@@ -564,7 +564,7 @@ class CompanyDetailView(View):
             c = Company.objects.filter(id=int(cid)).first()
         except Exception as e:
             return redirect('/error.html?msg=查看信息失败')
-        auth = CompanyAuthFile.objects.filter(company=c).exists()
+        auth = CompanyAuthFile.objects.filter(company=c, status=2).exists()
         return render(request, 'company_info.html', {
             'c': c,
             'user': u,
@@ -614,10 +614,12 @@ class SubmitResumeView(View):
     '''
 
     def get(self, request):
+        # 从session获取用户信息
         email = request.session.get('email', '')
         u = User.objects.filter(email=email).first()
         if not u:
             return redirect('login')
+        # 获取职位id
         pid = request.GET.get('id', 0)
         try:
             p = PositionInfo.objects.filter(id=int(pid)).first()
@@ -625,16 +627,32 @@ class SubmitResumeView(View):
                 raise Exception
         except Exception as e:
             return redirect('/error.html?msg=没有找到职位信息')
+        # 用户没有简历，提示错误
         if not hasattr(u, 'resume'):
             return redirect('/error.html?msg=没有找到简历信息')
+        # 已经投递过简历，提示错误
+        if SubmitResume.objects.filter(resume=u.resume, position=p).exists():
+            return redirect('/error.html?msg=已经投过这个职位了')
+        # 生成url
         url = 'http://%s/recruitment/unprocessed-resume.html' % settings.SELF_HOST_NAME
-        SubmitResume.objects.create(resume=u.resume, position=p, sort=u.resume.default)
-        data = {'email': p.company.user.email, 'url': url, 'name': p.company.abbreviation_name,
-                'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'position': p.position,
+        # 创建并保存简历、职位关系对象
+        SubmitResume.objects.create(resume=u.resume,
+                                    position=p,
+                                    sort=u.resume.default)
+        # 生成邮件信息
+        data = {'email': p.company.user.email,
+                'url': url, 'name': p.company.abbreviation_name,
+                'time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                'position': p.position,
                 'add_time': p.addTime.strftime("%Y-%m-%d %H:%M:%S")}
+        # 发送邮件
         send_submit_resume_email.delay(data)
+        # 返回成功页面
         return render(request, 'success.html', {
             'user': u,
+            'code': 2,
+            'success': '投递成功',
+            'msg': '恭喜，职位投递成功！',
         })
 
 
@@ -644,18 +662,23 @@ class ResumeView(View):
     '''
 
     def get(self, request):
+        # 获取用户信息
         email = request.session.get('email', '')
         u = User.objects.filter(email=email).first()
         if not u:
             return redirect('login')
+        # 获取token
         token = request.GET.get('token', None)
         if token:
+            # 提取token存储的信息
             token = base64.b64decode(token.encode('utf-8')).decode('utf-8')
             dic = json.loads(token)
+            # 被查看用户不存在，提示错误
             email = dic.get('email', '')
             user = User.objects.filter(email=email).first()
             if not user:
                 return redirect('/error.html?msg=查看信息失败')
+            # 简历、职位关系不存在，提示错误
             spid = dic.get('id', '')
             if spid:
                 try:
@@ -664,6 +687,7 @@ class ResumeView(View):
                     return redirect('/error.html?msg=查看信息失败')
             else:
                 return redirect('/error.html?msg=查看信息失败')
+            # 获取简历信息
             resume = user.resume if hasattr(user, 'resume') else None
             resume_info = resume.resume_info if hasattr(resume, 'resume_info') else None
             hope_work = resume.hope_work if hasattr(resume, 'hope_work') else None
@@ -674,6 +698,7 @@ class ResumeView(View):
                                                                                      'educational_experience') else None
             self_detail = resume.self_detail if hasattr(resume, 'self_detail') else None
             gallerys = resume.gallery.all() if hasattr(resume, 'gallery') else None
+            # 返回简历信息页面
             return render(request, 'preview.html', {
                 'user': user,
                 'resume': resume,
@@ -685,6 +710,7 @@ class ResumeView(View):
                 'self_detail': self_detail,
                 'gallerys': gallerys,
             })
+        # token不存在，提示错误信息
         return redirect('/error.html?msg=查看信息失败')
 
 
@@ -758,8 +784,8 @@ class CompanyListView(View):
             page = int(page)
         except Exception as e:
             return redirect('/error.html?msg=没有找到该页面')
-        companys = Company.objects.all()
-        if cws:
+        companys = Company.objects.order_by('-level')
+        if cws and hotCity.index(cws):
             companys = companys.filter(city=cws)
         if cde in development_stage:
             companys = companys.filter(development_stage__in=development_stage[cde])

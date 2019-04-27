@@ -40,7 +40,7 @@
                 <h1><em></em> 未处理简历 <span>（共{{ l }}份）</span></h1>
             </dt>
             <dd>
-                <form action="canInterviewResumes.html" method="get" id="filterForm">
+                <form id="filterForm">
                     <div class="filter_actions">
                         <label class="checkbox"> <input type="checkbox"/> <i></i> </label>
                         <span>全选</span>
@@ -95,11 +95,13 @@
                                 <div class="resumeShow">
                                     <a title="预览在线简历" target="_blank" class="resumeImg"
                                        href="{{ sr.resume_url }}">
-                                        <img src="{{ sr.resume.resume_info.photo }}"/> </a>
+                                        <img src="/{{ sr.resume.resume_info.photo }}"/> </a>
                                     <div class="resumeIntro">
-                                        <h3 class="unread"><a target="_blank" title="预览{{ sr.resume.title }}"
+                                        <h3 class="unread">
+                                            <a target="_blank" title="预览{{ sr.resume.title }}"
                                                               href="{{ sr.resume_url }}"> {{ sr.resume.title }} </a>
-                                            <em></em></h3>
+                                            <em></em>
+                                        </h3>
                                         <span class="fr">投递时间：{{ sr.add_time }}</span>
                                         <div class="jdpublisher">
                                         <span> 应聘职位：
@@ -200,59 +202,15 @@
                     <td align="center" class="f16"> 面试通知已发送成功<br/> 该简历已进入“已通知面试简历”列表</td>
                 </tr>
                 <tr>
-                    <td align="center"><input type="button" value="确认" class="btn"/></td>
+                    <td align="center">
+{#                        <input type="button" value="确认" class="btn"/>#}
+                        <a href="{% url 'recruitment:unprocessed_resume' %}" class="btn">确认</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
         </div>
         <!--/#noticeInterviewSuccess-->
-        <!--转发简历弹窗-->
-        <div class="popup" id="forwardResume">
-            <form id="forwardResumeForm">
-                <table width="100%" class="f16">
-                    <tbody>
-                    <tr>
-                        <td width="20%" align="right">收件人</td>
-                        <td width="80%"><input type="text" placeholder="最多可添加两个邮箱，用“；”隔开" id="recipients"
-                                               name="recipients"/> <span id="forwardResumeError" style="display:none"
-                                                                         class="beError"></span></td>
-                    </tr>
-                    <tr>
-                        <td align="right">主题</td>
-                        <td><input type="text" value="" name="title"/></td>
-                    </tr>
-                    <tr>
-                        <td valign="top" align="right">正文</td>
-                        <td><textarea name="content"></textarea> <span style="display:none;"
-                                                                       class="beError error"></span></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input type="submit" value="发送" class="btn"/> <a class="emial_cancel"
-                                                                             href="javascript:;">取消</a></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <input type="hidden" value="" name="resumeKey"/>
-                <input type="hidden" value="" name="positionId"/>
-                <input type="hidden" value="" name="deliverId"/>
-            </form>
-        </div>
-        <!--/#forwardResume-->
-        <!--转发简历成功弹窗-->
-        <div class="popup" id="forwardResumeSuccess">
-            <table width="100%" class="f16">
-                <tbody>
-                <tr>
-                    <td align="center" class="f16">简历已转发成功</td>
-                </tr>
-                <tr>
-                    <td align="center"><input type="button" value="确认" class="btn"/></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <!--/#forwardResumeSuccess-->
         <!--确认不合适弹窗-->
         <div style="height:400px;" class="popup" id="confirmRefuse">
             <form id="refuseMailForm">
@@ -271,8 +229,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><input type="submit" value="确认不合适" class="btn"/> <a class="emial_cancel"
-                                                                                href="javascript:;">取消</a></td>
+                        <td><input type="submit" value="确认不合适" class="btn"/>
+                            <a class="emial_cancel" href="javascript:;">取消</a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -288,7 +246,10 @@
                     <td align="center" class="f16"> 不合适通知已发送成功<br/> 该简历已进入“不合适简历”列表</td>
                 </tr>
                 <tr>
-                    <td align="center"><input type="button" value="确认" class="btn"/></td>
+                    <td align="center">
+{#                        <input type="button" value="确认" class="btn"/>#}
+                        <a href="{% url 'recruitment:unprocessed_resume' %}" class="btn">确认</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

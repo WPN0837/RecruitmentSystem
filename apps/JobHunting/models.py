@@ -223,6 +223,9 @@ class PositionCollection(models.Model):
         verbose_name_plural = verbose_name
         unique_together = ['user', 'position']
 
+    def __str__(self):
+        return self.user
+
 
 class Subscription(models.Model):
     '''
@@ -241,3 +244,6 @@ class Subscription(models.Model):
     class Meta:
         verbose_name = '订阅信息'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.email

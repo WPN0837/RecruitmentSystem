@@ -828,7 +828,6 @@ class ResumeStatusView(View):
         else:
             tag = '0'
         srs = my_Paginator(srs, 10, 6, page)
-        print(srs.__dict__)
         return render(request, 'delivery.html', {
             'user': u,
             'srs': srs,

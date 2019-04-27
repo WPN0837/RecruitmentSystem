@@ -38,9 +38,13 @@
                         <img width="80" height="80" alt="" src="{{ c.logo }}" class="b2">
                         <div>
                             <h2 class="fl"> {{ c.abbreviation_name }}
-                                <img width="15" height="19" alt="认证企业"
-                                                                           src="/static/images/valid.png"/>
-                                <span class="dn">认证企业</span>
+                                {% if c.companyauthfile.status == 2 %}
+                                    <img width="15" height="19" alt="认证企业" src="/static/images/valid.png"/>
+                                    <span class="dn">认证企业</span>
+                                {% else %}
+                                    <img width="15" height="19" alt="认证企业" src="/static/images/unvalid.png"/>
+                                    <span class="dn">未认证企业</span>
+                                {% endif %}
                             </h2>
                         </div>
                     </a>
