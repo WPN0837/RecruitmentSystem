@@ -4,7 +4,6 @@
     <list default="true" id="7f2872ce-21f0-476f-97da-0e2f0e6f816f" name="Default Changelist" comment="发布职位信息">
       <change afterPath="$PROJECT_DIR$/../I18N_demo/app0/translation.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../I18N_demo/templates/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/recruitmentsystem_beat1.sql" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../test1/demo4.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../test1/demo5.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Admin_demo/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Admin_demo/.idea/dataSources.local.xml" afterDir="false" />
@@ -142,6 +141,9 @@
       <change beforePath="$PROJECT_DIR$/../I18N_demo/venv/Lib/site-packages/django/contrib/sites/locale/zh_Hans/LC_MESSAGES/django.po" beforeDir="false" afterPath="$PROJECT_DIR$/../I18N_demo/venv/Lib/site-packages/django/contrib/sites/locale/zh_Hans/LC_MESSAGES/django.po" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../I18N_demo/venv/pip-selfcheck.json" beforeDir="false" afterPath="$PROJECT_DIR$/../I18N_demo/venv/pip-selfcheck.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$" beforeDir="false" afterPath="$PROJECT_DIR$" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/position_detail1.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/position_detail1.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Shop" beforeDir="false" afterPath="$PROJECT_DIR$/../Shop" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../django_orm/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../django_orm/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../website_indemnification_system/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../website_indemnification_system/.idea/workspace.xml" afterDir="false" />
@@ -173,13 +175,7 @@
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/recruitmentsystem_beat1.sql">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -247,11 +243,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/templates/base.html" />
-        <option value="$PROJECT_DIR$/templates/add_company_base.html" />
-        <option value="$PROJECT_DIR$/templates/preview.html" />
-        <option value="$PROJECT_DIR$/templates/about.html" />
-        <option value="$PROJECT_DIR$/static/js/popup.min.js" />
         <option value="$PROJECT_DIR$/static/js/additional-methods.js" />
         <option value="$PROJECT_DIR$/static/js/ajaxfileupload.js" />
         <option value="$PROJECT_DIR$/static/js/certification.min.js" />
@@ -259,7 +250,6 @@
         <option value="$PROJECT_DIR$/static/js/company.min.js" />
         <option value="$PROJECT_DIR$/static/js/core.min.js" />
         <option value="$PROJECT_DIR$/static/js/count.js" />
-        <option value="$PROJECT_DIR$/static/js/csrf.js" />
         <option value="$PROJECT_DIR$/static/js/delivery.js" />
         <option value="$PROJECT_DIR$/static/js/job_detail.js" />
         <option value="$PROJECT_DIR$/static/js/job_list.min.js" />
@@ -297,13 +287,19 @@
         <option value="$PROJECT_DIR$/apps/common/admin.py" />
         <option value="$PROJECT_DIR$/apps/Recruitment/admin.py" />
         <option value="$PROJECT_DIR$/templates/position_detail.html" />
+        <option value="$PROJECT_DIR$/utils/check_code.py" />
+        <option value="$PROJECT_DIR$/templates/common_base.html" />
+        <option value="$PROJECT_DIR$/static/js/csrf.js" />
+        <option value="$PROJECT_DIR$/RecruitmentSystem/settings.py" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/apps/common/views.py" />
+        <option value="$PROJECT_DIR$/templates/position_detail1.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="224" />
-    <option name="y" value="68" />
+    <option name="x" value="278" />
+    <option name="y" value="61" />
     <option name="width" value="1382" />
     <option name="height" value="784" />
   </component>
@@ -313,6 +309,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -325,11 +322,16 @@
               <item name="RecruitmentSystem" type="462c0819:PsiDirectoryNode" />
               <item name="apps" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="RecruitmentSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RecruitmentSystem" type="462c0819:PsiDirectoryNode" />
+              <item name="apps" type="462c0819:PsiDirectoryNode" />
+              <item name="Recruitment" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -337,22 +339,22 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/static" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\templates" />
-      <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\apps\common" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\static" />
       <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem" />
       <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\static\images" />
       <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\static\js" />
-      <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\static" />
       <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\utils" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\templates" />
+      <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\apps\common" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -520,7 +522,13 @@
       <workItem from="1555960832133" duration="14000" />
       <workItem from="1556178626254" duration="696000" />
       <workItem from="1556194040122" duration="1584000" />
-      <workItem from="1556341065727" duration="11508000" />
+      <workItem from="1556341065727" duration="11642000" />
+      <workItem from="1556365329792" duration="36000" />
+      <workItem from="1556365557022" duration="133000" />
+      <workItem from="1556372385740" duration="3892000" />
+      <workItem from="1556458275432" duration="156000" />
+      <workItem from="1556465363139" duration="614000" />
+      <workItem from="1556466260896" duration="303000" />
     </task>
     <task id="LOCAL-00001" summary="创建文件">
       <created>1552443717668</created>
@@ -683,22 +691,35 @@
       <option name="project" value="LOCAL" />
       <updated>1556354697806</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="数据库脚本">
+      <created>1556354973335</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1556354973335</updated>
+    </task>
+    <task id="LOCAL-00025" summary="修改csrf.js">
+      <created>1556374807181</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1556374807181</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="486277000" />
+    <option name="totallyTimeSpent" value="491545000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49772727" visible="true" weight="0.16577825" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49772727" visible="true" weight="0.17643923" />
       <window_info id="Structure" order="1" sideWeight="0.5022727" side_tool="true" weight="0.17700455" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3276923" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.46569645" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.33471933" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4116424" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -707,7 +728,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.510467" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.25363827" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49946696" visible="true" weight="0.20893972" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49946696" weight="0.20893972" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -738,7 +759,9 @@
     <MESSAGE value="修改部分代码" />
     <MESSAGE value="压缩js" />
     <MESSAGE value="发布职位信息" />
-    <option name="LAST_COMMIT_MESSAGE" value="发布职位信息" />
+    <MESSAGE value="数据库脚本" />
+    <MESSAGE value="修改csrf.js" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改csrf.js" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -756,41 +779,6 @@
     <SUITE FILE_PATH="coverage/RecruitmentSystem$common.coverage" NAME="common Coverage Results" MODIFIED="1556349026433" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/delivery.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/error.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/myhome.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/positions_base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/PostJob.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/preview.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-31" />
@@ -868,17 +856,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/position_detail1.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-20">
-          <caret line="154" column="30" selection-start-line="154" selection-start-column="30" selection-end-line="154" selection-end-column="30" />
-          <folding>
-            <element signature="e#406#424#0#DjangoTemplate" />
-            <element signature="n#ul#2;n#div#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/offline_positions.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -950,13 +927,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/Recruitment/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="36" column="41" selection-start-line="36" selection-start-column="41" selection-end-line="36" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/Company/auth/3a7ac662-636b-11e9-87d4-b46d83399436c (5).png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -1005,22 +975,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/Recruitment/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2106">
-          <caret line="559" column="21" lean-forward="true" selection-start-line="559" selection-start-column="21" selection-end-line="559" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#59#0" expanded="true" />
-            <element signature="e#4888#7608#0" />
-            <element signature="e#7645#8842#0" />
-            <element signature="e#8879#10576#0" />
-            <element signature="e#10613#12430#0" />
-            <element signature="e#12467#13825#0" />
-            <element signature="e#13862#14289#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1085,13 +1039,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/position_detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="111" column="35" lean-forward="true" selection-start-line="111" selection-start-column="35" selection-end-line="111" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/apps/Recruitment/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -1104,10 +1051,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/recruitmentsystem_beat1.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/check_code.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="19" column="36" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="21" selection-start-column="21" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/csrf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="5" lean-forward="true" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/common_base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="73" selection-start-line="16" selection-start-column="73" selection-end-line="16" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/apps/common/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="789" column="36" lean-forward="true" selection-start-line="789" selection-start-column="36" selection-end-line="789" selection-end-column="36" />
+        <state relative-caret-position="432">
+          <caret line="134" column="11" selection-start-line="134" selection-start-column="11" selection-end-line="134" selection-end-column="11" />
           <folding>
             <element signature="e#0#59#0" expanded="true" />
             <element signature="e#10635#15977#0" />
@@ -1118,8 +1103,56 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/recruitmentsystem_beat1.sql">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/RecruitmentSystem/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="87" column="23" selection-start-line="87" selection-start-column="23" selection-end-line="87" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/positions_base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="38" lean-forward="true" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/position_detail1.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="52" column="25" lean-forward="true" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/position_detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="24" selection-start-column="24" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/Recruitment/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="592">
+          <caret line="534" column="48" selection-start-line="534" selection-start-column="48" selection-end-line="534" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+            <element signature="e#4888#7608#0" />
+            <element signature="e#7645#8842#0" />
+            <element signature="e#8879#10576#0" />
+            <element signature="e#10613#12430#0" />
+            <element signature="e#12467#13825#0" />
+            <element signature="e#13862#14289#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/Recruitment/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="34" column="40" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
