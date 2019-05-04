@@ -4,6 +4,7 @@
     <list default="true" id="7f2872ce-21f0-476f-97da-0e2f0e6f816f" name="Default Changelist" comment="发布职位信息">
       <change afterPath="$PROJECT_DIR$/../I18N_demo/app0/translation.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../I18N_demo/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../gt3_reg_and_login/.idea/workspace.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../test1/demo4.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../test1/demo5.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Admin_demo/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Admin_demo/.idea/dataSources.local.xml" afterDir="false" />
@@ -143,7 +144,7 @@
       <change beforePath="$PROJECT_DIR$" beforeDir="false" afterPath="$PROJECT_DIR$" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/position_detail1.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/position_detail1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/subscribe.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/subscribe.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Shop" beforeDir="false" afterPath="$PROJECT_DIR$/../Shop" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../django_orm/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../django_orm/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../website_indemnification_system/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../website_indemnification_system/.idea/workspace.xml" afterDir="false" />
@@ -175,7 +176,38 @@
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apps/JobHunting/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="335">
+              <caret line="39" column="46" selection-start-line="39" selection-start-column="46" selection-end-line="39" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apps/JobHunting/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="297">
+              <caret line="743" column="38" selection-start-line="743" selection-start-column="38" selection-end-line="743" selection-end-column="38" />
+              <folding>
+                <element signature="e#0#59#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/subscribe.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="61" column="52" selection-start-line="61" selection-start-column="52" selection-end-line="61" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -188,7 +220,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ctx +</find>
       <find>s_radio</find>
       <find>add_company_info06</find>
       <find>select_city_hidden</find>
@@ -218,6 +249,7 @@
       <find>s.id</find>
       <find>IndefiniteResumeView</find>
       <find>success.html</find>
+      <find>datetimepicker</find>
     </findStrings>
     <replaceStrings>
       <replace>url('static/</replace>
@@ -243,8 +275,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/static/js/additional-methods.js" />
-        <option value="$PROJECT_DIR$/static/js/ajaxfileupload.js" />
         <option value="$PROJECT_DIR$/static/js/certification.min.js" />
         <option value="$PROJECT_DIR$/static/js/collections.min.js" />
         <option value="$PROJECT_DIR$/static/js/company.min.js" />
@@ -255,9 +285,7 @@
         <option value="$PROJECT_DIR$/static/js/job_list.min.js" />
         <option value="$PROJECT_DIR$/static/js/jobs.min.js" />
         <option value="$PROJECT_DIR$/static/js/jquery.lib.min.js" />
-        <option value="$PROJECT_DIR$/static/js/jquery.ui.datetimepicker.min.js" />
         <option value="$PROJECT_DIR$/static/js/profile.min.js" />
-        <option value="$PROJECT_DIR$/static/js/received_resumes.min.js" />
         <option value="$PROJECT_DIR$/static/js/search.min.js" />
         <option value="$PROJECT_DIR$/static/js/setting.js" />
         <option value="$PROJECT_DIR$/static/js/step1.min.js" />
@@ -266,7 +294,6 @@
         <option value="$PROJECT_DIR$/static/js/step4.min.js" />
         <option value="$PROJECT_DIR$/static/js/step5.min.js" />
         <option value="$PROJECT_DIR$/static/js/sub.min.js" />
-        <option value="$PROJECT_DIR$/apps/common/tasks.py" />
         <option value="$PROJECT_DIR$/templates/effective_positions.html" />
         <option value="$PROJECT_DIR$/templates/offline_positions.html" />
         <option value="$PROJECT_DIR$/templates/index.html" />
@@ -289,17 +316,22 @@
         <option value="$PROJECT_DIR$/templates/position_detail.html" />
         <option value="$PROJECT_DIR$/utils/check_code.py" />
         <option value="$PROJECT_DIR$/templates/common_base.html" />
-        <option value="$PROJECT_DIR$/static/js/csrf.js" />
         <option value="$PROJECT_DIR$/RecruitmentSystem/settings.py" />
-        <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/apps/common/views.py" />
         <option value="$PROJECT_DIR$/templates/position_detail1.html" />
+        <option value="$PROJECT_DIR$/static/js/jquery.ui.datetimepicker.min.js" />
+        <option value="$PROJECT_DIR$/static/js/received_resumes.min.js" />
+        <option value="$PROJECT_DIR$/static/js/csrf.js" />
+        <option value="$PROJECT_DIR$/apps/common/tasks.py" />
+        <option value="$PROJECT_DIR$/RecruitmentSystem/celery.py" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
+        <option value="$PROJECT_DIR$/templates/subscribe.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="278" />
-    <option name="y" value="61" />
+    <option name="x" value="384" />
+    <option name="y" value="70" />
     <option name="width" value="1382" />
     <option name="height" value="784" />
   </component>
@@ -309,7 +341,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -326,12 +357,13 @@
               <item name="RecruitmentSystem" type="b2602c69:ProjectViewProjectNode" />
               <item name="RecruitmentSystem" type="462c0819:PsiDirectoryNode" />
               <item name="apps" type="462c0819:PsiDirectoryNode" />
-              <item name="Recruitment" type="462c0819:PsiDirectoryNode" />
+              <item name="JobHunting" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -339,17 +371,17 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/static" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/static/js" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\static\js" />
       <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\static" />
       <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem" />
       <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\static\images" />
-      <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\static\js" />
       <recent name="C:\Users\WPN\PycharmProjects\RecruitmentSystem\utils" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -528,7 +560,10 @@
       <workItem from="1556372385740" duration="3892000" />
       <workItem from="1556458275432" duration="156000" />
       <workItem from="1556465363139" duration="614000" />
-      <workItem from="1556466260896" duration="303000" />
+      <workItem from="1556466260896" duration="353000" />
+      <workItem from="1556521589242" duration="3822000" />
+      <workItem from="1556598609351" duration="39000" />
+      <workItem from="1556958012671" duration="2218000" />
     </task>
     <task id="LOCAL-00001" summary="创建文件">
       <created>1552443717668</created>
@@ -705,21 +740,43 @@
       <option name="project" value="LOCAL" />
       <updated>1556374807181</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="修改部分bug">
+      <created>1556466589018</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1556466589018</updated>
+    </task>
+    <task id="LOCAL-00027" summary="js bug修复">
+      <created>1556523272257</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1556523272257</updated>
+    </task>
+    <task id="LOCAL-00028" summary="修复celery定时器">
+      <created>1556959330454</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1556959330455</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="491545000" />
+    <option name="totallyTimeSpent" value="497674000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49772727" visible="true" weight="0.17643923" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49772727" visible="true" weight="0.18229954" />
       <window_info id="Structure" order="1" sideWeight="0.5022727" side_tool="true" weight="0.17700455" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3276923" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.33471933" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.33384615" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4116424" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -728,7 +785,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.510467" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.25363827" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49946696" weight="0.20893972" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49946696" weight="0.35538462" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -761,7 +818,10 @@
     <MESSAGE value="发布职位信息" />
     <MESSAGE value="数据库脚本" />
     <MESSAGE value="修改csrf.js" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改csrf.js" />
+    <MESSAGE value="修改部分bug" />
+    <MESSAGE value="js bug修复" />
+    <MESSAGE value="修复celery定时器" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复celery定时器" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -779,39 +839,12 @@
     <SUITE FILE_PATH="coverage/RecruitmentSystem$common.coverage" NAME="common Coverage Results" MODIFIED="1556349026433" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/preview.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/register.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="84" column="66" selection-start-line="84" selection-start-column="62" selection-end-line="84" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/reset.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/reset_code.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-31" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/reset_update.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/resume_base_company.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-31" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/subscribe.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-31" />
       </provider>
@@ -828,16 +861,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/static/Company/logo/0a8bc1de-6339-11e9-a4ae-b46d83399436c (3).png">
       <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/common/tasks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2304">
-          <caret line="17" column="33" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/effective_positions.html">
       <provider selected="true" editor-type-id="text-editor">
@@ -875,23 +898,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/JobHunting/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="38" column="40" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/JobHunting/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="716" column="41" selection-start-line="716" selection-start-column="41" selection-end-line="716" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/success.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="265">
@@ -910,13 +916,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="198" column="93" selection-start-line="198" selection-start-column="93" selection-end-line="198" selection-end-column="93" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/unprocessed_resume.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="250" column="91" selection-start-line="250" selection-start-column="91" selection-end-line="250" selection-end-column="91" />
         </state>
       </provider>
     </entry>
@@ -1068,24 +1067,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/csrf.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="5" lean-forward="true" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/common_base.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="16" column="73" selection-start-line="16" selection-start-column="73" selection-end-line="16" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -1100,20 +1085,6 @@
             <element signature="e#20195#23329#0" />
             <element signature="e#23367#23927#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RecruitmentSystem/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="87" column="23" selection-start-line="87" selection-start-column="23" selection-end-line="87" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/positions_base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="38" lean-forward="true" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -1151,6 +1122,115 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
           <caret line="34" column="40" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/positions_base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="20" column="35" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+          <folding>
+            <element signature="e#880#902#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/resume_base_company.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="19" column="23" lean-forward="true" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
+          <folding>
+            <element signature="e#880#902#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/jquery.ui.datetimepicker.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="24" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/unprocessed_resume.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="150" column="65" selection-start-line="150" selection-start-column="51" selection-end-line="150" selection-end-column="65" />
+          <folding>
+            <element signature="n#div#1;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/received_resumes.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="3208" selection-start-line="2" selection-start-column="3208" selection-end-line="2" selection-end-column="3208" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/csrf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="3" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RecruitmentSystem/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="86" column="22" lean-forward="true" selection-start-line="86" selection-start-column="22" selection-end-line="86" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RecruitmentSystem/celery.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="30" column="31" selection-start-line="30" selection-start-column="31" selection-end-line="30" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#56#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/common/tasks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-368">
+          <caret line="72" column="14" lean-forward="true" selection-start-line="72" selection-start-column="14" selection-end-line="72" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="22" column="6" lean-forward="true" selection-start-line="22" selection-start-column="6" selection-end-line="22" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/JobHunting/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="39" column="46" selection-start-line="39" selection-start-column="46" selection-end-line="39" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/JobHunting/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="743" column="38" selection-start-line="743" selection-start-column="38" selection-end-line="743" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/subscribe.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="61" column="52" selection-start-line="61" selection-start-column="52" selection-end-line="61" selection-end-column="52" />
         </state>
       </provider>
     </entry>
