@@ -161,3 +161,5 @@ def filter(days=0):
             email_body += '</table><p style="text-align: right;">　　{time}</p>'.format(
                 time=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         SM(email_title=email_title, email_body=email_body, email=[email, ])
+        return True
+    return False

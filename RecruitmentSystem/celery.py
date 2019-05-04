@@ -24,11 +24,11 @@ app.conf.update(
     CELERY_RESULT_SERIALIZER='json',
     CELERYBEAT_SCHEDULE={
         'send_subscription_3_email': {
-            'task': 'viewsCount.tasks.data_processing',
+            'task': 'common.tasks.send_subscription_3_email',
             'schedule': timedelta(days=3),
         },
         'send_subscription_7_email': {
-            'task': 'viewsCount.tasks.data_processing',
+            'task': 'common.tasks.send_subscription_7_email',
             'schedule': timedelta(days=7),
         }
     }
