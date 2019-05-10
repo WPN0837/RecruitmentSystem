@@ -14,6 +14,10 @@ from common.tasks import send_submit_resume_pass_email, send_inter_email
 
 # Create your views here.
 class ValidateCityView(View):
+    '''
+    验证城市名称
+    '''
+
     def post(self, request):
         c = request.POST.get('city', None)
         if c and City.objects.filter(name=c).exists():
@@ -24,6 +28,10 @@ class ValidateCityView(View):
 
 
 class PostJobView(View):
+    '''
+    发布职位
+    '''
+
     def get(self, request):
         email = request.session.get('email', '')
         u = User.objects.filter(email=email).first()

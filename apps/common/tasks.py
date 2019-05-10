@@ -123,10 +123,11 @@ def SM(email_title, email_body, email):
 
 def filter(days=0):
     salary = ['2k以下', '2k-5k', '5k-10k', '10k-15k', '15k-25k', '25k-50k', '50k以上']
-    development_stage = {'初创型': ['未融资', '天使轮', ], '成长型': ['A轮', 'B轮', 'C轮', ], '成熟型': ['D轮以上'], '已上市': ['上市公司']}
+    development_stage = {'初创型': ['未融资', '天使轮', ], '成长型': ['A轮', 'B轮', 'C轮', ], '成熟型': ['D轮以上'], '上市公司': ['上市公司']}
     email_title = '订阅邮件'
     s = Subscription.objects.filter(cycle=days).all()
     for i in s:
+        print(i.__dict__)
         email = i.email
         name = i.user.resume.resume_info.name
         positions = PositionInfo.objects.filter(workAddress=i.city, position=i.position,
@@ -145,7 +146,7 @@ def filter(days=0):
             else:
                 mi, ma = [j.strip('k') for j in i.salary.split('-')]
                 for j in positions:
-                    if j.salaryMin <= int(mi) <= j.salaryMax and j.salaryMin <= int(ma) <= j.salaryMax:
+                    if j.salaryMin <= int(mi) <= j.salaryMax or j.salaryMin <= int(ma) <= j.salaryMax:
                         csy_positions.append(j)
             positions = csy_positions
         if not positions:

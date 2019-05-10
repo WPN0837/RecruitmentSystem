@@ -807,6 +807,9 @@ class DelSubscriptionView(View):
 
 
 class ResumeStatusView(View):
+    '''
+    投递的简历状态
+    '''
     def get(self, request):
         email = request.session.get('email', '')
         u = User.objects.filter(email=email).first()
